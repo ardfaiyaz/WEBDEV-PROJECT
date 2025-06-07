@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/template.css" />
+  <link rel="icon" type="image/png" href="../assets/images/school-logo.png" />
+  <title>Apply for Clearance</title>
+</head>
+<body>
+  <header class="topbar">
+    <a href="index.html" class="logo-link">
+      <div class="logo-section">
+        <img src="../assets/images/school-logo.png" alt="Logo">
+        <span class="school-name">NATIONAL<br/>UNIVERSITY</span>
+      </div>
+    </a>
+    <div class="user-section">
+      <i class='bx bxs-bell'></i>
+      <span class="username">Hi, User</span>
+      <i class='bx bxs-user-circle'></i>
+    </div>
+  </header>
+
+  <div class="yellow-wrap">
+    <div class="yellow">ribbon</div>
+  </div>
+
+  <div class="content-wrapper">
+    <aside class="sidebar" id="sidebar">
+      <ul class="icon-menu">
+        <li><a href="index.html"><i class='bx bxs-home'></i><span class="label">Home</span></a></li>
+        <li><a href="user-profile.html"><i class='bx bxs-user'></i><span class="label">Profile</span></a></li>
+        <li><a href="track-clearance.html"><i class='bx bxs-file'></i><span class="label">My Clearances</span></a></li>
+        <li><a href="#"><i class='bx bxs-log-out'></i><span class="label">Logout</span></a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content" id="mainContent">
+      <section>
+        <p class="notice-text">
+          NOTICE: <span>When you click the "Submit Request" button, your request will be immediately sent to the assigned teachers and office staff for review.
+            They will check, process, and approve your request based on the provided information. Please make sure all details are complete and accurate before submitting.</span>
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+    sidebar.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+      mainContent.classList.toggle('shifted');
+    });
+
+    // Script to disable select if checkbox is not checked
+    document.addEventListener('DOMContentLoaded', () => {
+      const checkboxSelectGroups = document.querySelectorAll('.checkbox-select-group');
+
+      checkboxSelectGroups.forEach(group => {
+        const checkbox = group.querySelector('input[type="checkbox"]');
+        const select = group.querySelector('select');
+
+        if (checkbox && select) {
+          // Initial state on page load
+          select.disabled = !checkbox.checked;
+
+          // Add event listener to checkbox
+          checkbox.addEventListener('change', () => {
+            select.disabled = !checkbox.checked;
+            // Optional: Reset select value when disabled
+            if (select.disabled) {
+              select.value = ""; // Or set to the default disabled option
+            }
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

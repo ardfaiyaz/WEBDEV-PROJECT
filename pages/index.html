@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/style.css"/>
+  <link rel="icon" type="image/png" href="../assets/images/school-logo.png" />
+  <title>Clearance</title>
+</head>
+<body>
+  <header class="topbar">
+    <a href="index.html" class="logo-link">
+      <div class="logo-section">
+        <img src="../assets/images/school-logo.png" alt="Logo">
+        <span class="school-name">NATIONAL<br/>UNIVERSITY</span>
+      </div>
+    </a>
+    <div class="user-section">
+      <i class='bx bxs-bell'></i>
+      <span class="username">Hi, User</span>
+      <i class='bx bxs-user-circle'></i>
+    </div>
+  </header>
+
+  <div class="content-wrapper">
+    <aside class="sidebar" id="sidebar">
+      <ul class="icon-menu">
+        <li><a href="index.html"><i class='bx bxs-home'></i><span class="label">Home</span></a></li>
+        <li><a href="user-profile.html"><i class='bx bxs-user'></i><span class="label">Profile</span></a></li>
+        <li><a href="track-clearance.html"><i class='bx bxs-file'></i><span class="label">My Clearances</span></a></li>
+        <li><a href="login.html"><i class='bx bxs-log-out'></i><span class="label">Logout</span></a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content" id="mainContent">
+      <section>
+        <h2>STUDENT CLEARANCE SYSTEM</h2>
+        <p class="description">Effortlessly manage, track, and submit your student clearance requirements.</p>
+        <div class="cards">
+          <a href="track-clearance.html" class="card">
+            <i class='bx bx-line-chart icon'></i>
+            <h3>Track my Clearance</h3>
+            <p>Visual tracker showing your current clearance status, pending steps, and completed stages.</p>
+          </a>
+
+          <a href="submit-clearance.html" class="card">
+            <i class='bx bx-send icon'></i>
+            <h3>Submit Request</h3>
+            <p>Central hub to create and send request letters or documents to the clearance office.</p>
+          </a>
+
+          <a href="apply-clearance.html" class="card">
+            <i class='bx bx-file icon'></i>
+            <h3>Apply for Clearance</h3>
+            <p>Start a new clearance application by filling out and submitting the official form.</p>
+          </a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+
+    sidebar.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+      mainContent.classList.toggle('shifted');
+    });
+  </script>
+
+</body>
+</html>

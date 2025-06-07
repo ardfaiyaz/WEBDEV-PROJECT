@@ -1,0 +1,228 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+
+@font-face {
+  font-family: 'AkwePro';
+  src: url('../fonts/akwe-pro-ext-sc-bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: #f5f5f5;
+  color: #2c2c2c;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Header Topbar */
+.topbar {
+  background-color: #2c2273;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 50px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo-section img {
+  width: 50px;
+}
+
+.school-name {
+  font-family: 'AkwePro', sans-serif;
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 16px;
+}
+
+.user-section span{
+  font-weight: 600;
+  color: white;
+}
+
+.user-section i {
+  font-size: 34px;
+  cursor: pointer;
+}
+
+/* Layout Wrapper */
+.content-wrapper {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 60px;
+  background-color: #2c2273;
+  color: white;
+  transition: width 0.3s ease-in-out;
+  overflow: hidden;
+  padding: 20px 0;
+  position: relative;
+  z-index: 10;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  height: auto;
+  top: 54%;
+  transform: translateY(-50%);
+  position: absolute;
+}
+
+.sidebar.active {
+  width: 200px;
+}
+
+.icon-menu {
+  list-style: none;
+}
+
+.icon-menu li {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.icon-menu a {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 15px;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.icon-menu a:hover {
+  background: #443ba0;
+  transform: translateX(6px);
+}
+
+.icon-menu i {
+  font-size: 22px;
+}
+
+.label {
+  opacity: 0;
+  white-space: nowrap;
+  transition: 0.3s ease-in-out;
+}
+
+.sidebar.active .label {
+  opacity: 1;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 30px;
+  transition: 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-content.shifted {
+  margin-left: 300px;
+}
+
+.main-content section {
+  background-color: #ffffff;
+  padding: 60px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 1500px;
+  text-align: center;
+}
+
+.main-content h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 38px;
+  color: #2b2c7e;
+  margin-bottom: 10px;
+  font-weight: 800;
+}
+
+.description {
+  color: #555;
+  font-size: 18px;
+  margin-bottom: 40px;
+}
+
+/* Cards Section */
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
+  justify-content: center;
+}
+
+.card {
+  text-decoration: none;
+  color: inherit;
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 50px;
+  flex: 1 1 calc(33.333% - 40px);
+  min-width: 250px;
+  max-width: 100%;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease;
+  text-align: center;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  cursor: pointer;
+}
+
+.card .icon {
+  font-size: 54px;
+  color: #127e00;
+  margin-bottom: 15px;
+}
+
+.card h3 {
+  font-size: 26px;
+  color: #2b2c7e;
+  font-weight: 00;
+  margin-bottom: 10px;
+}
+
+.card p {
+  color: black;
+  font-size: 17px;
+  line-height: 1.5;
+}
+

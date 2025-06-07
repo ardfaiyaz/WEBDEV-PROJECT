@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/user-profile.css" />
+  <link rel="icon" type="image/png" href="../assets/images/school-logo.png" />
+  <title>My Profile</title>
+</head>
+<body>
+  <header class="topbar">
+    <a href="index.html" class="logo-link">
+      <div class="logo-section">
+        <img src="../assets/images/school-logo.png" alt="Logo">
+        <span class="school-name">NATIONAL<br/>UNIVERSITY</span>
+      </div>
+    </a>
+    <div class="user-section">
+      <i class='bx bxs-bell'></i>
+      <span class="username">Hi, User</span>
+      <i class='bx bxs-user-circle'></i>
+    </div>
+  </header>
+
+  <div class="yellow-wrap">
+    <div class="yellow">My Profile</div>
+  </div>
+
+  <div class="content-wrapper">
+    <aside class="sidebar" id="sidebar">
+      <ul class="icon-menu">
+        <li><a href="index.html"><i class='bx bxs-home'></i><span class="label">Home</span></a></li>
+        <li><a href="user-profile.html"><i class='bx bxs-user'></i><span class="label">Profile</span></a></li>
+        <li><a href="track-clearance.html"><i class='bx bxs-file'></i><span class="label">My Clearances</span></a></li>
+        <li><a href="#"><i class='bx bxs-log-out'></i><span class="label">Logout</span></a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content" id="mainContent">
+      <div class="profile-body">
+  <div class="profile-image">
+    <img src="../assets/images/default-profile.jpg" alt="Profile Photo">
+  </div>
+  <div class="profile-details">
+    <p><Strong>Name  </Strong>Melthon</p>
+    <p><strong>ID:  </strong>2023-170658 </p>
+    <p><strong>Course:  </strong> Bachelor of Science in Information Technology with specialization in Mobile and Web Applications (BSIT-MWA)</p>
+    <p><strong>Department:  </strong> School of Engineering, Computing, and Architecture</p>
+    <p><strong>School Email:  </strong> luceropl@students.nu-dasma.edu.ph</p>
+  </div>
+</div>
+
+
+<div class="about">
+    <h2>About Me</h2>
+
+      <h3><i class="info-icon"> !</i> Basic Information</h3>
+      <div class="form-row">
+        <label>Last Name:* <input type="text" value="" /></label>
+        <label>Civil Status:* 
+          <select>
+            <option>Single</option>
+            <option>Married</option>
+          </select>
+        </label>
+      </div>
+      <div class="form-row">
+        <label>First Name:* <input type="text" value="" /></label>
+        <label>Gender:* 
+          <select>
+            <option>Female</option>
+            <option>Male</option>
+          </select>
+        </label>
+      </div>
+      <div class="form-row">
+        <label>Middle Name: <input type="text" value="" /></label>
+        <label>Religion: <input type="text" value="" /></label>
+      </div>
+      <div class="form-row">
+        <label>Middle Initial: <input type="text" value="L" /></label>
+        <label>Mobile No:* <input type="text" value="" /></label>
+      </div>
+      <div class="form-row">
+        <label>Birth Date:* <input type="date" value="" /></label>
+        <label>Telephone No: <input type="text" value="" /></label>
+      </div>
+      <div class="form-row">
+        <label>Country of Birth:* <input type="text" value="" /></label>
+        <label>Email Address:* <input type="email" value="" /></label>
+      </div>
+      <div class="form-row">
+        <label>Birth Place:* <input type="text" value="" /></label>
+      </div>
+    </section>
+
+
+      <h3><i class="info-icon">!</i> Address</h3>
+      <div class="form-row">
+        <label>Province:* <input type="text" value="" /></label>
+        <label>City/Municipality:* <input type="text" value="" /></label>
+      </div>
+      <div class="form-row">
+        <label>House No./St.:* <input type="text" /></label>
+        <label>Barangay:* <input type="text" /></label>
+      </div>
+      <div class="form-row">
+        <label>Postal Code: <input type="text" /></label>
+      </div>
+    </section>
+  </div>
+</div>
+    </main>
+
+    
+  </div>
+
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+    sidebar.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+      mainContent.classList.toggle('shifted');
+    });
+
+
+  </script>
+</body>
+</html>
