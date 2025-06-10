@@ -23,7 +23,6 @@ body {
   min-height: 100vh;
 }
 
-/* Header */
 .topbar {
   background-color: #2c2273;
   color: white;
@@ -64,7 +63,7 @@ body {
 }
 
 .user-section span {
-  font-weight: 600;
+  font-weight: 500;
   color: white;
 }
 
@@ -265,7 +264,6 @@ body {
 }
 
 .checkbox-select-group {
-  margin-top: 8px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -330,7 +328,9 @@ select:invalid {
   font-family: 'Open Sans', sans-serif;
   background-color: #fff;
   appearance: none;
+  margin-top: 8px; /* 🔧 Add this line */
 }
+
 
 .select1:invalid {
   color: #aaa;
