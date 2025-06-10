@@ -71,25 +71,37 @@ body {
 
 form {
   width: 100%;
+  display: flex; /* Make form a flex container */
+  flex-direction: column; /* Stack its children vertically */
+  justify-content: space-between; /* Distribute space */
+  height: 100%; /* Make form fill the right-panel height */
+  box-sizing: border-box; /* Include padding in height calculation */
 }
 
 .input-fields {
   justify-content: center;
   padding: 0px 90px;
+  flex-grow: 1; /* Allow input fields to take available space */
+  display: flex; /* Make input-fields a flex container */
+  flex-direction: column; /* Stack its children vertically */
+  gap: 15px; /* Add some gap between the h4 and input groups */
 }
 
 .input-fields h4 {
   color: #29227c;
-  margin-bottom: 8px;
+  margin-bottom: 0px; /* Adjusted margin */
   font-size: 18px;
+  margin-top: 0; /* Remove default top margin */
 }
 
 .input-group {
+  font-family: 'Montserrat', sans-serif;
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 0px; /* Adjusted margin */
   height: 52px;
   background-color: transparent;
+  width: 100%; /* Ensure input group takes full width */
 }
 
 .input-group span.icon,
@@ -102,9 +114,7 @@ form {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  /* Remove border */
   border: none;
-  /* Add spacing if desired */
   margin-right: 0px;
 }
 
@@ -124,7 +134,7 @@ form {
   outline: none;
   background-color: #e8e7e7;
   box-sizing: border-box;
-  border: none; /* Completely remove border */
+  border: none;
   border-radius: 0;
 }
 
@@ -134,62 +144,188 @@ form {
   opacity: 1;
 }
 
+/* Custom styles for select arrow */
+.input-group select {
+  appearance: none; /* Remove default arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* Black arrow */
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 20px;
+}
+
 
 .login-button-container {
-  margin-top: 30px;
+  margin-top: 30px; /* Adjusted margin */
   justify-content: center;
   align-items: center;
   display: flex;
+  padding: 0px 90px; /* Add padding to align with input fields */
 }
 
 .login-button {
-  font-family: "Montserrat", sans-serif;
-  font-weight: 400;
-  width: 55%;
-  padding: 10px 10px;
+  font-family: "Montserrat", sans-serif; /* Keep Montserrat for button text */
+  font-weight: 600; /* Made slightly bolder */
+  width: 100%; /* Make button fill its container */
+  max-width: 300px; /* Optional: limit max width for larger screens */
+  padding: 12px 10px; /* Adjusted padding for better look */
   background-color: #ffcf00;
   border: none;
-  border-radius: 0 !;
-  color: black;
-  font-size: 16px;
+  border-radius: 5px; /* Added slight border-radius to button */
+  color: #29227c; /* Changed text color to dark blue */
+  font-size: 17px; /* Slightly larger font size */
   cursor: pointer;
-  transition: 0.3s ease-in-out;
+  transition: background-color 0.3s ease-in-out, transform 0.2s ease, box-shadow 0.2s ease;
+  letter-spacing: 0.5px; /* Add slight letter spacing */
 }
 
 .login-button:hover {
   background-color: #ffc107;
+  transform: translateY(-2px); /* Slight lift effect */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow on hover */
 }
 
 .divider {
   text-align: center;
-  margin: 15px 0;
+  margin: 20px 0; /* Adjusted margin */
   color: #888;
+  padding: 0px 90px; /* Add padding to align */
+}
+
+/* NEW: Styles for the signup links container */
+.signup-links-container {
+  display: flex;
+  transition: 0.3s ease-in-out;
+  justify-content: center;
+  align-items: center;
+  gap: 10px; /* Space between links and pipe */
+  margin-bottom: 30px; /* Space below the links */
+  padding: 0px 90px; /* Add padding to align */
 }
 
 .signup-link {
-  text-align: center;
-  display: block;
   color: #0A1C66;
   font-weight: bold;
   text-decoration: none;
   transition: 0.3s ease-in-out;
+  white-space: nowrap; /* Prevent links from wrapping */
 }
 
 .signup-link:hover {
   text-decoration: underline;
 }
 
-form, 
-.input-group, 
-.input-group input, 
-.input-group select, 
-.input-fields h4, 
-.login-button {
+.pipe-divider {
+  color: #888; /* Color of the pipe */
+  font-weight: bold;
+}
+
+
+/* --- Font Consistency --- */
+/* Applied Open Sans to form elements that aren't titles or headers */
+form,
+.input-group input,
+.input-group select,
+.login-button,
+.signup-link,
+.divider,
+.pipe-divider {
   font-family: "Open Sans", sans-serif;
   font-weight: 500;
 }
 
-h1, p, h2, h4 {
+/* Ensure Montserrat for specific elements as per your last rule */
+h1, p, h2, h4, .login-button { /* Added .login-button here as it seems to be Montserrat in your original */
   font-family: "Montserrat", sans-serif !important;
 }
 
+/* Responsive Adjustments */
+@media (max-width: 1350px) {
+  .container {
+    width: 90%;
+    height: auto; /* Allow height to adjust */
+    flex-direction: column; /* Stack panels vertically */
+  }
+
+  .left-panel {
+    padding: 30px;
+    height: auto;
+  }
+
+  .left-panel h1 {
+    font-size: 30px;
+    line-height: 40px;
+  }
+
+  .left-panel img {
+    width: 100px;
+  }
+
+  .right-panel {
+    padding-bottom: 30px; /* Add some padding at the bottom */
+  }
+
+  .login-header,
+  .input-fields,
+  .login-button-container,
+  .divider,
+  .signup-links-container {
+    padding: 0 40px; /* Reduce horizontal padding */
+  }
+
+  form {
+    height: auto; /* Allow form height to adjust in column layout */
+  }
+}
+
+@media (max-width: 768px) {
+  .login-header h2 {
+    font-size: 30px;
+  }
+
+  .input-fields h4 {
+    font-size: 16px;
+  }
+
+  .login-button {
+    font-size: 15px;
+    padding: 10px 10px;
+  }
+
+  .divider {
+    font-size: 14px;
+  }
+
+  .signup-link {
+    font-size: 14px;
+  }
+
+  .container {
+    box-shadow: none; /* Remove shadow on very small screens for cleaner look */
+  }
+}
+
+@media (max-width: 480px) {
+  .login-header,
+  .input-fields,
+  .login-button-container,
+  .divider,
+  .signup-links-container {
+    padding: 0 20px; /* Further reduce padding */
+  }
+
+  .left-panel h1 {
+    font-size: 24px;
+    line-height: 35px;
+  }
+
+  .left-panel p {
+    font-size: 14px;
+  }
+
+  .input-group input,
+  .input-group select {
+    font-size: 14px;
+  }
+}
