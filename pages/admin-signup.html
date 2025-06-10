@@ -52,12 +52,28 @@
             </div>
 
             <div class="submit-wrapper">
-              <button type="submit" class="submit-btn">Submit</button>
+              <button type="submit" class="submit-btn" id="adminSubmitButton">Submit</button>
             </div>
           </form>
         </div>
       </div>
     </div>
   </div>
+
+  <script>
+    // Get the form element
+    const signupForm = document.querySelector('.signup-form');
+    // Get the submit button element
+    const adminSubmitButton = document.getElementById('adminSubmitButton');
+
+    // Add an event listener to the form's submit event
+    signupForm.addEventListener('submit', function(event) {
+      // Prevent the default form submission behavior (which causes a page reload)
+      event.preventDefault();
+      window.location.href = 'index.html'; // Redirects to index.html in the same directory
+    });
+
+
+  </script>
 </body>
 </html>
