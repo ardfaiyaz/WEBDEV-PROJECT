@@ -10,17 +10,14 @@
 <body>
   <div class="container">
 
-    <!-- Left Panel -->
     <div class="left-panel">
       <img src="../assets/icons/NU_shield.svg.png" alt="NU Logo" class="logo">
       <h1>WELCOME TO <br> NU STUDENT CLEARANCE <br> SYSTEM</h1>
       <p>The Office of the University Registrar maintains the <br> centralized student clearance system.</p>
     </div>
 
-    <!-- Right Panel -->
     <div class="right-panel">
-      <form action="login" method="post">
-        <div class="login-header">
+      <form id="loginForm" action="login" method="post"> <div class="login-header">
           <h2>Log in</h2>
         </div>
 
@@ -28,38 +25,35 @@
           <h4>Select Account Type</h4>
           <div class="input-group">
             <span class="iconType"><img src="../assets/icons/user-icon.png" alt="Human Icon"></span>
-            <select required>
-
-              <option value=""disabled selected>Choose Type</option>
+            <select id="accountType" required> <option value="" disabled selected>Choose Type</option>
               <option value="student">Student</option>
               <option value="admin">Admin</option>
             </select>
-
           </div>
           <h4>Log In Credentials</h4>
           <div class="input-group">
             <span class="icon"><img src="../assets/icons/at-sign.png" alt="Your Icon"></span>
-
-            <input type="email" placeholder="Enter your email here" required>
-          </div>
+            <input type="email" id="emailInput" placeholder="Enter your email here" required> </div>
 
           <div class="input-group">
             <span class="iconlock"><img src="../assets/icons/lock-sign.png" alt="icon lock"></span>
-
-            <input type="password" placeholder="Enter your password here" required>
-          </div>
+            <input type="password" id="passwordInput" placeholder="Enter your password here" required> </div>
         </div>
 
         <div class="login-button-container">
           <button type="submit" class="login-button">Log in with NUSCS</button>
         </div>
 
-        <div class="divider">or</div>
-        <a href="signup.html" class="signup-link">Sign Up</a>
+        <div class="divider">or Sign Up as</div>
 
+        <div class="signup-links-container">
+          <a href="user-signup.html" class="signup-link">Student</a>
+          <span class="pipe-divider">|</span>
+          <a href="admin-signup.html" class="signup-link">Admin</a>
+        </div>
       </form>
     </div>
-
   </div>
-</body>
+
+  <script src="./js/login.js"></script> </body>
 </html>
