@@ -17,7 +17,7 @@
     </div>
 
     <div class="right-panel">
-      <form id="loginForm" action="login" method="post"> <div class="login-header">
+      <form id="loginForm" action="../php/login.php" method="post"> <div class="login-header">
           <h2>Log in</h2>
         </div>
 
@@ -25,7 +25,8 @@
           <h4>Select Account Type</h4>
           <div class="input-group">
             <span class="iconType"><img src="../assets/icons/user-icon.png" alt="Human Icon"></span>
-            <select id="accountType" required> <option value="" disabled selected>Choose Type</option>
+            <select id="accountType" name="accountType" required>
+              <option value="" disabled selected>Choose Type</option>
               <option value="student">Student</option>
               <option value="admin">Admin</option>
             </select>
@@ -33,11 +34,13 @@
           <h4>Log In Credentials</h4>
           <div class="input-group">
             <span class="icon"><img src="../assets/icons/at-sign.png" alt="Your Icon"></span>
-            <input type="email" id="emailInput" placeholder="Enter your email here" required> </div>
+            <input type="email" id="emailInput" name="email" placeholder="Enter your email here" required>
+          </div>
 
           <div class="input-group">
             <span class="iconlock"><img src="../assets/icons/lock-sign.png" alt="icon lock"></span>
-            <input type="password" id="passwordInput" placeholder="Enter your password here" required> </div>
+            <input type="password" id="passwordInput" name="password" placeholder="Enter your password here" required>
+          </div>
         </div>
 
         <div class="login-button-container">
@@ -55,5 +58,5 @@
     </div>
   </div>
 
-  <script src="./js/login.js"></script> </body>
+  <script src="../js/login.js"></script> </body>
 </html>
