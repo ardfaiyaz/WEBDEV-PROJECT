@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'config.php';
+require_once 'database.php';
 
 if (isset($_POST['register'])) {
     $user_id = $_POST['user_id'];
