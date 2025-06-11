@@ -2,7 +2,7 @@
 session_start(); // Start the session to access $_SESSION variables
 
 // Include your database connection file
-require_once 'db_connect.php'; // Adjust path if db_connect.php is in a different directory
+require_once 'database.php'; // Adjust path if db_connect.php is in a different directory
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -11,9 +11,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// $user_id = $_SESSION['user_id']; // Get the user_id from the session
-
-$user_id = ['2023-12345']; // testing purpose
+$user_id = $_SESSION['user_id']; // Get the user_id from the session
 
 // Check if the form was submitted via POST
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['applyclr_submitbtn'])) {
