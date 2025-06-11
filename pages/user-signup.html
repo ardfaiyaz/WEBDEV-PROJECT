@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Signup</title>
+  <link rel="stylesheet" href="../assets/css/user-signup.css" />
+  <link rel="icon" type="image/png" href="../assets/images/school-logo.png" />
+</head>
+<body>
+  <div class="signup-wrapper">
+    <div class="signup-container">
+      <div class="signup-box">
+        <div class="header">
+          <img src="../assets/icons/NU_shield.svg.png" alt="NU Logo" class="logo">
+          <h1>NU STUDENT CLEARANCE SYSTEM</h1>
+        </div>
+
+        <div class="form-wrapper">
+          <section class="form-section" id="basic">
+            <h2 class="form-title">Basic Information</h2>
+            <div class="form-grid">
+              <div class="form-item">
+                <label>First Name:</label>
+                <input type="text" placeholder="Enter Here" />
+              </div>
+              <div class="form-item">
+                <label>Middle Name:</label>
+                <input type="text" placeholder="Enter Here" />
+              </div>
+              <div class="form-item">
+                <label>Last Name:</label>
+                <input type="text" placeholder="Enter Here" />
+              </div>
+              <div class="form-item">
+                <label>Gender:</label>
+                <select>
+                  <option disabled selected>Select</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                </select>
+              </div>
+              <div class="form-item">
+                <label>Birthdate:</label>
+                <input type="date" />
+              </div>
+              <div class="form-item">
+                <label>Birth Place:</label>
+                <input type="text" placeholder="Enter Here" />
+              </div>
+              <div class="form-item">
+                <label>Nationality:</label>
+                <input type="text" placeholder="Enter Here" />
+              </div>
+            </div>
+          </section>
+
+          <section class="form-section" id="address">
+            <h2 class="form-title">Address Information</h2>
+            <div class="form-grid">
+              <div class="form-item">
+                <label>House No.:</label>
+                <input type="text" placeholder="Enter Here" />
+              </div>
+              <div class="form-item">
+                <label>Street/Barangay:</label>
+                <input type="text" placeholder="Enter Here" />
+              </div>
+              <div class="form-item">
+                <label>City/Municipality:</label>
+                <input type="text" placeholder="Enter Here" />
+              </div>
+              <div class="form-item">
+                <label>State/Province:</label>
+                <input type="text" placeholder="Enter Here" />
+              </div>
+              <div class="form-item">
+                <label>ZIP Code:</label>
+                <input type="text" placeholder="Enter Here" />
+              </div>
+              <div class="form-item">
+                <label>Country:</label>
+                <input type="text" placeholder="Enter Here" />
+              </div>
+              <div class="form-item">
+                <label>Mobile Number:</label>
+                <input type="text" placeholder="Enter Here" />
+              </div>
+            </div>
+          </section>
+
+          <section class="form-section" id="account">
+            <h2 class="form-title">Account Information</h2>
+            <div class="form-grid" style="margin-bottom: 50px;">
+              <div class="form-item">
+                <label>School ID:</label>
+                <input type="text" placeholder="Enter Here" />
+              </div>
+              <div class="form-item">
+                <label>School Email:</label>
+                <input type="email" placeholder="Enter Here" />
+              </div>
+              <div class="form-item">
+                <label>Password:</label>
+                <input type="password" placeholder="Enter Here" />
+              </div>
+              <div class="form-item">
+                <label>Confirm Password:</label>
+                <input type="password" placeholder="Enter Here" />
+              </div>
+            </div>
+
+            <div style="text-align: center;">
+              <button class="submit-btn" id="submitButton">Submit</button>
+            </div>
+          </section>
+        </div>
+
+      </div>
+
+      <div class="tracker">
+        <div class="step active" data-target="basic">
+          <div class="circle"></div>
+          <span>Basic Info</span>
+        </div>
+        <div class="line"></div>
+        <div class="step" data-target="address">
+          <div class="circle"></div>
+          <span>Address Info</span>
+        </div>
+        <div class="line"></div>
+        <div class="step" data-target="account">
+          <div class="circle"></div>
+          <span>Account Info</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sections = document.querySelectorAll('.form-section');
+    const steps = document.querySelectorAll('.tracker .step');
+    const wrapper = document.querySelector('.form-wrapper');
+    const submitButton = document.getElementById('submitButton'); // Get the button by its ID
+
+    wrapper.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (wrapper.scrollTop >= sectionTop - wrapper.offsetHeight / 2) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      steps.forEach(step => {
+        step.classList.remove('active');
+        if (step.dataset.target === current) {
+          step.classList.add('active');
+        }
+      });
+    });
+
+    steps.forEach(step => {
+      step.addEventListener('click', () => {
+        document.getElementById(step.dataset.target).scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // Add this new event listener for the submit button
+    submitButton.addEventListener('click', () => {
+      // You can add validation here before redirecting if needed
+      // For now, it will just redirect immediately
+      window.location.href = 'index.html'; // Redirects to index.html in the same directory
+    });
+  </script>
+</body>
+</html>
