@@ -8,8 +8,6 @@
     font-style: normal;
 } 
 
-
-
 * {
     margin: 0;
     padding: 0;
@@ -927,9 +925,6 @@ body.modal-open {
     background-color: #443ba0;
 }
 
-.status-offices-section {
-    /* No flex-grow needed, now a single column */
-}
 
 .office-status-item {
     display: flex;
@@ -966,12 +961,6 @@ body.modal-open {
 }
 
 /* Styling for the new requested documents section in the modal */
-.requested-documents-section {
-    /* flex property defined above with other sections */
-}
-.requested-documents-section h4 {
-    /* H4 styling defined above with other sections */
-}
 .document-item {
     display: flex;
     justify-content: space-between;
