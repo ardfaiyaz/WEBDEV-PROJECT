@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // *** THIS IS THE CHANGE ***
                     header("Location: index.html"); // Redirect students to user-profile.html
                 } elseif ($user['role_code'] === 'ADMIN') {
-                    header("Location: ../admin_dashboard.php"); // Keep admin redirect as is
+                    header("Location: index.html"); // Keep admin redirect as is
                 }
                 exit(); // Always exit after a header redirect
             } else {
