@@ -18,7 +18,7 @@ if (isset($_POST['register'])) {
     $brgy = $_POST['brgy'];
     $city_mun = $_POST['city_mun'];
     $province = $_POST['province']; 
-    $zip $_POST['zip'];
+    $zip = $_POST['zip'];
 
     $user_id = $conn->query("SELECT user_id FROM student_info WHERE user_id = '$user_id'");
     if ($checkEmail->num_rows > 0) {
