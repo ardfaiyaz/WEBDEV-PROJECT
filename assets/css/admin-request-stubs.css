@@ -1,0 +1,1352 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+ @font-face {
+    font-family: 'AkwePro';
+    src: url('akwe-pro-ext-sc-bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+} 
+
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f5f5f5; 
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header */
+.header {
+    background-color: #2c2273; 
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-wrap: wrap;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-section .logo {
+    width: 45px;
+    height: 45px;
+    border-radius: 8px; 
+    object-fit: contain;
+}
+
+.university-name {
+    font-weight: 700;
+    font-size: 1.4em;
+    line-height: 1.2;
+     font-family: 'AkwePro', sans-serif; 
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-left: auto; /* Push to right */
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1em;
+    font-weight: 500;
+}
+
+.icon-bell,
+.icon-user {
+    font-size: 1.8em;
+    color: #f7b32b; 
+}
+
+.search-bar {
+    background-color: #f0f0f0; 
+    border-radius: 20px; 
+    padding: 8px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 250px; 
+}
+
+.search-bar input {
+    border: none;
+    background: transparent;
+    outline: none;
+    color: #333;
+    font-size: 0.9em;
+    flex-grow: 1;
+}
+
+.search-bar input::placeholder {
+    color: #777;
+}
+
+.icon-search {
+    color: #777;
+    font-size: 1.2em;
+}
+
+
+.main-container {
+    display: flex;
+    flex: 1;
+}
+
+.sidebar {
+    width: 250px; 
+    background-color: #ffffff; 
+    padding: 30px 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    position: sticky; 
+    top: 0;
+    left: 0;
+    height: 100vh; 
+   
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-item {
+    margin-bottom: 10px;
+}
+
+.menu-item a {
+    display: flex;
+    align-items: center;
+    padding: 12px 30px;
+    color: #555;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 8px; 
+    margin: 0 15px;
+}
+
+.menu-item a:hover {
+    background-color: #f0f0f0;
+    color: #2c2273;
+}
+
+.menu-item.active a {
+    background-color: #2c2273; 
+    color: white;
+    border-radius: 8px;
+}
+
+.menu-item.active a .icon-sidebar {
+    color: white; 
+}
+
+.icon-sidebar {
+    font-size: 1.4em;
+    margin-right: 15px;
+    color: #777; 
+}
+
+
+.content-area {
+    flex: 1;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px; 
+}
+
+.page-title { 
+    font-size: 2em;
+    font-weight: 700;
+    color: #2c2273; 
+    margin-bottom: 20px;
+}
+
+
+.section-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+}
+
+
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.card { 
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-icon {
+    background-color: #e0e0e0; 
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.2em;
+    color: #2c2273; 
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-title {
+    font-size: 0.9em;
+    color: #777;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.card-number {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: #2c2273; 
+}
+
+
+.main-grid {
+    display: grid;
+    grid-template-columns: 2.5fr 1fr;
+    gap: 30px;
+}
+
+.grid-left {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.grid-right {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+
+.data-table th,
+.data-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+
+.data-table thead th {
+    background-color: #f8f8f8;
+    font-weight: 600;
+    color: #555;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none; 
+}
+
+.data-table tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+
+.table-header-row {
+    display: grid; 
+    grid-template-columns: repeat(4, minmax(120px, 1fr));
+    align-items: center;
+    background-color: #f8f8f8;
+    font-weight: 600;
+    color: #555;
+    text-transform: uppercase;
+    font-size: 0.9em;
+    padding: 12px 15px; 
+    border-radius: 8px 8px 0 0; 
+}
+
+.table-header-row div {
+    padding: 0 5px; 
+}
+
+.data-row {
+    display: grid; 
+    grid-template-columns: repeat(4, minmax(120px, 1fr));
+    align-items: center;
+    border-bottom: 1px solid #eee; 
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+}
+.data-row:last-child {
+    border-bottom: none; 
+}
+.data-row:hover {
+    background-color: #f0f0f0;
+}
+
+
+
+.status-cell {
+    font-weight: 500;
+    color: #333;
+}
+.remark-cell {
+    font-style: italic;
+    color: #666;
+}
+.date-completed-cell {
+    font-weight: 600;
+    color: #28a745; 
+}
+
+
+.action-cell {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap; 
+}
+
+.action-cell-placeholder {
+    height: 100%;
+    display: block; 
+}
+
+.action-button {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #6a5acd; /* Original background color */
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+    white-space: nowrap;
+}
+
+.action-button:hover {
+    background-color: #5345b8; /* Slightly darker shade for hover effect */
+}
+
+
+
+.clear-button {
+    background-color: #dc3545; 
+    color: white;
+}
+.clear-button:hover {
+    background-color: #c82333;
+}
+
+
+/* Dropdown Menu Styles */
+.dropdown-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1000;
+    border-radius: 5px;
+    overflow: visible !important;
+    max-height: unset !important;
+}
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-menu a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    white-space: nowrap;
+}
+.dropdown-menu a:hover {
+    background-color: #f1f1f1;
+}
+
+/* My Clearances Page Specific Styles */
+.page-header-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.page-header-controls .search-bar {
+    width: auto; /* Override fixed width from global search bar */
+    flex-grow: 1; /* Allow it to grow in the controls */
+    max-width: 300px;
+}
+
+.back-link {
+    color: #6a5acd; /* Purple link color */
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+}
+
+.back-link:hover {
+    color: #443ba0;
+    text-decoration: underline;
+}
+
+.status-remark-text, .status-completed-text {
+    /* Styles for remarks/completed text in my_clearances.html and view_request_details.html */
+    font-weight: 500;
+    color: #333; /* Default text color */
+}
+.status-remark-text {
+    font-style: italic;
+    color: #666;
+}
+.status-completed-text {
+    font-weight: 600;
+    color: #28a745;
+}
+
+/* Tab Navigation for Status Filtering */
+.tab-navs {
+    margin-bottom: 20px;
+}
+
+.tab-navs .navtabs {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.tab-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #777;
+    text-transform: uppercase;
+    transition: color 0.3s ease, border-color 0.3s ease;
+    position: relative;
+}
+
+.tab-item:hover {
+    color: #2c2273;
+}
+
+.tab-item.active {
+    color: #2c2273;
+}
+
+.tab-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #2c2273;
+}
+
+
+/* Charts Section */
+.charts-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.chart-card { /* Now uses section-card styling */
+    text-align: center;
+}
+
+.chart-card h3 {
+    font-size: 1.2em;
+    color: #2c2273;
+    margin-bottom: 15px;
+}
+
+canvas {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.chart-placeholder-text {
+    font-size: 0.9em;
+    color: #777;
+    margin-top: 10px;
+}
+
+.calendar-section h3 {
+    font-size: 1.2em;
+    color: #2c2273;
+    margin-bottom: 20px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    text-align: center;
+}
+
+.calendar-header {
+    grid-column: 1 / -1; /* Span all columns */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #2c2273;
+}
+
+.calendar-header i {
+    cursor: pointer;
+    font-size: 1.5em;
+    padding: 5px;
+}
+
+.calendar-days-header {
+    grid-column: 1 / -1; /* Span all columns */
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    font-weight: 500;
+    font-size: 0.85em;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.calendar-days span {
+    padding: 8px 0;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+}
+
+.calendar-days span:empty {
+    background-color: transparent;
+    cursor: default;
+}
+
+.calendar-days span:not(:empty):hover {
+    background-color: #f0f0f0;
+}
+
+/* Highlight today's date if applicable */
+.calendar-days span:nth-child(16) { /* Example: for June 10th */
+    background-color: #f7b32b; /* Highlight color */
+    color: white;
+    font-weight: 700;
+}
+.calendar-days span:nth-child(16):hover {
+    background-color: #e09d20;
+}
+
+.calendar-placeholder-text {
+    grid-column: 1 / -1; /* Span all columns */
+    font-size: 0.9em;
+    color: #777;
+    margin-top: 15px;
+    text-align: center;
+}
+
+/* Modal CSS (reusing and extending for View Status Modal) */
+.modal-overlay {
+    display: none; /* Initially hidden */
+    position: fixed;
+    z-index: 1001; /* Higher z-index than other elements */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-overlay.show-modal {
+    display: flex; /* Show the overlay */
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 30px;
+    border: 1px solid #888;
+    width: 40%; /* Original width set for mobile, now adjusting max-width */
+    max-width: 70vw; /* Adjusted to 70% of viewport width */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    text-align: center;
+    position: relative;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    border-radius: 10px;
+}
+
+.modal-overlay.show-modal .modal-content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.modal-icon {
+    font-size: 60px;
+    color: #6a5acd;
+    margin-bottom: 15px;
+    border: 3px solid #6a5acd;
+    border-radius: 50%;
+    padding: 10px;
+    display: inline-block;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.modal-content p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 25px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.modal-button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.modal-button.confirm {
+    background-color: #28a745;
+    color: white;
+}
+
+.modal-button.confirm:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.modal-button.cancel {
+    background-color: #dc3545;
+    color: white;
+}
+
+.modal-button.cancel:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+}
+
+body.modal-open {
+    overflow: hidden; /* Prevents background scrolling when modal is open */
+}
+
+/* --- View Request Details Page Specific Styles (view_request_details.html) --- */
+
+.view-request-header .page-title {
+    /* Style for the "View Request" button acting as a title */
+    display: inline-block; /* Make it behave like a button/block */
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1.8em; /* Slightly smaller than main page title */
+    margin-bottom: 0; /* Remove default margin */
+}
+
+.view-request-header .back-link {
+    margin-left: auto; /* Push back link to the right */
+}
+
+.local-abroad-tabs .navtabs {
+    border-bottom: none; /* Remove bottom border from tab container */
+    margin-bottom: 20px;
+    justify-content: flex-start; /* Align tabs to the left */
+}
+
+.local-abroad-tabs .tab-item {
+    border: 1px solid #e0e0e0;
+    border-bottom: none; /* Remove bottom border */
+    border-radius: 8px 8px 0 0; /* Rounded top corners */
+    background-color: #f8f8f8;
+    padding: 10px 25px;
+    margin-right: 5px; /* Small space between tabs */
+}
+
+.local-abroad-tabs .tab-item.active {
+    background-color: #fff; /* White background for active tab */
+    border-color: #e0e0e0;
+    border-bottom: none; /* No bottom border for active tab */
+    color: #2c2273;
+}
+
+.local-abroad-tabs .tab-item.active::after {
+    content: none; /* Remove the underline from active tab */
+}
+
+/* Adjust table headers for the 7 columns in View Request table */
+.view-request-table-header {
+    grid-template-columns: 0.5fr 1fr 1.2fr 1.5fr 1fr 1fr 2fr; /* Adjust column widths for new table */
+    border-radius: 0; /* Remove rounded top corners if tabs already have them */
+}
+
+.view-request-data-row {
+    grid-template-columns: 0.5fr 1fr 1.2fr 1.5fr 1fr 1fr 2fr; /* Match header columns */
+}
+
+/* Specific button colors for View Request table */
+.release-claim-stub-button.blue-button {
+    background-color: #17a2b8; /* Info blue */
+}
+.release-claim-stub-button.blue-button:hover {
+    background-color: #138496;
+}
+.release-claim-stub-button.green-button {
+    background-color: #28a745; /* Success green */
+}
+.release-claim-stub-button.green-button:hover {
+    background-color: #218838;
+}
+
+/* New style for the "view status" link below "Complete" */
+.view-status-link {
+    display: block; /* Make it appear on a new line */
+    font-size: 0.8em;
+    color: #6a5acd; /* Purple color for the link */
+    text-decoration: none;
+    margin-top: 2px; /* Small space from the status text */
+    transition: color 0.3s ease;
+}
+
+.view-status-link:hover {
+    color: #443ba0;
+    text-decoration: underline;
+}
+
+.view-status-modal-content {
+     max-width: 70vw; /* Adjusted to 70% of viewport width */
+     padding: 20px 40px; /* Adjust padding */
+     text-align: left; /* Align content left */
+     display: flex;
+     flex-direction: column;
+     gap: 25px; /* Space between main sections */
+     border-radius: 12px;
+}
+
+.view-status-modal-content .close-button {
+     position: absolute;
+     top: 15px;
+     right: 25px;
+     font-size: 30px;
+     font-weight: bold;
+     cursor: pointer;
+     color: #333;
+}
+
+.view-status-modal-content .close-button:hover,
+.view-status-modal-content .close-button:focus {
+     color: #000;
+     text-decoration: none;
+}
+
+.view-status-modal-inner {
+    display: flex; /* Changed back to flex */
+    flex-direction: column; /* Stack vertically */
+    gap: 20px; /* Space between sections */
+}
+
+
+.student-info-section,
+.remarks-section,
+.status-offices-section,
+.requested-documents-section { /* Added requested-documents-section */
+    flex: 1; /* Allow sections to grow */
+    min-width: unset; /* Removed min-width as it's now a single column */
+    width: 100%; /* Take full width in single column */
+}
+
+/* Student info section for avatar and text */
+.student-info-section {
+    display: flex; /* Use flexbox to align avatar and text side-by-side */
+    align-items: flex-start; /* Align items to the top (avatar and text block) */
+    gap: 20px; /* Space between the avatar and the text block */
+    text-align: left; /* Ensure text inside is left-aligned */
+}
+
+.student-avatar-img { /* Use this for the actual image tag */
+    width: 80px;
+    height: 80px;
+    border-radius: 50%; /* Make it round */
+    object-fit: cover; /* Cover the area, cropping if necessary */
+    flex-shrink: 0; /* Prevent it from shrinking */
+}
+
+.student-text-info { /* New class for the container of name, ID, and email */
+    display: flex;
+    flex-direction: column;
+    text-align: left; /* Ensure text is left-aligned */
+    flex-grow: 1; /* Allow text info to take available space */
+}
+
+
+.student-info-section h3 {
+    font-size: 1.5em;
+    color: #2c2273;
+    margin-bottom: 5px;
+}
+
+.student-info-section p {
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 3px;
+}
+
+.remarks-section {
+    margin-top: 0; /* Adjusted margin as it's now in a column */
+}
+
+.remarks-section h4,
+.status-offices-section h4,
+.requested-documents-section h4 { /* Added requested-documents-section */
+    font-size: 1.1em;
+    color: #2c2273;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #e0e0e0;
+    text-align: left; /* Align section titles to the left as per image */
+}
+
+.remarks-box {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    min-height: 80px; /* Adjust as needed */
+    padding: 15px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #777;
+    font-style: italic;
+    margin-bottom: 15px;
+}
+
+.view-consent-file-button {
+    background-color: #6a5acd; /* Purple button */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    width: auto; /* Allow button to size to content */
+    display: block; /* Make it a block element to align left */
+    margin-left: 0; /* Remove auto margin from previous centering */
+}
+.view-consent-file-button:hover {
+    background-color: #443ba0;
+}
+
+.status-offices-section {
+    /* No flex-grow needed, now a single column */
+}
+
+.office-status-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 0.95em;
+    color: #333;
+}
+
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 15px; /* Pill-shaped badges */
+    font-weight: 600;
+    color: white;
+    font-size: 0.85em;
+    text-align: center;
+    min-width: 90px; /* Ensures consistent width for badges */
+}
+
+/* Status Badge Colors */
+.status-badge.issue-found {
+    background-color: #dc3545; /* Red */
+}
+.status-badge.pending {
+    background-color: #ffc107; /* Yellow/Orange */
+    color: #333; /* Dark text for light background */
+}
+.status-badge.on-going {
+    background-color: #17a2b8; /* Info Blue */
+}
+.status-badge.completed {
+    background-color: #28a745; /* Green */
+}
+
+/* Styling for the new requested documents section in the modal */
+.requested-documents-section {
+    /* flex property defined above with other sections */
+}
+.requested-documents-section h4 {
+    /* H4 styling defined above with other sections */
+}
+.document-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+    color: #333;
+}
+
+.document-name {
+    font-weight: 500;
+    flex-grow: 1;
+}
+
+.document-copies {
+    font-weight: 600;
+    color: #555;
+    flex-shrink: 0;
+}
+
+
+/* for custom message box*/
+.custom-message-box {
+position: fixed;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+background-color: white;
+padding: 20px;
+border-radius: 8px;
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+z-index: 1002;
+text-align: center;
+}
+
+.custom-message-box p {
+margin-bottom: 15px;
+font-size: 1.1em;
+color: #333;
+}
+
+.custom-message-box-close {
+background-color: #2c2273;
+color: white;
+border: none;
+padding: 10px 20px;
+border-radius: 5px;
+cursor: pointer;
+font-weight: 600;
+transition: background-color 0.3s ease;
+}
+
+.custom-message-box-close:hover {
+background-color: #1f1850;
+}
+
+/* Styling for the new requested documents section in the modal */
+.requested-documents-section h4 {
+font-size: 1.1em;
+color: #2c2273;
+margin-bottom: 15px;
+padding-bottom: 5px;
+border-bottom: 2px solid #e0e0e0;
+}
+
+.document-item {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 8px;
+font-size: 0.95em;
+color: #333;
+}
+
+.document-name {
+font-weight: 500;
+flex-grow: 1;
+}
+
+.document-copies {
+font-weight: 600;
+color: #555;
+flex-shrink: 0;
+}
+
+
+
+
+/* Responsive Adjustments (combined for all pages) */
+@media (max-width: 1200px) {
+    .header {
+        padding: 10px 20px;
+    }
+    .main-container {
+        flex-direction: column; /* Stack sidebar and content */
+    }
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        padding: 15px 0;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        justify-content: flex-start; /* Align menu items left */
+    }
+    .sidebar-menu {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+    }
+    .menu-item a {
+        padding: 8px 15px;
+        margin: 0 5px;
+    }
+    .icon-sidebar {
+        margin-right: 8px;
+    }
+    .content-area {
+        padding: 20px;
+    }
+    .summary-cards {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+    .charts-section {
+        grid-template-columns: 1fr; /* Stack charts on smaller screens */
+    }
+
+    /* Clearance specific table adjustments */
+    .table-header-row,
+    .data-row {
+        grid-template-columns: repeat(4, minmax(100px, 1fr));
+        min-width: 500px; /* Adjust min-width for horizontal scroll */
+    }
+
+    /* View Request table adjustments */
+    .view-request-table-header,
+    .view-request-data-row {
+        grid-template-columns: 0.5fr 1fr 1.2fr 1.5fr 1fr 1fr 2fr; /* Adjust for 7 columns */
+        min-width: 700px; /* Ensure horizontal scroll on smaller screens */
+    }
+
+    /* View Status Modal responsive */
+    .view-status-modal-content {
+        max-width: 75vw; /* Adjust max-width for larger screens, slightly wider */
+        padding: 20px;
+    }
+    .view-status-modal-inner {
+        flex-direction: column; /* Ensure stacked vertically */
+        gap: 20px; /* Space between stacked sections */
+    }
+    .student-info-section,
+    .remarks-section,
+    .status-offices-section,
+    .requested-documents-section {
+        min-width: unset;
+        width: 100%;
+    }
+    .student-info-section {
+        flex-direction: row; /* Keep horizontal layout for student info */
+        align-items: flex-start; /* Align items to the top */
+        text-align: left;
+    }
+    .remarks-section h4,
+    .status-offices-section h4,
+    .requested-documents-section h4 {
+        text-align: left; /* Align section titles to the left */
+    }
+    .view-consent-file-button {
+        display: block;
+        margin: 15px 0 0 0; /* Align left */
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .header-right {
+        width: 100%;
+        justify-content: space-between;
+        gap: 15px;
+    }
+    .search-bar {
+        width: 100%;
+        max-width: unset;
+    }
+    .sidebar {
+        flex-wrap: wrap; /* Allow sidebar items to wrap */
+        justify-content: center;
+    }
+    .menu-item {
+        width: 48%; /* Two items per row */
+        margin-bottom: 10px;
+    }
+    .page-title {
+        font-size: 1.6em;
+    }
+    .section-card h2, .section-card h3 { /* Generalize for section titles */
+        font-size: 1.3em;
+    }
+    .data-table {
+        font-size: 0.9em;
+    }
+    .card {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+    .card-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.8em;
+    }
+    .card-number {
+        font-size: 1.5em;
+    }
+
+    /* Clearance specific table adjustments */
+    .table-header-row,
+    .data-row {
+        font-size: 0.85em;
+        padding: 8px 0;
+        gap: 5px;
+        grid-template-columns: repeat(4, minmax(80px, 1fr)); /* 4 columns on smaller screens */
+        min-width: 400px; /* Keep minimum width for horizontal scroll */
+    }
+    .action-button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    .tab-navs {
+        justify-content: space-around;
+        gap: 10px;
+    }
+    .tab-item {
+        min-width: 90px;
+        font-size: 14px;
+    }
+    .tab-item.active::after {
+        bottom: -7px;
+    }
+
+    .page-header-controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .page-header-controls .search-bar {
+        width: 100%;
+        max-width: unset;
+    }
+
+    /* View Request specific adjustments */
+    .view-request-header .page-title {
+        font-size: 1.5em;
+        padding: 8px 15px;
+    }
+    .view-request-table-header,
+    .view-request-data-row {
+        grid-template-columns: 0.5fr 1fr 1.2fr 1.5fr 1fr 1fr 2fr; /* Smaller columns */
+        min-width: 600px; /* Adjusted min-width for scroll */
+    }
+    .local-abroad-tabs .tab-item {
+        padding: 8px 15px;
+        font-size: 0.9em;
+    }
+
+    /* View Status Modal responsive */
+    .view-status-modal-content {
+        max-width: 90%; /* Max width 90% of screen */
+        padding: 15px;
+    }
+    .office-status-item {
+        flex-direction: column; /* Stack status items */
+        align-items: flex-start;
+        gap: 5px;
+    }
+    .status-badge {
+        width: 100%; /* Full width for badges */
+        min-width: unset;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        padding: 10px 15px;
+    }
+    .university-name {
+        font-size: 1.2em;
+    }
+    .user-info span {
+        display: none;
+    }
+    .user-info .icon-bell,
+    .user-info .icon-user {
+        font-size: 1.5em;
+    }
+    .sidebar {
+        padding: 10px 0;
+        gap: 0;
+    }
+    .menu-item {
+        width: 100%; /* Stack sidebar items vertically */
+    }
+    .menu-item a {
+        justify-content: center;
+    }
+    /* .menu-item a .label {
+        display: none; // Hide labels, show only icons - decided to keep labels visible where possible in mobile.
+    } */
+    .menu-item.active a {
+        flex-direction: column;
+    }
+    .icon-sidebar {
+        margin-right: 0;
+        margin-bottom: 5px;
+    }
+    .content-area {
+        padding: 15px;
+    }
+    .page-title {
+        font-size: 1.4em;
+    }
+    .section-card h2, .section-card h3 {
+        font-size: 1.1em;
+    }
+    .data-table {
+        font-size: 0.8em;
+    }
+
+    /* Clearance specific table adjustments */
+    .table-header-row,
+    .data-row {
+        grid-template-columns: repeat(4, minmax(60px, 1fr)); /* Even smaller columns for mobile */
+        min-width: 300px; /* Adjust min-width if needed to fit more content or allow scroll */
+    }
+    .action-button {
+        padding: 4px 8px;
+        font-size: 10px;
+    }
+    .tab-item {
+        min-width: 60px;
+        font-size: 12px;
+    }
+
+    /* View Request specific adjustments */
+    .view-request-header .page-title {
+        font-size: 1.3em;
+        padding: 6px 12px;
+    }
+    .view-request-table-header,
+    .view-request-data-row {
+        grid-template-columns: repeat(7, minmax(50px, 1fr)); /* Further reduce column width */
+        min-width: 500px; /* Maintain horizontal scroll */
+    }
+    .local-abroad-tabs .tab-item {
+        padding: 6px 12px;
+        font-size: 0.8em;
+    }
+
+    /* View Status Modal responsive */
+    .view-status-modal-content {
+        padding: 10px;
+        max-width: 95%; /* Adjust for very small screens */
+    }
+    .office-status-item {
+        font-size: 0.9em;
+    }
+    .status-badge {
+        padding: 4px 8px;
+        font-size: 0.75em;
+    }
+}

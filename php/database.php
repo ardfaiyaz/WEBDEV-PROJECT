@@ -1,7 +1,7 @@
 <?php
 // php/database.php
 
-$host = '127.0.0.1'; // Your database host
+$host = 'localhost'; // Your database host
 $db   = 'clearance'; // Your database name, as defined in clearance-3.sql
 $user = 'root'; // Your database username (default for XAMPP)
 $pass = ''; // Your database password (default for XAMPP, usually empty)
