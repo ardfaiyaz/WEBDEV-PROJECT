@@ -1,173 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Signup</title>
-  <link rel="stylesheet" href="../assets/css/user-signup.css" />
-  <link rel="icon" type="image/png" href="../assets/images/school-logo.png" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Student Signup</title>
+    <link rel="stylesheet" href="../assets/css/user-signup.css" />
+    <link rel="icon" type="image/png" href="../assets/images/school-logo.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-  <div class="signup-wrapper">
-    <div class="signup-container">
-      <div class="signup-box">
-        <div class="header">
-          <img src="../assets/icons/NU_shield.svg.png" alt="NU Logo" class="logo">
-          <h1>NU STUDENT CLEARANCE SYSTEM</h1>
-        </div>
+    <div class="signup-wrapper">
+        <div class="signup-container">
+            <div class="signup-box">
+                <div class="header">
+                    <img src="../assets/icons/NU_shield.svg.png" alt="NU Logo" class="logo">
+                    <h1>NU STUDENT CLEARANCE SYSTEM</h1>
+                </div>
 
-        <div class="form-wrapper">
-          <!-- Section 1: Basic Information -->
-          <section class="form-section" id="basic">
-            <h2 class="form-title">Basic Information</h2>
-            <div class="form-grid">
-              <div class="form-item">
-                <label>First Name:</label>
-                <input type="text" placeholder="Enter Here" />
-              </div>
-              <div class="form-item">
-                <label>Middle Name:</label>
-                <input type="text" placeholder="Enter Here" />
-              </div>
-              <div class="form-item">
-                <label>Last Name:</label>
-                <input type="text" placeholder="Enter Here" />
-              </div>
-              <div class="form-item">
-                <label>Gender:</label>
-                <select>
-                  <option disabled selected>Select</option>
-                  <option>Male</option>
-                  <option>Female</option>
-                </select>
-              </div>
-              <div class="form-item">
-                <label>Birthdate:</label>
-                <input type="date" />
-              </div>
-              <div class="form-item">
-                <label>Birth Place:</label>
-                <input type="text" placeholder="Enter Here" />
-              </div>
-              <div class="form-item">
-                <label>Nationality:</label>
-                <input type="text" placeholder="Enter Here" />
-              </div>
+                <div class="form-wrapper">
+                    <form class="signup-form">
+                        <div class="form-grid">
+                            <div class="form-row-grid">
+                                <div class="form-item">
+                                    <label for="firstName">First Name:</label>
+                                    <input type="text" id="firstName" placeholder="Enter First Name" required />
+                                </div>
+                                <div class="form-item">
+                                    <label for="lastName">Last Name:</label>
+                                    <input type="text" id="lastName" placeholder="Enter Last Name" required />
+                                </div>
+                            </div>
+
+                            <div class="form-item">
+                                <label for="email">School Email:</label>
+                                <input type="email" id="email" placeholder="Enter School Email" required />
+                            </div>
+                            <div class="form-item">
+                                <label for="studentId">Student ID:</label>
+                                <input type="text" id="studentId" placeholder="Enter Student ID" required />
+                            </div>
+
+                            <div class="form-row-grid">
+                                <div class="form-item">
+                                    <label for="password">Password:</label>
+                                    <div class="password-input-container">
+                                        <input type="password" id="password" placeholder="Enter Password" required />
+                                        <span class="password-toggle-icon"><i class="fas fa-eye"></i></span>
+                                    </div>
+                                </div>
+                                <div class="form-item">
+                                    <label for="confirmPassword">Confirm Password:</label>
+                                    <div class="password-input-container">
+                                        <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
+                                        <span class="password-toggle-icon"><i class="fas fa-eye"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="submit-wrapper">
+                            <button type="submit" class="submit-btn" id="userSubmitButton">Sign Up</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-          </section>
-
-          <!-- Section 2: Address Information -->
-          <section class="form-section" id="address">
-            <h2 class="form-title">Address Information</h2>
-            <div class="form-grid">
-              <div class="form-item">
-                <label>House No.:</label>
-                <input type="text" placeholder="Enter Here" />
-              </div>
-              <div class="form-item">
-                <label>Street/Barangay:</label>
-                <input type="text" placeholder="Enter Here" />
-              </div>
-              <div class="form-item">
-                <label>City/Municipality:</label>
-                <input type="text" placeholder="Enter Here" />
-              </div>
-              <div class="form-item">
-                <label>State/Province:</label>
-                <input type="text" placeholder="Enter Here" />
-              </div>
-              <div class="form-item">
-                <label>ZIP Code:</label>
-                <input type="text" placeholder="Enter Here" />
-              </div>
-              <div class="form-item">
-                <label>Country:</label>
-                <input type="text" placeholder="Enter Here" />
-              </div>
-              <div class="form-item">
-                <label>Mobile Number:</label>
-                <input type="text" placeholder="Enter Here" />
-              </div>
-            </div>
-          </section>
-
-          <!-- Section 3: Account Information -->
-          <section class="form-section" id="account">
-            <h2 class="form-title">Account Information</h2>
-            <div class="form-grid" style="margin-bottom: 50px;">
-              <div class="form-item">
-                <label>School ID:</label>
-                <input type="text" placeholder="Enter Here" />
-              </div>
-              <div class="form-item">
-                <label>School Email:</label>
-                <input type="email" placeholder="Enter Here" />
-              </div>
-              <div class="form-item">
-                <label>Password:</label>
-                <input type="password" placeholder="Enter Here" />
-              </div>
-              <div class="form-item">
-                <label>Confirm Password:</label>
-                <input type="password" placeholder="Enter Here" />
-              </div>
-            </div>
-
-            <!-- Submit Button -->
-            <div style="text-align: center;">
-              <button class="submit-btn">Submit</button>
-            </div>
-          </section>
         </div>
-        
-      </div>
-
-      <div class="tracker">
-        <div class="step active" data-target="basic">
-          <div class="circle"></div>
-          <span>Basic Info</span>
-        </div>
-        <div class="line"></div>
-        <div class="step" data-target="address">
-          <div class="circle"></div>
-          <span>Address Info</span>
-        </div>
-        <div class="line"></div>
-        <div class="step" data-target="account">
-          <div class="circle"></div>
-          <span>Account Info</span>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <script>
-    const sections = document.querySelectorAll('.form-section');
-    const steps = document.querySelectorAll('.tracker .step');
-    const wrapper = document.querySelector('.form-wrapper');
+    <script>
+        const signupForm = document.querySelector('.signup-form');
+        const userSubmitButton = document.getElementById('userSubmitButton'); // Changed ID for clarity
 
-    wrapper.addEventListener('scroll', () => {
-      let current = '';
-      sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        if (wrapper.scrollTop >= sectionTop - wrapper.offsetHeight / 2) {
-          current = section.getAttribute('id');
-        }
-      });
+        const passwordToggleIcons = document.querySelectorAll('.password-toggle-icon');
 
-      steps.forEach(step => {
-        step.classList.remove('active');
-        if (step.dataset.target === current) {
-          step.classList.add('active');
-        }
-      });
-    });
+        signupForm.addEventListener('submit', function(event) {
+            event.preventDefault();
 
-    steps.forEach(step => {
-      step.addEventListener('click', () => {
-        document.getElementById(step.dataset.target).scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-    });
-  </script>
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match. Please try again.");
+                return;
+            }
+
+            // In a real application, you'd send this data to your server.
+            // For now, we'll just redirect.
+            console.log("Form submitted successfully!");
+            window.location.href = 'index.html';
+        });
+
+        passwordToggleIcons.forEach(icon => {
+            icon.addEventListener('click', function() {
+                const passwordInput = this.previousElementSibling;
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+
+                this.querySelector('i').classList.toggle('fa-eye');
+                this.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+        });
+    </script>
 </body>
 </html>
