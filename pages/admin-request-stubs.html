@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Request - National University</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/admin-request-stubs.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="logo-section">
+            <img src="NU_shield.svg.png" alt="NU Logo" class="logo">
+            <span class="university-name">NATIONAL<br>UNIVERSITY</span>
+        </div>
+        <div class="header-right">
+            <div class="user-info">
+                <i class='bx bxs-bell icon-bell'></i>
+                <span>Hi, Pia Elleine</span>
+                <i class='bx bxs-user-circle icon-user'></i>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <i class='bx bx-search icon-search'></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="menu-item"><a href="UserPOV.html"><i class='bx bxs-home icon-sidebar'></i> Home</a></li>
+                <li class="menu-item"><a href="#"><i class='bx bxs-user icon-sidebar'></i> Profile</a></li>
+                <li class="menu-item"><a href="#"><i class ='bx male-female icon-sidebar'></i> About Us</a></li>
+                <li class="menu-item"><a href="#"><i class='bx bxs-log-out icon-sidebar'></i> Logout</a></li>
+            </ul>
+        </aside>
+
+        <main class="content-area">
+            <div class="page-header-controls view-request-header">
+                <h1 class="page-title  primary-button view-request-title-button">View Request</h1>
+                <div class="header-actions">
+                    <a href="student_clearances.html" class="back-link">Back to My Clearances</a>
+                </div>
+            </div>
+
+            <section class="section-card">
+                <div class="tab-navs local-abroad-tabs">
+                    <ul class="navtabs">
+                        <li class="tab-item active" data-type="LOCAL">LOCAL</li>
+                        <li class="tab-item" data-type="ABROAD">ABROAD</li>
+                    </ul>
+                </div>
+
+                <div class="status-table-container">
+                    <div class="table-header-row data-table-header view-request-table-header">
+                        <div>ID</div>
+                        <div>DATE</div>
+                        <div>STUDENT ID</div>
+                        <div>NAME</div>
+                        <div>PROGRAM</div>
+                        <div>STATUS</div>
+                        <div>ACTION</div>
+                    </div>
+
+                    <!-- LOCAL Requests - Updated details for Pia Elleine Lucero -->
+                    <div class="data-row view-request-data-row" data-type="LOCAL"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Issue Found"}, {"office": "Student Discipline Office", "status": "Pending"}, {"office": "Student Affairs Office", "status": "On-going"}, {"office": "Guidance Office", "status": "On-going"}, {"office": "Library", "status": "Pending"}, {"office": "ITSO", "status": "Completed"}, {"office": "Accounting Office", "status": "Issue Found"}, {"office": "Registrar Office", "status": "Completed"}]'
+                        data-student-name="Lucero, Pia Elleine"
+                        data-student-email="luceropl@students.nu-dasma.edu.ph"
+                        data-student-id="2023-170123"
+                        data-requested-documents='[{"name": "Transcript of Records", "copies": "3 copies"}, {"name": "Certificate of Good Moral", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=PL"
+                        >
+                        <div>1</div>
+                        <div>05-19-2025</div>
+                        <div>2023-123456</div>
+                        <div>Pia Elleine Lucero</div>
+                        <div>BSIT-MWA</div>
+                        <div>
+                            <span>On-going</span>
+                            <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">view status</a>
+                        </div>
+                        <div class="action-cell">
+                            <button class="action-button secondary-button view-status-detail-button">View Status Detail</button>
+                            <button class="action-button primary-button release-claim-stub-button">Release Claim Stub</button>
+                        </div>
+                    </div>
+
+                    <!-- LOCAL Requests - Pia Elleine Lucero (Completed overall) -->
+                    <div class="data-row view-request-data-row" data-type="LOCAL"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Completed"}, {"office": "Student Discipline Office", "status": "Completed"}, {"office": "Student Affairs Office", "status": "Completed"}, {"office": "Guidance Office", "status": "Completed"}, {"office": "Library", "status": "Completed"}, {"office": "ITSO", "status": "Completed"}, {"office": "Accounting Office", "status": "Completed"}, {"office": "Registrar Office", "status": "Completed"}]'
+                        data-student-name="Pia Elleine Lucero"
+                        data-student-email="luceropl@students.nu-dasma.edu.ph"
+                        data-student-id="2023-123456"
+                        data-requested-documents='[{"name": "Transcript of Records", "copies": "2 copies"}, {"name": "Diploma (Photocopy)", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=PE"
+                        >
+                        <div>1</div>
+                        <div>05-19-2025</div>
+                        <div>2023-123456</div>
+                        <div>Pia Elleine Lucero</div>
+                        <div>BSIT-MWA</div>
+                        <div>
+                            <span>Completed</span>
+                            <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">view status</a>
+                        </div>
+                        <div class="action-cell">
+                            <button class="action-button secondary-button view-status-detail-button">View Status Detail</button>
+                            <span class="status-completed-text">Claim Stub Released</span>
+                        </div>
+                    </div>
+
+                    <!-- LOCAL Requests - Bryan Cancel (Complete overall) -->
+                    <div class="data-row view-request-data-row" data-type="LOCAL"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Completed"}, {"office": "Student Discipline Office", "status": "On-going"}, {"office": "Student Affairs Office", "status": "Completed"}, {"office": "Guidance Office", "status": "Completed"}, {"office": "Library", "status": "Pending"}, {"office": "ITSO", "status": "Completed"}, {"office": "Accounting Office", "status": "Completed"}, {"office": "Registrar Office", "status": "Completed"}]'
+                        data-student-name="Bryan Cancel"
+                        data-student-email="cancelb@students.nu-dasma.edu.ph"
+                        data-student-id="2023-123456"
+                        data-requested-documents='[{"name": "Certificate of Enrollment", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=BC"
+                        >
+                        <div>2</div>
+                        <div>05-19-2025</div>
+                        <div>2023-123456</div>
+                        <div>Bryan Cancel</div>
+                        <div>BSArch</div>
+                        <div>
+                            <span>Complete</span>
+                            <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">view status</a>
+                        </div>
+                        <div class="action-cell">
+                            <button class="action-button primary-button release-claim-stub-button blue-button">Release Claim Stub</button>
+                        </div>
+                    </div>
+
+                    <!-- LOCAL Requests - Melthon Donaire (Complete overall) -->
+                    <div class="data-row view-request-data-row" data-type="LOCAL"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Completed"}, {"office": "Student Discipline Office", "status": "Completed"}, {"office": "Student Affairs Office", "status": "On-going"}, {"office": "Guidance Office", "status": "Completed"}, {"office": "Library", "status": "Completed"}, {"office": "ITSO", "status": "Completed"}, {"office": "Accounting Office", "status": "Pending"}, {"office": "Registrar Office", "status": "Completed"}]'
+                        data-student-name="Melthon Donaire"
+                        data-student-email="donairem@students.nu-dasma.edu.ph"
+                        data-student-id="2023-123456"
+                        data-requested-documents='[{"name": "Letter of Recommendation", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=MD"
+                        >
+                        <div>3</div>
+                        <div>05-19-2025</div>
+                        <div>2023-123456</div>
+                        <div>Melthon Donaire</div>
+                        <div>BSPsy</div>
+                        <div>
+                            <span>Complete</span>
+                            <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">view status</a>
+                        </div>
+                        <div class="action-cell">
+                            <button class="action-button primary-button release-claim-stub-button green-button">Release Claim Stub</button>
+                        </div>
+                    </div>
+
+                    <!-- LOCAL Requests - Hero Buta (Complete overall) -->
+                    <div class="data-row view-request-data-row" data-type="LOCAL"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Completed"}, {"office": "Student Discipline Office", "status": "Completed"}, {"office": "Student Affairs Office", "status": "Completed"}, {"office": "Guidance Office", "status": "Completed"}, {"office": "Library", "status": "Completed"}, {"office": "ITSO", "status": "Completed"}, {"office": "Accounting Office", "status": "Completed"}, {"office": "Registrar Office", "status": "Completed"}]'
+                        data-student-name="Hero Buta"
+                        data-student-email="butah@students.nu-dasma.edu.ph"
+                        data-student-id="2023-123456"
+                        data-requested-documents='[{"name": "Medical Certificate", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=HB"
+                        >
+                        <div>4</div>
+                        <div>05-19-2025</div>
+                        <div>2023-123456</div>
+                        <div>Hero Buta</div>
+                        <div>BSHM</div>
+                        <div>
+                            <span>Complete</span>
+                            <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">view status</a>
+                        </div>
+                        <div class="action-cell">
+                            <button class="action-button primary-button release-claim-stub-button green-button">Release Claim Stub</button>
+                        </div>
+                    </div>
+
+                    <!-- ABROAD Requests - Alex Johnson (Pending overall) -->
+                    <div class="data-row view-request-data-row" data-type="ABROAD" style="display: none;"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Pending"}, {"office": "Student Discipline Office", "status": "Pending"}, {"office": "Student Affairs Office", "status": "On-going"}, {"office": "Guidance Office", "status": "Pending"}, {"office": "Library", "status": "Issue Found"}, {"office": "ITSO", "status": "Pending"}, {"office": "Accounting Office", "status": "Pending"}, {"office": "Registrar Office", "status": "On-going"}]'
+                        data-student-name="Alex Johnson"
+                        data-student-email="johnsona@students.nu-dasma.edu.ph"
+                        data-student-id="2023-987654"
+                        data-requested-documents='[{"name": "Transcript of Records", "copies": "5 copies"}, {"name": "Course Description", "copies": "2 copies"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=AJ"
+                        >
+                        <div>2</div>
+                        <div>05-20-2025</div>
+                        <div>2023-987654</div>
+                        <div>Alex Johnson</div>
+                        <div>BSECE</div>
+                        <div>
+                            <span>Pending</span>
+                            <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">view status</a>
+                        </div>
+                        <div class="action-cell">
+                            <button class="action-button secondary-button view-status-detail-button">View Status Detail</button>
+                        </div>
+                    </div>
+
+                    <!-- ABROAD Requests - Sarah Lee (Completed overall) -->
+                    <div class="data-row view-request-data-row" data-type="ABROAD" style="display: none;"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Completed"}, {"office": "Student Discipline Office", "status": "Completed"}, {"office": "Student Affairs Office", "status": "Completed"}, {"office": "Guidance Office", "status": "Completed"}, {"office": "Library", "status": "Completed"}, {"office": "ITSO", "status": "Completed"}, {"office": "Accounting Office", "status": "Completed"}, {"office": "Registrar Office", "status": "Completed"}]'
+                        data-student-name="Sarah Lee"
+                        data-student-email="lees@students.nu-dasma.edu.ph"
+                        data-student-id="2023-112233"
+                        data-requested-documents='[{"name": "Transcript of Records", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=SL"
+                        >
+                        <div>3</div>
+                        <div>05-21-2025</div>
+                        <div>2023-112233</div>
+                        <div>Sarah Lee</div>
+                        <div>BSCS</div>
+                        <div>
+                            <span>Completed</span>
+                            <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">view status</a>
+                        </div>
+                        <div class="action-cell">
+                            <button class="action-button secondary-button view-status-detail-button">View Status Detail</button>
+                            <span class="status-completed-text">Claim Stub Released</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="viewStatusModal" class="modal-overlay">
+        <div class="modal-content view-status-modal-content">
+            <span class="close-button">&times;</span>
+            <div class="view-status-modal-inner">
+                <div class="student-info-section">
+                    <img src="" alt="Student Avatar" class="student-avatar-img"> <!-- Added an img tag for the avatar -->
+                    <div class="student-text-info"> <!-- New wrapper for text info -->
+                        <h3 class="modal-student-name"></h3>
+                        <p class="modal-student-id"></p>
+                        <p class="modal-student-email"></p>
+                    </div>
+                </div>
+
+                <div class="status-offices-section">
+                    <h4>STATUS</h4>
+                 
+                </div>
+                
+                <div class="requested-documents-section">
+                    <h4>REQUESTED DOCUMENTS</h4>
+                   
+                </div>
+
+                <div class="remarks-section">
+                    <h4>OTHER REMARKS</h4>
+                    <div class="remarks-box">
+                        <p class="modal-remarks">No Remarks</p>
+                    </div>
+                    <button class="view-consent-file-button">View Consent File</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../js/admin-request-stubs.js"></script>
+</body>
+</html>
