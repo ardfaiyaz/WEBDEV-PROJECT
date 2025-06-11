@@ -42,9 +42,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Redirect based on role code
                 if ($user['role_code'] === 'STUD') {
                     // *** THIS IS THE CHANGE ***
-                    header("Location: index.html"); // Redirect students to user-profile.html
+                    header("Location: index.php"); // Redirect students to user-profile.html
                 } elseif ($user['role_code'] === 'ADMIN') {
-                    header("Location: index.html"); // Keep admin redirect as is
+                    header("Location: index.php"); // Keep admin redirect as is
                 }
                 exit(); // Always exit after a header redirect
             } else {
