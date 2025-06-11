@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
             notification.style.display = 'none';
             if (redirectToLogin) {
                 console.log("Redirecting to login.html...");
-                window.location.href = '../pages/login.html';
+                window.location.href = '../pages/login.php';
             }
         };
 
