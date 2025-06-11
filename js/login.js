@@ -19,3 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Additional validation can be added here (e.g., email format, password strength)
     });
 });
+
+
+
+    
