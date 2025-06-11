@@ -149,7 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <?php if ($redirectNow): ?>
-    <meta http-equiv="refresh" content="3;url=../pages/login.html"> 
+    <meta http-equiv="refresh" content="3;url=../pages/login.php"> 
     <?php endif; ?>
 
 </head>
