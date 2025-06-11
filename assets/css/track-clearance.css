@@ -262,21 +262,16 @@ button {
   background-color: #9bc494; /* light green */
 }
 
-.card.pending {
-  background-color: #fff3cd; /* light orange */
-
-}
-
-.card.inprogress {
+.card.ongoing {
   background-color: #9dccf5; /* light blue */
 }
 
-.card.declined {
+.card.issuefound {
   background-color: #ef7979; /* light red */
 }
 
-.card.inprogress2 {
-  background-color: #eeeeee; /* light gray */
+.card.pending {
+  background-color: #b0b0b0ee; /* light gray */
 }
 
 
@@ -302,8 +297,7 @@ button {
   margin-right: 6px;
 }
 
-.completed::before { color: green; }
-.pending::before { color: orange; }
-.inprogress::before { color: blue; }
-.declined::before { color: red; }
-.inprogress2::before { color: gray; }
+.completed::before { color: #9bc494; }
+.ongoing::before { color: #9dccf5; }
+.issuefound::before { color: #ef7979; }
+.pending::before { color: gray; }
