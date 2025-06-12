@@ -301,3 +301,27 @@ button {
 .ongoing::before { color: #9dccf5; }
 .issuefound::before { color: #ef7979; }
 .pending::before { color: gray; }
+
+
+
+/* In assets/css/track-clearance.css */
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    word-wrap: break-word; /* Ensure long messages wrap */
+}
+
+.success-alert {
+    background-color: #d4edda; /* Light green background */
+    color: #155724; /* Dark green text */
+    border: 1px solid #c3e6cb; /* Green border */
+}
+
+/* Optional: Add a fade-out effect for the alert */
+.alert.fade-out {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+}
