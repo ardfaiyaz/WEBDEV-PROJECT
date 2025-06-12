@@ -252,7 +252,7 @@ if ($userProfileData) {
         <li><a href="index.php"><i class='bx bxs-home'></i><span class="label">Home</span></a></li>
         <li><a href="user-profile.php"><i class='bx bxs-user'></i><span class="label">Profile</span></a></li>
         <li><a href="track-clearance.php"><i class='bx bxs-file'></i><span class="label">My Clearances</span></a></li>
-        <li><a href="logout.php"><i class='bx bxs-log-out'></i><span class="label">Logout</span></a></li>
+        <li><a href=""><i class='bx bxs-log-out'></i><span class="label">Logout</span></a></li>
       </ul>
     </aside>
 
