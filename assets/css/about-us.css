@@ -35,13 +35,17 @@ body {
   z-index: 100;
 }
 
+/* Updated logo-section for hamburger menu integration */
+.topbar .logo-section {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Space between hamburger, logo, and text */
+}
+
 .logo-link {
   text-decoration: none;
   color: inherit;
-}
-
-.logo-section {
-  display: flex;
+  display: flex; /* Ensure logo and text align well */
   align-items: center;
   gap: 15px;
 }
@@ -73,20 +77,53 @@ body {
   cursor: pointer;
 }
 
-/* Yellow Banner */
-.yellow-wrap {
-  width: 100%;
-  height: auto;
-  margin-top: 20px;
+
+/* Hero Banner Section - This is where the image and text are combined */
+.hero-banner {
+  /* IMPORTANT: Ensure this URL points to your actual image file. */
+  /* This uses the image you uploaded: image_6df717.jpg */
+  background-image: url('../images/about-us-bg.png');
+  background-size: cover; /* Makes the image cover the entire area of the div */
+  background-position: center center; /* Centers the image within the div */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  height: 75vh; /* Adjust height as needed to fit content and visuals */
+  display: flex;
+  align-items: center; /* Vertically centers the content (text) inside the banner */
+  position: relative; /* Needed if you want to absolutely position elements later */
+  color: white; /* Sets default text color to white for contrast against the image */
+  padding-left: 90px; /* Aligns text with header padding */
 }
 
-.yellow {
-  font-size: 20px;
-   text-align: center; 
-  font-family: 'Montserrat', sans-serif;
+.hero-content {
+  max-width: 40vw; /* Limits the width of the text for readability */
+ /* Pushes content up from the bottom to make space for the yellow bar */
+  /* Adding a subtle text shadow for better readability over complex backgrounds */
+}
+
+.hero-banner h1 {
+    font-weight: bold;
+  font-size: 3.5em; /* Large font size as in the image */
+  margin-bottom: 15px;
+  line-height: 1.1;
+  text-transform: uppercase;
+  font-family: 'Montserrat', sans-serif; /* Use AkwePro for the large heading if desired */
+  color: white; /* Explicitly set to white to ensure visibility */
+}
+
+.hero-banner p {
+  font-family: 'Montserrat', sans-serif; /* Use Montserrat for the paragraph text */
+  font-size: 1.1em;
+  line-height: 1.6;
+  max-width: 30vw;
+  color: white; /* Explicitly set to white to ensure visibility */
+}
+
+/* About System Bar at the bottom */
+.about-system-bar {
+  background-color: #ffd700; /* Yellow color from the image */
+  padding: 20px 50px;
+  color: #2c2c2c; /* Dark text color for contrast */
   font-weight: bold;
-  padding: 10px 70px;
-  background-color: #ffcf00;
-  color: black;
-  display: inline-block; 
+  font-size: 1.2em;
+  text-transform: uppercase;
 }
