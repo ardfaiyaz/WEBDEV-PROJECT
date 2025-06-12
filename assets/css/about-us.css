@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+
+@font-face {
+  font-family: 'AkwePro';
+  src: url('../fonts/akwe-pro-ext-sc-bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: #f5f5f5;
+  color: #2c2c2c;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header */
+.topbar {
+  background-color: #2c2273;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 50px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo-section img {
+  width: 50px;
+}
+
+.school-name {
+  font-family: 'AkwePro', sans-serif;
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 16px;
+}
+
+.user-section span {
+  font-weight: 600;
+  color: white;
+}
+
+.user-section i {
+  font-size: 34px;
+  cursor: pointer;
+}
+
+/* Yellow Banner */
+.yellow-wrap {
+  width: 100%;
+  height: auto;
+  margin-top: 20px;
+}
+
+.yellow {
+  font-size: 20px;
+   text-align: center; 
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  padding: 10px 70px;
+  background-color: #ffcf00;
+  color: black;
+  display: inline-block; 
+}
