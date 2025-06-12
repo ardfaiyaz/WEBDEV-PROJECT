@@ -2,211 +2,294 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
 
 @font-face {
-  font-family: 'AkwePro';
-  src: url('../fonts/akwe-pro-ext-sc-bold.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'AkwePro';
+    src: url('../fonts/akwe-pro-ext-sc-bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }
 
 body {
-  margin: 0;
-  font-family: "Montserrat", sans-serif;
-  background: url('../images/LOGIN-BACKGROUND-IMAGE.png') no-repeat center center/cover;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-attachment: fixed;
+    margin: 0;
+    font-family: "Montserrat", sans-serif;
+    background: url('../images/LOGIN-BACKGROUND-IMAGE.png') no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-attachment: fixed;
+    overflow: hidden; /* Prevent scrollbar during initial animations */
 }
 
 .signup-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 .signup-container {
-  height: auto;
-  min-height: 60vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    height: auto;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .signup-box {
-  background-color: #29227c;
-  padding: 20px;
-  width: 600px;
-  height: auto;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-  display: flex;
-  flex-direction: column;
-  border-radius: 10px;
-  max-height: 90vh;
-  overflow-y: auto;
+    background-color: #29227c;
+    padding: 20px;
+    width: 600px;
+    height: auto;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    max-height: 90vh;
+    overflow-y: auto; /* Keep scroll for content if it overflows */
 }
 
 .signup-box::-webkit-scrollbar {
-  display: none;
+    display: none; /* Hide scrollbar for Chrome, Safari, Opera */
 }
 .signup-box {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 }
 
 
 .header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  color: white;
-  margin-bottom: 20px;
-  text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    color: white;
+    margin-bottom: 20px;
+    text-align: center;
+    opacity: 0; /* Initial state for JS fade-in */
 }
 
 .logo {
-  width: 50px;
+    width: 50px;
 }
 
 .header h1 {
-  font-family: 'AkwePro', sans-serif;
-  font-size: 28px;
-  font-weight: 700;
-  margin: 0;
-  line-height: 1.2;
+    font-family: 'AkwePro', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
 }
 
 .form-wrapper {
-  flex-grow: 1;
-  background: white;
-  border-radius: 5px;
-  padding: 30px;
+    flex-grow: 1;
+    background: white;
+    border-radius: 5px;
+    padding: 40px 30px; /* Adjusted padding for consistency with floating labels */
 }
 
 .signup-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .form-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
 }
 
 .form-row-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }
 
 .form-item {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    position: relative; /* Essential for positioning the label */
+    margin-bottom: 10px; /* Space for the label to float */
+    opacity: 0; /* Initial state for JS slide-in fade-in */
+    transform: translateY(20px); /* Initial state for JS slide-in fade-in */
 }
 
-.form-item label {
-  color: #29227c;
-  font-weight: 600;
-  margin-bottom: 8px;
-  font-size: 15px;
-}
-
-.password-input-container {
-  position: relative;
-  width: 100%;
-}
-
-.password-input-container input {
-  width: 100%;
-  box-sizing: border-box;
-  padding-right: 40px;
-}
-
-.password-toggle-icon {
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  color: black;
-  font-size: 18px;
-  z-index: 10;
-  transition: color 0.3s ease;
-}
-
-.password-toggle-icon:hover {
-  color: black;
-}
-
-
+/* Base style for all inputs and selects */
 input, select {
-  font-family: 'Montserrat', sans-serif;
-  padding: 12px 16px;
-  font-size: 14px;
-  background-color: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 5px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.08);
-  color: black;
+    font-family: 'Montserrat', sans-serif;
+    padding: 18px 16px 6px 16px; /* Increased top padding to make room for label */
+    font-size: 14px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.08);
+    color: black;
+    width: 100%; /* Ensure inputs take full width */
+    box-sizing: border-box; /* Include padding in width */
+    position: relative;
+    z-index: 1; /* Ensures input is below label when animated */
 }
 
 input:focus, select:focus {
-  outline: none;
-  border-color: #f3c614;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.08), 0 0 0 3px rgba(243, 198, 20, 0.2);
+    outline: none;
+    border-color: #f3c614;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.08), 0 0 0 3px rgba(243, 198, 20, 0.2);
 }
 
+/* Floating Label Styles for INPUTS */
+.form-item label {
+    transition: all 0.3s ease; /* Smooth transition for the label */
+    position: absolute; /* Allows positioning relative to .form-item */
+    top: 50%; /* Center vertically with input text */
+    left: 16px; /* Initial horizontal position */
+    font-size: 14px; /* Initial font size */
+    pointer-events: none; /* Allows clicks to pass through to input */
+    transform-origin: left top; /* Set transform origin for scaling */
+    color: #888; /* Softer initial color for placeholder-like effect */
+    z-index: 2; /* Ensure label is above input when animated */
+    transform: translateY(-50%); /* Adjust for perfect vertical centering */
+}
+
+/* When input is NOT showing placeholder (i.e., has text) OR is focused */
+.form-item input:not(:placeholder-shown) + label,
+.form-item input:focus + label {
+    top: 0; /* Moves label to the top */
+    font-size: 12px; /* Shrinks font size */
+    color: #29227c; /* Changes color when focused/filled */
+    transform: translateY(-100%) scale(0.85); /* Moves up and scales down */
+    background-color: white; /* Match form background */
+    padding: 0 4px; /* Small padding for background behind text */
+    left: 10px; /* Adjust left position when "floated" */
+}
+
+/* Specific styling for when an input is actively focused */
+.form-item input:focus + label {
+    color: #f3c614; /* Highlight color for the label on focus */
+}
+
+
+/* Styling for SELECT element (not a true floating label, but aligns better) */
+.form-item select {
+    padding: 12px 16px; /* Standard padding for select */
+    height: auto; /* Allow height to adjust */
+}
+
+.form-item label[for="office"] { /* Target the label specific to the select element */
+    position: static; /* Override absolute position for select labels */
+    transform: none; /* Remove transformations */
+    margin-bottom: 8px; /* Original margin-bottom */
+    color: #29227c;
+    font-weight: 600;
+    font-size: 15px; /* Keep original font size for non-floating label */
+}
+
+/* Adjust the arrow for select */
 select {
-  appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg fill="%2329227c" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 20px;
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%2329227c" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 20px;
+}
+
+
+/* Password input container specific adjustments */
+.password-input-container {
+    position: relative;
+    width: 100%;
+    display: flex; /* To align input, label, and toggle icon */
+    align-items: center; /* Vertically center children */
+}
+
+.password-input-container input {
+    flex-grow: 1; /* Make input take available space */
+    padding-right: 40px; /* Space for the eye icon */
+}
+
+.password-input-container label {
+    /* Override top/left for labels inside password-input-container */
+    top: 50%; /* Initial position */
+    left: 16px; /* Initial position */
+    position: absolute;
+    z-index: 2;
+    transform: translateY(-50%);
+}
+
+/* Adjust the floated label for password inputs */
+.password-input-container input:not(:placeholder-shown) + label,
+.password-input-container input:focus + label {
+    top: 0; /* Moves label to the top */
+    transform: translateY(-100%) scale(0.85); /* Moves up and scales down */
+    left: 10px;
+}
+
+
+.password-input-container .password-toggle-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%); /* Base transform */
+    cursor: pointer;
+    color: black;
+    font-size: 18px;
+    z-index: 10;
+    transition: color 0.2s ease, transform 0.2s ease-in-out; /* Added transform transition */
+}
+
+.password-input-container .password-toggle-icon:hover {
+    color: #333; /* Slightly darker on hover */
+}
+
+/* Animation for the password toggle icon */
+.password-toggle-icon.icon-pop {
+    transform: translateY(-50%) scale(1.2); /* Pop effect */
 }
 
 .submit-wrapper {
-  margin-top: 30px;
-  text-align: center;
+    margin-top: 30px;
+    text-align: center;
 }
 
 .submit-btn {
-  background: linear-gradient(135deg, #32CD32, #228B22);
-  color: white;
-  font-size: 20px;
-  font-weight: 600;
-  padding: 15px 50px;
-  border: none;
-  border-radius: 8px;
-  font-family: "Montserrat", sans-serif;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(50, 205, 50, 0.4);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  letter-spacing: 1px;
+    background: linear-gradient(135deg, #32CD32, #228B22);
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 15px 50px;
+    border: none;
+    border-radius: 8px;
+    font-family: "Montserrat", sans-serif;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(50, 205, 50, 0.4);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 1px;
 }
 
 .submit-btn::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.3);
-  transition: all 0.6s ease;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: all 0.6s ease;
 }
 
 .submit-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(34, 139, 34, 0.6);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(34, 139, 34, 0.6);
 }
 
 .submit-btn:hover::before {
-  left: 100%;
+    left: 100%;
+}
+
+/* New: Button press effect */
+.submit-btn.button-pressed {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(34, 139, 34, 0.4);
 }

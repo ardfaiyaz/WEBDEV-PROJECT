@@ -1,124 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Signup</title>
-  <link rel="stylesheet" href="../assets/css/admin-signup.css" />
-  <link rel="icon" type="image/png" href="../assets/images/school-logo.png" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Admin Signup</title>
+    <link rel="stylesheet" href="../assets/css/admin-signup.css" />
+    <link rel="icon" type="image/png" href="../assets/images/school-logo.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-  <div class="signup-wrapper">
-    <div class="signup-container">
-      <div class="signup-box">
-        <div class="header">
-          <img src="../assets/icons/NU_shield.svg.png" alt="NU Logo" class="logo">
-          <h1>NU STUDENT CLEARANCE SYSTEM</h1>
-        </div>
+    <div class="signup-wrapper">
+        <div class="signup-container">
+            <div class="signup-box">
+                <div class="header">
+                    <img src="../assets/icons/NU_shield.svg.png" alt="NU Logo" class="logo">
+                    <h1>NU STUDENT CLEARANCE SYSTEM</h1>
+                </div>
 
-        <div class="form-wrapper">
-          <form class="signup-form">
-            <div class="form-grid">
-              <div class="form-row-grid">
-                <div class="form-item">
-                  <label for="firstName">First Name:</label>
-                  <input type="text" id="firstName" placeholder="Enter First Name" required />
-                </div>
-                <div class="form-item">
-                  <label for="lastName">Last Name:</label>
-                  <input type="text" id="lastName" placeholder="Enter Last Name" required />
-                </div>
-              </div>
+                <div class="form-wrapper">
+                    <form class="signup-form">
+                        <div class="form-grid">
+                            <div class="form-row-grid">
+                                <div class="form-item">
+                                    <input type="text" id="firstName" name="firstName" placeholder=" " required />
+                                    <label for="firstName">First Name:</label>
+                                </div>
+                                <div class="form-item">
+                                    <input type="text" id="lastName" name="lastName" placeholder=" " required />
+                                    <label for="lastName">Last Name:</label>
+                                </div>
+                            </div>
 
-              <div class="form-item">
-                <label for="email">School Email:</label>
-                <input type="email" id="email" placeholder="Enter School Email" required />
-              </div>
-              <div class="form-item">
-                <label for="employeeId">Employee ID:</label>
-                <input type="text" id="employeeId" placeholder="Enter Employee ID" required />
-              </div>
-              <div class="form-item">
-                <label for="office">Office:</label>
-                <select id="office" required>
-                  <option disabled selected>Select Office</option>
-                  <option value="registrar-office">Registrar Office</option>
-                  <option value="dean-program-chair-principal">Dean/Program Chair/Principal</option>
-                  <option value="student-discipline-office">Student Discipline Office</option>
-                  <option value="student-affairs-office">Student Affairs Office</option>
-                  <option value="guidance-office">Guidance Office</option>
-                  <option value="itso">ITSO</option>
-                  <option value="library-office">Library Office</option>
-                  <option value="accounting-office">Accounting Office</option>
-                </select>
-              </div>
+                            <div class="form-item">
+                                <input type="email" id="email" name="email" placeholder=" " required />
+                                <label for="email">School Email:</label>
+                            </div>
+                            <div class="form-item">
+                                <input type="text" id="employeeId" name="employeeId" placeholder=" " required />
+                                <label for="employeeId">Employee ID:</label>
+                            </div>
+                            <div class="form-item">
+                                <label for="office">Office:</label>
+                                <select id="office" name="office" required>
+                                    <option value="" disabled selected>Select Office</option>
+                                    <option value="registrar-office">Registrar Office</option>
+                                    <option value="dean-program-chair-principal">Dean/Program Chair/Principal</option>
+                                    <option value="student-discipline-office">Student Discipline Office</option>
+                                    <option value="student-affairs-office">Student Affairs Office</option>
+                                    <option value="guidance-office">Guidance Office</option>
+                                    <option value="itso">ITSO</option>
+                                    <option value="library-office">Library Office</option>
+                                    <option value="accounting-office">Accounting Office</option>
+                                </select>
+                            </div>
 
-              <div class="form-row-grid">
-                <div class="form-item">
-                  <label for="password">Password:</label>
-                  <div class="password-input-container">
-                    <input type="password" id="password" placeholder="Enter Password" required />
-                    <span class="password-toggle-icon"><i class="fas fa-eye"></i></span>
-                  </div>
+                            <div class="form-row-grid">
+                                <div class="form-item">
+                                    <div class="password-input-container">
+                                        <input type="password" id="password" name="password" placeholder=" " required />
+                                        <label for="password">Password:</label>
+                                        <span class="password-toggle-icon"><i class="fas fa-eye"></i></span>
+                                    </div>
+                                </div>
+                                <div class="form-item">
+                                    <div class="password-input-container">
+                                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder=" " required />
+                                        <label for="confirmPassword">Confirm Password:</label>
+                                        <span class="password-toggle-icon"><i class="fas fa-eye"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="submit-wrapper">
+                            <button type="submit" class="submit-btn" id="adminSubmitButton">Submit</button>
+                        </div>
+                    </form>
                 </div>
-                <div class="form-item">
-                  <label for="confirmPassword">Confirm Password:</label>
-                  <div class="password-input-container">
-                    <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
-                    <span class="password-toggle-icon"><i class="fas fa-eye"></i></span>
-                  </div>
-                </div>
-              </div>
             </div>
-
-            <div class="submit-wrapper">
-              <button type="submit" class="submit-btn" id="adminSubmitButton">Submit</button>
-            </div>
-          </form>
         </div>
-      </div>
     </div>
-  </div>
 
-  <script>
-    // Get the form element
-    const signupForm = document.querySelector('.signup-form');
-    // Get the submit button element
-    const adminSubmitButton = document.getElementById('adminSubmitButton');
-
-    // Get the password toggle icons
-    const passwordToggleIcons = document.querySelectorAll('.password-toggle-icon');
-
-    // Add an event listener to the form's submit event
-    signupForm.addEventListener('submit', function(event) {
-      // Prevent the default form submission behavior (which causes a page reload)
-      event.preventDefault();
-
-      // Basic client-side password validation
-      const password = document.getElementById('password').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
-
-      if (password !== confirmPassword) {
-        alert("Passwords do not match. Please try again.");
-        return; // Stop the form submission
-      }
-
-      window.location.href = 'index.html'; // Redirects to index.html in the same directory
-    });
-
-    // Add event listeners for password toggle icons
-    passwordToggleIcons.forEach(icon => {
-      icon.addEventListener('click', function() {
-        const passwordInput = this.previousElementSibling; // Gets the input element right before the icon
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type', type);
-
-        // Toggle the eye icon (open eye / crossed out eye)
-        this.querySelector('i').classList.toggle('fa-eye');
-        this.querySelector('i').classList.toggle('fa-eye-slash');
-      });
-    });
-  </script>
+    <script src="../js/admin-signup.js"></script>
 </body>
 </html>
