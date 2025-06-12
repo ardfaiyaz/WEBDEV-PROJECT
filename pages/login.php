@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         // Invalid account type selected
         $_SESSION['login_error'] = "Invalid account type selected.";
-        header("Location: ../login.php"); // Redirect back to login page
+        header("Location: ../pages/login.php"); // Redirect back to login page
         exit();
     }
 
@@ -60,20 +60,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 // Incorrect password
                 $_SESSION['login_error'] = "Invalid email or password.";
-                header("Location: ../login.php"); // Redirect back to login page
+                header("Location: ../pages/login.php"); // Redirect back to login page
                 exit();
             }
         } else {
             // User not found for the given email and account type combination
             $_SESSION['login_error'] = "Invalid email or password.";
-            header("Location: ../login.php"); // Redirect back to login page
+            header("Location: ../pages/login.php"); // Redirect back to login page
             exit();
         }
 
     } catch (PDOException $e) {
         error_log("Login error: " . $e->getMessage());
         $_SESSION['login_error'] = "An error occurred during login. Please try again later.";
-        header("Location: ../login.php");
+        header("Location: ../pages/login.php");
         exit();
     }
 }
@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <div class="right-panel">
-      <form id="loginForm" action="login.php" method="POST"> <div class="login-header">
+      <form id="loginForm" action="../pages/login.php" method="POST"> <div class="login-header">
           <h2>Log in</h2>
         </div>
 
