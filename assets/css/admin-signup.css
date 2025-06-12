@@ -9,15 +9,15 @@
 }
 
 body {
-    margin: 0;
-    font-family: "Montserrat", sans-serif;
-    background: url('../images/LOGIN-BACKGROUND-IMAGE.png') no-repeat center center/cover;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-attachment: fixed;
-    overflow: hidden; /* Prevent scrollbar during initial animations */
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  background: url('../images/LOGIN-BACKGROUND-IMAGE.png') no-repeat center center/cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  /* Ensure background remains static */
+  background-attachment: fixed;
 }
 
 .signup-wrapper {
@@ -28,81 +28,83 @@ body {
 }
 
 .signup-container {
-    height: auto;
-    min-height: 60vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  /* Adjusted height for a more compact form */
+  height: auto;
+  min-height: 60vh; /* Minimum height to look good */
+  display: flex;
+  align-items: center; /* Center vertically if form is shorter than wrapper */
+  justify-content: center;
 }
 
 .signup-box {
-    background-color: #29227c;
-    padding: 20px;
-    width: 600px;
-    height: auto;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    display: flex;
-    flex-direction: column;
-    border-radius: 10px;
-    max-height: 90vh;
-    overflow-y: auto; /* Keep scroll for content if it overflows */
+  background-color: #29227c;
+  padding: 20px;
+  width: 600px;
+  /* Removed fixed height to allow content to dictate height */
+  height: auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px; /* Fully rounded box now as tracker is gone */
+  max-height: 90vh; /* To prevent form from overflowing on smaller screens */
+  overflow-y: auto; /* Allow scrolling within the box if content is too long */
 }
 
+/* Hide scrollbar for signup-box if it appears */
 .signup-box::-webkit-scrollbar {
     display: none; /* Hide scrollbar for Chrome, Safari, Opera */
 }
 .signup-box {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 
 .header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    color: white;
-    margin-bottom: 20px;
-    text-align: center;
-    opacity: 0; /* Initial state for JS fade-in */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center items horizontally */
+  gap: 15px;
+  color: white;
+  margin-bottom: 20px; /* Increased margin for better spacing */
+  text-align: center;
 }
 
 .logo {
-    width: 50px;
+  width: 50px; /* Slightly larger logo */
 }
 
 .header h1 {
-    font-family: 'AkwePro', sans-serif;
-    font-size: 28px;
-    font-weight: 700;
-    margin: 0;
-    line-height: 1.2;
+  font-family: 'AkwePro', sans-serif;
+  font-size: 28px; /* Slightly larger title */
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2; /* Adjust line height for better readability */
 }
 
 .form-wrapper {
-    flex-grow: 1;
-    background: white;
-    border-radius: 5px;
-    padding: 40px 30px; /* Adjusted padding for consistency with floating labels */
+  flex-grow: 1;
+  background: white;
+  border-radius: 5px;
+  padding: 30px; /* Increased padding inside the form */
+  /* Removed scroll-snap properties as it's a single form now */
 }
 
 .signup-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Space between form items */
 }
 
+/* All the previous CSS for layout, header, submit button, etc., remains the same */
+/* ONLY THE INPUT AND SELECT STYLES ARE UPDATED HERE based on your latest provided code */
+
+/* --- Form Elements --- */
 .form-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
-}
-
-.form-row-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+  display: grid;
+  /* Adjusting this for a single column layout again, as per the simplified form */
+  grid-template-columns: 1fr;
+  gap: 20px; /* Increased gap between form items, as in your multi-step code */
 }
 
 .form-item {
@@ -114,158 +116,64 @@ body {
     transform: translateY(20px); /* Initial state for JS slide-in fade-in */
 }
 
-/* Base style for all inputs and selects */
+.form-item label {
+  color: #29227c;
+  font-weight: 600; /* Slightly less bold, as in your multi-step code */
+  margin-bottom: 8px; /* Increased margin, as in your multi-step code */
+  font-size: 15px; /* Slightly larger label font, as in your multi-step code */
+}
+
 input, select {
-    font-family: 'Montserrat', sans-serif;
-    padding: 18px 16px 6px 16px; /* Increased top padding to make room for label */
-    font-size: 14px;
-    background-color: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 5px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.08);
-    color: black;
-    width: 100%; /* Ensure inputs take full width */
-    box-sizing: border-box; /* Include padding in width */
-    position: relative;
-    z-index: 1; /* Ensures input is below label when animated */
+  font-family: 'Montserrat', sans-serif; /* Using AkwePro for input fields */
+  padding: 12px 16px; /* Increased padding, as in your multi-step code */
+  font-size: 14px; /* Slightly larger font, as in your multi-step code */
+  background-color: #fff; /* Lighter background, as in your multi-step code */
+  border: 1px solid #e0e0e0; /* Subtle border, as in your multi-step code */
+  border-radius: 5px; /* Rounded input fields, as in your multi-step code */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.08); /* Subtle inner shadow, as in your multi-step code */
+  color: black; /* Ensuring text color is dark */
 }
 
 input:focus, select:focus {
-    outline: none;
-    border-color: #f3c614;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.08), 0 0 0 3px rgba(243, 198, 20, 0.2);
+  outline: none;
+  border-color: #f3c614; /* Highlight border on focus, as in your multi-step code */
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.08), 0 0 0 3px rgba(243, 198, 20, 0.2); /* Soft glow on focus, as in your multi-step code */
 }
 
-/* Floating Label Styles for INPUTS */
-.form-item label {
-    transition: all 0.3s ease; /* Smooth transition for the label */
-    position: absolute; /* Allows positioning relative to .form-item */
-    top: 50%; /* Center vertically with input text */
-    left: 16px; /* Initial horizontal position */
-    font-size: 14px; /* Initial font size */
-    pointer-events: none; /* Allows clicks to pass through to input */
-    transform-origin: left top; /* Set transform origin for scaling */
-    color: #888; /* Softer initial color for placeholder-like effect */
-    z-index: 2; /* Ensure label is above input when animated */
-    transform: translateY(-50%); /* Adjust for perfect vertical centering */
-}
-
-/* When input is NOT showing placeholder (i.e., has text) OR is focused */
-.form-item input:not(:placeholder-shown) + label,
-.form-item input:focus + label {
-    top: 0; /* Moves label to the top */
-    font-size: 12px; /* Shrinks font size */
-    color: #29227c; /* Changes color when focused/filled */
-    transform: translateY(-100%) scale(0.85); /* Moves up and scales down */
-    background-color: white; /* Match form background */
-    padding: 0 4px; /* Small padding for background behind text */
-    left: 10px; /* Adjust left position when "floated" */
-}
-
-/* Specific styling for when an input is actively focused */
-.form-item input:focus + label {
-    color: #f3c614; /* Highlight color for the label on focus */
-}
-
-
-/* Styling for SELECT element (not a true floating label, but aligns better) */
-.form-item select {
-    padding: 12px 16px; /* Standard padding for select */
-    height: auto; /* Allow height to adjust */
-}
-
-.form-item label[for="office"] { /* Target the label specific to the select element */
-    position: static; /* Override absolute position for select labels */
-    transform: none; /* Remove transformations */
-    margin-bottom: 8px; /* Original margin-bottom */
-    color: #29227c;
-    font-weight: 600;
-    font-size: 15px; /* Keep original font size for non-floating label */
-}
-
-/* Adjust the arrow for select */
+/* Custom dropdown arrow for select elements */
 select {
-    appearance: none;
-    background-image: url('data:image/svg+xml;utf8,<svg fill="%2329227c" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 20px;
+  appearance: none; /* Remove default arrow on select */
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%2329227c" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 20px;
 }
 
 
-/* Password input container specific adjustments */
-.password-input-container {
-    position: relative;
-    width: 100%;
-    display: flex; /* To align input, label, and toggle icon */
-    align-items: center; /* Vertically center children */
-}
 
-.password-input-container input {
-    flex-grow: 1; /* Make input take available space */
-    padding-right: 40px; /* Space for the eye icon */
-}
-
-.password-input-container label {
-    /* Override top/left for labels inside password-input-container */
-    top: 50%; /* Initial position */
-    left: 16px; /* Initial position */
-    position: absolute;
-    z-index: 2;
-    transform: translateY(-50%);
-}
-
-/* Adjust the floated label for password inputs */
-.password-input-container input:not(:placeholder-shown) + label,
-.password-input-container input:focus + label {
-    top: 0; /* Moves label to the top */
-    transform: translateY(-100%) scale(0.85); /* Moves up and scales down */
-    left: 10px;
-}
-
-
-.password-input-container .password-toggle-icon {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%); /* Base transform */
-    cursor: pointer;
-    color: black;
-    font-size: 18px;
-    z-index: 10;
-    transition: color 0.2s ease, transform 0.2s ease-in-out; /* Added transform transition */
-}
-
-.password-input-container .password-toggle-icon:hover {
-    color: #333; /* Slightly darker on hover */
-}
-
-/* Animation for the password toggle icon */
-.password-toggle-icon.icon-pop {
-    transform: translateY(-50%) scale(1.2); /* Pop effect */
-}
-
+/* Submit Button */
 .submit-wrapper {
-    margin-top: 30px;
-    text-align: center;
+  margin-top: 30px; /* Space above the button */
+  text-align: center;
 }
 
 .submit-btn {
-    background: linear-gradient(135deg, #32CD32, #228B22);
-    color: white;
-    font-size: 20px;
-    font-weight: 600;
-    padding: 15px 50px;
-    border: none;
-    border-radius: 8px;
-    font-family: "Montserrat", sans-serif;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(50, 205, 50, 0.4);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    letter-spacing: 1px;
+  background: linear-gradient(135deg, #32CD32, #228B22);
+  color: white;
+  font-size: 20px; /* Larger font size for button */
+  font-weight: 600;
+  padding: 15px 50px; /* More padding for a bigger button */
+  border: none;
+  border-radius: 8px;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(50, 205, 50, 0.4);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 1px; /* Add some letter spacing */
+
 }
 
 .submit-btn::before {
@@ -280,16 +188,36 @@ select {
 }
 
 .submit-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(34, 139, 34, 0.6);
+
+  transform: translateY(-3px); /* More pronounced lift on hover */
+  box-shadow: 0 8px 20px rgba(34, 139, 34, 0.6); /* Stronger shadow on hover */
 }
 
 .submit-btn:hover::before {
-    left: 100%;
+  left: 100%;
 }
 
-/* New: Button press effect */
-.submit-btn.button-pressed {
-    transform: translateY(1px);
-    box-shadow: 0 2px 8px rgba(34, 139, 34, 0.4);
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 0.95em;
+}
+
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+.alert-danger ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
 }

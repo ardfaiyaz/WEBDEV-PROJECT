@@ -1,5 +1,5 @@
 <?php
-session_start(); // Start the session at the very beginning
+session_start(); // IMPORTANT: Start the session at the very beginning of the file
 
 // Include the database connection file
 require_once '../php/database.php'; // Adjust path if 'database.php' is in a different directory
@@ -13,9 +13,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Map the HTML form's accountType to the database's role_code
     $roleCode = '';
     if ($accountType === 'student') {
-    $roleCode = 'STUD'; // Matches the database role_code
+        $roleCode = 'STUD'; // Matches the database role_code
     } elseif ($accountType === 'admin') {
         $roleCode = 'ADMIN'; // Matches the database role_code
+    } elseif ($accountType === 'sub_admin') {
+        $roleCode = 'SUB_ADMIN'; // Matches the database role_code
     } else {
         // Invalid account type selected
         $_SESSION['login_error'] = "Invalid account type selected.";
@@ -24,8 +26,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     try {
-        // 3. Prepare and Execute SQL Query using PDO
-        $stmt = $pdo->prepare("SELECT user_id, user_password, role_code FROM users WHERE email = :email AND role_code = :role_code");
+        // REVISED PART 1: Add 'firstname' to your SELECT query
+        $stmt = $pdo->prepare("SELECT user_id, user_password, role_code, firstname FROM users WHERE email = :email AND role_code = :role_code");
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->bindParam(':role_code', $roleCode, PDO::PARAM_STR);
         $stmt->execute();
@@ -34,18 +36,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($user) {
             // 4. Verify Password
             if (password_verify($password, $user['user_password'])) {
-                // Password is correct, start a session
+                // Password is correct, store user data in session
                 $_SESSION['user_id'] = $user['user_id'];
                 $_SESSION['user_email'] = $email;
                 $_SESSION['account_type'] = $user['role_code']; // Store 'STUD' or 'ADMIN'
+                
+                // REVISED PART 2: Store the fetched firstname in the session
+                $_SESSION['firstname'] = $user['firstname']; 
+
+                // IMPORTANT SECURITY STEP: Regenerate session ID to prevent session fixation
+                session_regenerate_id(true); 
 
                 // Redirect based on role code
                 if ($user['role_code'] === 'STUD') {
-                    // *** THIS IS THE CHANGE ***
-                    header("Location: index.php"); // Redirect students to user-profile.html
+                    header("Location: index.php"); // Redirect students to index.php
                 } elseif ($user['role_code'] === 'ADMIN') {
-                    header("Location: index.php"); // Keep admin redirect as is
+                    header("Location: admin-index.html"); // Keep admin redirect as is
+                } elseif ($user['role_code'] === 'SUB_ADMIN') {
+                    header("Location: admin-index.html"); // Keep sub-admin redirect as is
                 }
+
                 exit(); // Always exit after a header redirect
             } else {
                 // Incorrect password
@@ -99,6 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               <option value="" disabled selected>Choose Type</option>
               <option value="student">Student</option>
               <option value="admin">Admin</option>
+              <option value="sub_admin">Sub-Admin</option>
             </select>
           </div>
           <h4>Log In Credentials</h4>
@@ -122,7 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="signup-links-container">
           <a href="user-signup.php" class="signup-link">Student</a>
           <span class="pipe-divider">|</span>
-          <a href="admin-signup.html" class="signup-link">Admin</a>
+          <a href="admin-signup.php" class="signup-link">Admin</a>
         </div>
       </form>
     </div>
