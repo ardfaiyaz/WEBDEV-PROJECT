@@ -208,7 +208,7 @@ select {
 }
 
 .submit-btn:hover::before {
-  left: 100%;
+    left: 100%;
 }
 
 
@@ -315,3 +315,8 @@ select {
     color: #666;
 }
 
+/* New: Button press effect */
+.submit-btn.button-pressed {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(34, 139, 34, 0.4);
+}

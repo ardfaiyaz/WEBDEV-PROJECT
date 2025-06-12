@@ -292,6 +292,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
         </div>
     </div>
 
-    <script src="../assets/js/admin-signup.js"></script>
+    <script src="../js/admin-signup.js"></script>
 </body>
 </html>
