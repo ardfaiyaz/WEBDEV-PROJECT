@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clearance Requests</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Universal Imports */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        /* Placeholder for AkwePro font - replace with actual URL if available */
+        @font-face {
+            font-family: 'AkwePro';
+            src: url('https://fonts.gstatic.com/s/akweprosans/v1/AkweProSans-Bold.woff2') format('woff2'); /* Example, check a real CDN or self-host */
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif; /* Preferred font from previous code */
+            background-color: #f5f5f5; /* Light gray background */
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        body.modal-open {
+            overflow: hidden; /* Prevent scrolling when modal is open */
+        }
+
+        /* Header */
+        .header {
+            background-color: #2c2273; /* Dark blue */
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-section .logo {
+            width: 45px;
+            height: 45px;
+            border-radius: 8px; /* Rounded corners */
+            object-fit: contain;
+            /* Placeholder for image background if needed */
+            background-color: #f7b32b; /* Example background for placeholder */
+            padding: 5px;
+        }
+
+        .university-name {
+            font-family: 'AkwePro', sans-serif; /* AkwePro as per original intent */
+            font-weight: 700;
+            font-size: 1.4em;
+            line-height: 1.2;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-left: auto; /* Push to right */
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1em;
+            font-weight: 500;
+        }
+
+        .icon-bell,
+        .icon-user {
+            font-size: 1.8em;
+            color: #f7b32b; /* Yellow/Orange accent */
+        }
+
+        .search-bar {
+            background-color: #f0f0f0; /* Lighter background for search */
+            border-radius: 20px; /* Rounded search bar */
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 250px; /* Fixed width for desktop */
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            color: #333;
+            font-size: 0.9em;
+            flex-grow: 1;
+        }
+
+        .search-bar input::placeholder {
+            color: #777;
+        }
+
+        .icon-search {
+            color: #777;
+            font-size: 1.2em;
+        }
+
+        /* Main Container */
+        .main-container {
+            display: flex;
+            flex: 1;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px; /* Fixed width for sidebar */
+            background-color: #ffffff; /* White background */
+            padding: 30px 0;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            position: sticky; /* Sticky sidebar */
+            top: 0; /* Align to top */
+            left: 0;
+            height: 100vh; /* Full viewport height */
+            overflow-y: auto; /* Enable scrolling if menu is long */
+            padding-top: calc(15px + 45px + 15px + 30px); /* Adjust padding for header height */
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu-item {
+            margin-bottom: 10px;
+        }
+
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            padding: 12px 30px;
+            color: #555;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border-radius: 8px; /* Rounded corners */
+            margin: 0 15px;
+        }
+
+        .menu-item a:hover {
+            background-color: #f0f0f0;
+            color: #2c2273;
+        }
+
+        .menu-item.active a {
+            background-color: #2c2273; /* Dark blue for active */
+            color: white;
+            border-radius: 8px;
+        }
+
+        .menu-item.active a .icon-sidebar {
+            color: white; /* Active icon color */
+        }
+
+        .icon-sidebar {
+            font-size: 1.4em;
+            margin-right: 15px;
+            color: #777; /* Default icon color */
+        }
+
+        /* Main Content Area */
+        .content-area {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px; /* Space between sections */
+        }
+
+        /* Clearance Requests Header */
+        .clearance-requests-header {
+            background-color: #f0f0f0;
+            padding: 15px 40px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            width: fit-content;
+            border-left: 5px solid #6a5acd;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Soft shadow */
+        }
+
+        .clearance-requests-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Status Request Summary Boxes */
+        .Status-Request {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            width: 100%;
+            padding: 30px;
+            background-color: #fff;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+            margin-top: 0; /* Adjusted from 20px as it's within content-area now */
+            flex-wrap: wrap;
+        }
+
+        .status-box {
+            background-color: #f1f1f1;
+            border-radius: 8px;
+            padding: 20px 30px;
+            text-align: center;
+            flex: 1;
+            min-width: 180px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .status-box:hover {
+            background-color: #e6e6e6;
+            transform: translateY(-3px);
+        }
+
+        .status-box h6 {
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .status-box p {
+            font-weight: bold;
+            font-size: 28px;
+            color: #2c2273;
+        }
+
+        /* Main Status Table Section */
+        .Status {
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff;
+            margin-top: 0; /* Adjusted from 40px */
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            position: relative;
+        }
+
+        .navtabs {
+            display: flex;
+            justify-content: flex-start;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            border-bottom: 2px solid #ddd;
+            gap: 40px;
+            position: sticky;
+            top: 0; /* Keep sticky behavior */
+            width: 100%;
+            background-color: #fff;
+            z-index: 10;
+            padding-bottom: 10px;
+            white-space: nowrap;
+            overflow-x: auto; /* Allow horizontal scroll for tabs on smaller screens */
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        }
+
+        .Nav-item {
+            font-weight: 600;
+            padding: 10px 16px;
+            cursor: pointer;
+            position: relative;
+            text-align: center;
+            min-width: 100px;
+            transition: color 0.3s ease;
+            color: #666;
+        }
+
+        .Nav-item:hover {
+            color: #2c2273;
+        }
+
+        .Nav-item.active {
+            color: #2c2273;
+        }
+
+        .Nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #6a5acd;
+            border-radius: 2px;
+        }
+
+        .Status-table {
+            margin-top: 20px;
+            width: 100%;
+            overflow-x: auto; /* Enable horizontal scrolling for the table */
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .Status-header,
+        .Status-row {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(120px, 1fr)) minmax(150px, 1fr);
+            padding: 14px 0;
+            align-items: center;
+            min-width: 900px; /* Minimum width to ensure horizontal scroll */
+            gap: 10px;
+        }
+
+        .Status-header {
+            font-weight: 700;
+            background-color: #f8f8f8;
+            border-bottom: 2px solid #ddd;
+            color: #333;
+            text-align: left;
+            border-radius: 6px 6px 0 0; /* Rounded top corners */
+        }
+
+        .Status-header div {
+            padding: 0 10px;
+        }
+
+        .Status-row {
+            background-color: #fff;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            text-align: left;
+        }
+
+        .Status-row:hover {
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .Status-row div {
+            padding: 0 10px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-start;
+            align-items: center;
+            flex-wrap: wrap; /* Allow buttons to wrap */
+        }
+
+        .actions-placeholder {
+            /* Placeholder for alignment when no actions are present */
+            height: 100%;
+            display: block;
+        }
+
+        .dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .add-remark-button {
+            background-color: #007bff; /* Blue for add remark */
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap; /* Prevent text wrap */
+        }
+
+        .add-remark-button:hover {
+            background-color: #0056b3;
+        }
+
+        .add-remark-button i {
+            font-size: 16px;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 100; /* Ensure it's above other elements */
+            border-radius: 5px;
+            /* overflow: visible !important; /* Allow content to overflow if needed */
+            /* max-height: unset !important; */
+        }
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .clear-button {
+            background-color: #28a745; /* Green for clear */
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            white-space: nowrap; /* Prevent text wrap */
+        }
+
+        .clear-button:hover {
+            background-color: #218838;
+        }
+
+        .status-cell {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .remark-column {
+            font-style: italic;
+            color: #666;
+        }
+
+        .date-completed-column {
+            font-weight: 600;
+            color: #555;
+        }
+
+        /* Modal CSS */
+        .modal-overlay {
+            display: none; /* Initially hidden */
+            position: fixed;
+            z-index: 1000; /* Ensure it's on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6); /* Semi-transparent black background */
+            display: flex; /* Use flexbox for centering */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            transition: opacity 0.3s ease;
+            opacity: 0; /* Start hidden for transition */
+            pointer-events: none; /* Allows clicks through when hidden */
+        }
+
+        .modal-overlay.show-modal {
+            opacity: 1; /* Fade in */
+            pointer-events: auto; /* Enable clicks when visible */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto; /* Centering for older browsers, flexbox handles most */
+            padding: 30px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 400px; /* Max width for content */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            position: relative;
+            transform: translateY(-20px); /* Start slightly off-center for animation */
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0; /* Start hidden for transition */
+            border-radius: 10px; /* Rounded corners */
+        }
+
+        .modal-overlay.show-modal .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .modal-icon {
+            font-size: 60px;
+            color: #6a5acd;
+            margin-bottom: 15px;
+            border: 3px solid #6a5acd;
+            border-radius: 50%;
+            padding: 10px;
+            display: inline-block;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .modal-content p {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .modal-button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .modal-button.confirm {
+            background-color: #28a745; /* Green */
+            color: white;
+        }
+
+        .modal-button.confirm:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        .modal-button.cancel {
+            background-color: #dc3545; /* Red */
+            color: white;
+        }
+
+        .modal-button.cancel:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+        }
+
+        /* Custom Message Box (for alerts) */
+        .custom-message-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1002;
+            text-align: center;
+        }
+
+        .custom-message-box p {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .custom-message-box-close {
+            background-color: #2c2273;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .custom-message-box-close:hover {
+            background-color: #1f1850;
+        }
+
+        /* Styling for the new requested documents section in the modal (from view request) */
+        .requested-documents-section h4 {
+            font-size: 1.1em;
+            color: #2c2273;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .document-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+            color: #333;
+        }
+
+        .document-name {
+            font-weight: 500;
+            flex-grow: 1;
+        }
+
+        .document-copies {
+            font-weight: 600;
+            color: #555;
+            flex-shrink: 0;
+        }
+
+        /* View Status Modal Specific Styles (from view request) */
+        .view-status-modal-content {
+            max-width: 70vw; /* Adjusted to 70% of viewport width */
+            padding: 20px 40px; /* Adjust padding */
+            text-align: left; /* Align content left */
+            display: flex;
+            flex-direction: column;
+            gap: 25px; /* Space between main sections */
+            border-radius: 12px;
+        }
+
+        .view-status-modal-content .close-button {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .view-status-modal-content .close-button:hover,
+        .view-status-modal-content .close-button:focus {
+            color: #000;
+            text-decoration: none;
+        }
+
+        .view-status-modal-inner {
+            display: flex;
+            flex-direction: column; /* Stack vertically */
+            gap: 20px; /* Space between sections */
+        }
+
+        .student-info-section,
+        .remarks-section,
+        .status-offices-section,
+        .requested-documents-section {
+            flex: 1; /* Allow sections to grow */
+            min-width: unset;
+            width: 100%;
+        }
+
+        .student-info-section {
+            display: flex; /* Use flexbox to align avatar and text side-by-side */
+            align-items: flex-start; /* Align items to the top (avatar and text block) */
+            gap: 20px; /* Space between the avatar and the text block */
+            text-align: left; /* Ensure text inside is left-aligned */
+        }
+
+        .student-avatar-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%; /* Make it round */
+            object-fit: cover; /* Cover the area, cropping if necessary */
+            flex-shrink: 0; /* Prevent it from shrinking */
+        }
+
+        .student-text-info { /* Container for name, ID, and email */
+            display: flex;
+            flex-direction: column;
+            text-align: left; /* Ensure text is left-aligned */
+            flex-grow: 1; /* Allow text info to take available space */
+        }
+
+        .student-info-section h3 {
+            font-size: 1.5em;
+            color: #2c2273;
+            margin-bottom: 5px;
+        }
+
+        .student-info-section p {
+            font-size: 0.9em;
+            color: #555;
+            margin-bottom: 3px;
+        }
+
+        .remarks-section h4,
+        .status-offices-section h4,
+        .requested-documents-section h4 {
+            font-size: 1.1em;
+            color: #2c2273;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #e0e0e0;
+            text-align: left; /* Align section titles to the left */
+        }
+
+        .remarks-box {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            min-height: 80px; /* Adjust as needed */
+            padding: 15px;
+            background-color: #f9f9f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .view-consent-file-button {
+            background-color: #6a5acd; /* Purple button */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            width: auto; /* Allow button to size to content */
+            display: block; /* Make it a block element to align left */
+            margin-left: 0; /* Remove auto margin from previous centering */
+        }
+        .view-consent-file-button:hover {
+            background-color: #443ba0;
+        }
+
+        .office-status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+            color: #333;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 15px; /* Pill-shaped badges */
+            font-weight: 600;
+            color: white;
+            font-size: 0.85em;
+            text-align: center;
+            min-width: 90px; /* Ensures consistent width for badges */
+        }
+
+        /* Status Badge Colors */
+        .status-badge.issue-found {
+            background-color: #dc3545; /* Red */
+        }
+        .status-badge.pending {
+            background-color: #ffc107; /* Yellow/Orange */
+            color: #333; /* Dark text for light background */
+        }
+        .status-badge.on-going {
+            background-color: #17a2b8; /* Info Blue */
+        }
+        .status-badge.completed {
+            background-color: #28a745; /* Green */
+        }
+
+
+        /* Responsive Adjustments */
+        @media (max-width: 1200px) {
+            .Status-Request {
+                justify-content: center;
+                gap: 15px;
+            }
+            .status-box {
+                min-width: 150px;
+            }
+            .Status-header,
+            .Status-row {
+                grid-template-columns: repeat(6, minmax(100px, 1fr)) minmax(150px, 1fr);
+                min-width: unset;
+                gap: 5px;
+            }
+            .sidebar {
+                width: 200px; /* Slightly narrower on medium screens */
+                padding-top: calc(15px + 45px + 15px + 20px); /* Adjust padding */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 10px 20px;
+                flex-direction: column; /* Stack logo and user section */
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+                gap: 15px;
+            }
+            .search-bar {
+                width: 100%;
+                max-width: unset;
+            }
+
+            .main-container {
+                flex-direction: column; /* Stack sidebar and content */
+            }
+            .sidebar {
+                width: 100%; /* Full width sidebar */
+                height: auto; /* Auto height */
+                position: static; /* No longer fixed */
+                flex-direction: row; /* Horizontal menu */
+                overflow-x: auto; /* Allow horizontal scroll for menu */
+                overflow-y: hidden;
+                white-space: nowrap; /* Prevent menu items from wrapping */
+                padding: 15px 0;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                justify-content: center; /* Center menu items */
+                padding-top: 15px; /* Reset padding for horizontal menu */
+            }
+            .sidebar-menu {
+                display: flex;
+                flex-direction: row;
+                gap: 5px;
+                padding-top: 0; /* Reset padding */
+            }
+            .menu-item {
+                margin-bottom: 0;
+            }
+            .menu-item a {
+                padding: 8px 15px;
+                margin: 0 5px;
+                flex-direction: column; /* Stack icon and label on mobile */
+                gap: 5px;
+            }
+            .icon-sidebar {
+                margin-right: 0;
+            }
+            .label {
+                opacity: 1; /* Always show label on mobile for clarity */
+                font-size: 0.8em;
+            }
+
+            .content-area {
+                padding: 20px;
+            }
+            .clearance-requests-header h2 {
+                font-size: 1.6em;
+            }
+
+            .Status-Request {
+                flex-direction: column;
+                align-items: center;
+                padding: 20px;
+            }
+            .status-box {
+                width: 100%;
+                max-width: 300px;
+                margin-bottom: 10px;
+            }
+
+            .Status {
+                padding: 20px;
+            }
+            .navtabs {
+                gap: 20px;
+                padding-bottom: 5px;
+            }
+            .Nav-item {
+                min-width: 70px;
+                font-size: 14px;
+                padding: 8px 10px;
+            }
+            .Nav-item.active::after {
+                bottom: -7px;
+            }
+
+            .Status-header,
+            .Status-row {
+                font-size: 12px;
+                padding: 8px 0;
+                gap: 5px;
+                grid-template-columns: repeat(7, minmax(80px, 1fr));
+                min-width: 600px;
+            }
+
+            .actions {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            .add-remark-button, .clear-button {
+                width: 100%;
+                text-align: left;
+            }
+            .dropdown-menu {
+                min-width: 100%;
+            }
+
+            /* Modal responsive */
+            .view-status-modal-content {
+                max-width: 90%;
+                padding: 15px;
+            }
+            .office-status-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            .status-badge {
+                width: 100%;
+                min-width: unset;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 10px;
+            }
+            .logo-section .logo {
+                width: 40px;
+                height: 40px;
+            }
+            .university-name {
+                font-size: 1.2em;
+            }
+            .user-info span {
+                display: none;
+            }
+            .user-info .icon-bell,
+            .user-info .icon-user {
+                font-size: 1.5em;
+            }
+
+            .clearance-requests-header h2 {
+                font-size: 1.3em;
+                padding: 10px 20px;
+            }
+
+            .status-box p {
+                font-size: 24px;
+            }
+            .Status-header,
+            .Status-row {
+                grid-template-columns: repeat(7, minmax(60px, 1fr));
+                min-width: 450px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo-section">
+            <img src="https://placehold.co/45x45/333/FFF?text=NU" alt="NU Logo" class="logo">
+            <span class="university-name">NATIONAL<br>UNIVERSITY</span>
+        </div>
+        <div class="header-right">
+            <div class="user-info">
+                <i class='bx bxs-bell icon-bell'></i>
+                <span>Hi, Pia Elleine</span>
+                <i class='bx bxs-user-circle icon-user'></i>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <i class='bx bx-search icon-search'></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="menu-item"><a href="UserPOV.html"><i class='bx bxs-home icon-sidebar'></i> Home</a></li>
+                <li class="menu-item"><a href="#"><i class='bx bxs-user icon-sidebar'></i> Profile</a></li>
+                <li class="menu-item"><a href="TrackPage.html"><i class='bx bxs-file icon-sidebar'></i> My Clearances</a></li>
+                <li class="menu-item"><a href="#"><i class='bx bxs-log-out icon-sidebar'></i> Logout</a></li>
+            </ul>
+        </aside>
+
+        <main class="content-area">
+            <div class="clearance-requests-header">
+                <h2>CLEARANCE REQUESTS</h2>
+            </div>
+            <div class="Status-Request">
+                <div class="status-box">
+                    <h6>Total Requests</h6>
+                    <p>600</p>
+                </div>
+                <div class="status-box">
+                    <h6>Pending</h6>
+                    <p>200</p>
+                </div>
+                <div class="status-box">
+                    <h6>On-Going</h6>
+                    <p>200</p>
+                </div>
+                <div class="status-box">
+                    <h6>Completed</h6>
+                    <p>200</p>
+                </div>
+            </div>
+
+            <div class="Status">
+                <ul class="navtabs">
+                    <li class="Nav-item active" data-status="ALL">ALL</li>
+                    <li class="Nav-item" data-status="PENDING">PENDING</li>
+                    <li class="Nav-item" data-status="ON-GOING">ON-GOING</li>
+                    <li class="Nav-item" data-status="COMPLETED">COMPLETED</li>
+                </ul>
+
+                <div class="Status-table">
+                    <div class="Status-header">
+                        <div>REQUEST ID</div>
+                        <div>STUDENT ID</div>
+                        <div>STUDENT NAME</div>
+                        <div>PROGRAM</div>
+                        <div>STATUS</div>
+                        <div>DATE SUBMITTED</div>
+                        <div class="actions-header">ACTIONS</div>
+                    </div>
+
+                    <!-- Existing Rows -->
+                    <div class="Status-row" data-status="PENDING">
+                        <div>001</div>
+                        <div>2023-1701234</div>
+                        <div>HEART QUINTANILLA HERNANDEZ</div>
+                        <div>BSIT-MWA</div>
+                        <div class="status-cell">PENDING</div>
+                        <div>05-25-2025</div>
+                        <div class="actions">
+                            <div class="dropdown-wrapper">
+                                <button class="add-remark-button dropdown-toggle">ADD REMARK <i class='bx bx-chevron-down'></i></button>
+                                <div class="dropdown-menu">
+                                    <a href="#" data-remark="Unpaid Fees">Unpaid Fees</a>
+                                    <a href="#" data-remark="Incomplete Documents">Incomplete Documents</a>
+                                    <a href="#" data-remark="Missing Signatures">Missing Signatures</a>
+                                    <a href="#" data-remark="Other">Other (Specify)</a>
+                                </div>
+                            </div>
+                            <button class="clear-button">CLEAR</button>
+                        </div>
+                    </div>
+
+                    <div class="Status-row" data-status="ON-GOING">
+                        <div>002</div>
+                        <div>2023-1701234</div>
+                        <div>HEART QUINTANILLA HERNANDEZ</div>
+                        <div>BSIT-MWA</div>
+                        <div class="remark-column">
+                            <span class="remark-text">Unpaid fees</span>
+                        </div>
+                        <div>05-25-2025</div>
+                        <div class="actions">
+                            <button class="clear-button">CLEAR</button>
+                        </div>
+                    </div>
+
+                    <div class="Status-row" data-status="COMPLETED">
+                        <div>003</div>
+                        <div>2023-1701234</div>
+                        <div>HEART QUINTANILLA HERNANDEZ</div>
+                        <div>BSIT-MWA</div>
+                        <div class="date-completed-column">
+                            <span>05-25-2025</span>
+                        </div>
+                        <div>05-25-2025</div>
+                        <div class="actions-placeholder"></div>
+                    </div>
+
+                    <!-- New Example Rows based on previous conversation -->
+                    <div class="Status-row" data-status="ON-GOING"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Issue Found"}, {"office": "Student Discipline Office", "status": "Pending"}, {"office": "Student Affairs Office", "status": "On-going"}, {"office": "Guidance Office", "status": "On-going"}, {"office": "Library", "status": "Pending"}, {"office": "ITSO", "status": "Completed"}, {"office": "Accounting Office", "status": "Issue Found"}, {"office": "Registrar Office", "status": "Completed"}]'
+                        data-student-name="Pia Elleine Lucero"
+                        data-student-email="luceropl@students.nu-dasma.edu.ph"
+                        data-student-id="2023-123456"
+                        data-requested-documents='[{"name": "Transcript of Records", "copies": "3 copies"}, {"name": "Certificate of Good Moral", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=PL"
+                        >
+                        <div>004</div>
+                        <div>2023-123456</div>
+                        <div>Pia Elleine Lucero</div>
+                        <div>BSIT-MWA</div>
+                        <div class="remark-column">
+                            <span class="remark-text">On-going</span>
+                        </div>
+                        <div>05-19-2025</div>
+                        <div class="actions">
+                            <div class="dropdown-wrapper">
+                                <button class="add-remark-button dropdown-toggle">ADD REMARK <i class='bx bx-chevron-down'></i></button>
+                                <div class="dropdown-menu">
+                                    <a href="#" data-remark="Unpaid Fees">Unpaid Fees</a>
+                                    <a href="#" data-remark="Incomplete Documents">Incomplete Documents</a>
+                                    <a href="#" data-remark="Missing Signatures">Missing Signatures</a>
+                                    <a href="#" data-remark="Other">Other (Specify)</a>
+                                </div>
+                            </div>
+                            <button class="clear-button">CLEAR</button>
+                            <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">View Status Detail</a>
+                        </div>
+                    </div>
+
+                    <div class="Status-row" data-status="COMPLETED"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Completed"}, {"office": "Student Discipline Office", "status": "Completed"}, {"office": "Student Affairs Office", "status": "Completed"}, {"office": "Guidance Office", "status": "Completed"}, {"office": "Library", "status": "Completed"}, {"office": "ITSO", "status": "Completed"}, {"office": "Accounting Office", "status": "Completed"}, {"office": "Registrar Office", "status": "Completed"}]'
+                        data-student-name="Bryan Cancel"
+                        data-student-email="cancelb@students.nu-dasma.edu.ph"
+                        data-student-id="2023-123456"
+                        data-requested-documents='[{"name": "Certificate of Enrollment", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=BC"
+                        >
+                        <div>005</div>
+                        <div>2023-123456</div>
+                        <div>Bryan Cancel</div>
+                        <div>BSArch</div>
+                        <div class="date-completed-column">
+                            <span>05-25-2025</span>
+                        </div>
+                        <div>05-19-2025</div>
+                        <div class="actions">
+                             <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">View Status Detail</a>
+                             <span class="status-completed-text">Claim Stub Released</span>
+                        </div>
+                    </div>
+
+                    <div class="Status-row" data-status="PENDING"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Pending"}, {"office": "Student Discipline Office", "status": "Pending"}, {"office": "Student Affairs Office", "status": "Pending"}, {"office": "Guidance Office", "status": "Pending"}, {"office": "Library", "status": "Pending"}, {"office": "ITSO", "status": "Pending"}, {"office": "Accounting Office", "status": "Pending"}, {"office": "Registrar Office", "status": "Pending"}]'
+                        data-student-name="Melthon Donaire"
+                        data-student-email="donairem@students.nu-dasma.edu.ph"
+                        data-student-id="2023-123457"
+                        data-requested-documents='[{"name": "Letter of Recommendation", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=MD"
+                        >
+                        <div>006</div>
+                        <div>2023-123457</div>
+                        <div>Melthon Donaire</div>
+                        <div>BSPsy</div>
+                        <div class="status-cell">PENDING</div>
+                        <div>05-26-2025</div>
+                        <div class="actions">
+                            <div class="dropdown-wrapper">
+                                <button class="add-remark-button dropdown-toggle">ADD REMARK <i class='bx bx-chevron-down'></i></button>
+                                <div class="dropdown-menu">
+                                    <a href="#" data-remark="Unpaid Fees">Unpaid Fees</a>
+                                    <a href="#" data-remark="Incomplete Documents">Incomplete Documents</a>
+                                    <a href="#" data-remark="Missing Signatures">Missing Signatures</a>
+                                    <a href="#" data-remark="Other">Other (Specify)</a>
+                                </div>
+                            </div>
+                            <button class="clear-button">CLEAR</button>
+                            <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">View Status Detail</a>
+                        </div>
+                    </div>
+
+                    <div class="Status-row" data-status="COMPLETED"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Completed"}, {"office": "Student Discipline Office", "status": "Completed"}, {"office": "Student Affairs Office", "status": "Completed"}, {"office": "Guidance Office", "status": "Completed"}, {"office": "Library", "status": "Completed"}, {"office": "ITSO", "status": "Completed"}, {"office": "Accounting Office", "status": "Completed"}, {"office": "Registrar Office", "status": "Completed"}]'
+                        data-student-name="Hero Buta"
+                        data-student-email="butah@students.nu-dasma.edu.ph"
+                        data-student-id="2023-123458"
+                        data-requested-documents='[{"name": "Medical Certificate", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=HB"
+                        >
+                        <div>007</div>
+                        <div>2023-123458</div>
+                        <div>Hero Buta</div>
+                        <div>BSHM</div>
+                        <div class="date-completed-column">
+                            <span>05-26-2025</span>
+                        </div>
+                        <div>05-26-2025</div>
+                        <div class="actions">
+                             <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">View Status Detail</a>
+                             <span class="status-completed-text">Claim Stub Released</span>
+                        </div>
+                    </div>
+
+                    <div class="Status-row" data-status="PENDING"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Pending"}, {"office": "Student Discipline Office", "status": "Pending"}, {"office": "Student Affairs Office", "status": "On-going"}, {"office": "Guidance Office", "status": "Pending"}, {"office": "Library", "status": "Issue Found"}, {"office": "ITSO", "status": "Pending"}, {"office": "Accounting Office", "status": "Pending"}, {"office": "Registrar Office", "status": "On-going"}]'
+                        data-student-name="Alex Johnson"
+                        data-student-email="johnsona@students.nu-dasma.edu.ph"
+                        data-student-id="2023-987654"
+                        data-requested-documents='[{"name": "Transcript of Records", "copies": "5 copies"}, {"name": "Course Description", "copies": "2 copies"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=AJ"
+                        >
+                        <div>008</div>
+                        <div>2023-987654</div>
+                        <div>Alex Johnson</div>
+                        <div>BSECE</div>
+                        <div class="status-cell">PENDING</div>
+                        <div>05-20-2025</div>
+                        <div class="actions">
+                            <div class="dropdown-wrapper">
+                                <button class="add-remark-button dropdown-toggle">ADD REMARK <i class='bx bx-chevron-down'></i></button>
+                                <div class="dropdown-menu">
+                                    <a href="#" data-remark="Unpaid Fees">Unpaid Fees</a>
+                                    <a href="#" data-remark="Incomplete Documents">Incomplete Documents</a>
+                                    <a href="#" data-remark="Missing Signatures">Missing Signatures</a>
+                                    <a href="#" data-remark="Other">Other (Specify)</a>
+                                </div>
+                            </div>
+                            <button class="clear-button">CLEAR</button>
+                            <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">View Status Detail</a>
+                        </div>
+                    </div>
+
+                    <div class="Status-row" data-status="COMPLETED"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Completed"}, {"office": "Student Discipline Office", "status": "Completed"}, {"office": "Student Affairs Office", "status": "Completed"}, {"office": "Guidance Office", "status": "Completed"}, {"office": "Library", "status": "Completed"}, {"office": "ITSO", "status": "Completed"}, {"office": "Accounting Office", "status": "Completed"}, {"office": "Registrar Office", "status": "Completed"}]'
+                        data-student-name="Sarah Lee"
+                        data-student-email="lees@students.nu-dasma.edu.ph"
+                        data-student-id="2023-112233"
+                        data-requested-documents='[{"name": "Transcript of Records", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=SL"
+                        >
+                        <div>009</div>
+                        <div>2023-112233</div>
+                        <div>Sarah Lee</div>
+                        <div>BSCS</div>
+                        <div class="date-completed-column">
+                            <span>05-27-2025</span>
+                        </div>
+                        <div>05-21-2025</div>
+                        <div class="actions">
+                             <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">View Status Detail</a>
+                             <span class="status-completed-text">Claim Stub Released</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- View Status Modal (integrated from the provided snippet) -->
+    <div id="viewStatusModal" class="modal-overlay">
+        <div class="modal-content view-status-modal-content">
+            <span class="close-button">&times;</span>
+            <div class="view-status-modal-inner">
+                <div class="student-info-section">
+                    <img src="" alt="Student Avatar" class="student-avatar-img">
+                    <div class="student-text-info">
+                        <h3 class="modal-student-name"></h3>
+                        <p class="modal-student-id"></p>
+                        <p class="modal-student-email"></p>
+                    </div>
+                </div>
+
+                <div class="status-offices-section">
+                    <h4>STATUS</h4>
+                </div>
+
+                <div class="requested-documents-section">
+                    <h4>REQUESTED DOCUMENTS</h4>
+                </div>
+
+                <div class="remarks-section">
+                    <h4>OTHER REMARKS</h4>
+                    <div class="remarks-box">
+                        <p class="modal-remarks">No Remarks</p>
+                    </div>
+                    <button class="view-consent-file-button">View Consent File</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal (from original clearance requests) -->
+    <div id="confirmationModal" class="modal-overlay">
+        <div class="modal-content">
+            <i class='bx bx-question-mark modal-icon'></i>
+            <h2>Confirm Clearance</h2>
+            <p>Are you sure you want to clear this request?</p>
+            <div class="modal-buttons">
+                <button id="confirmClearBtn" class="modal-button confirm">Yes, Clear</button>
+                <button id="cancelClearBtn" class="modal-button cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Logic for ALL/PENDING/ON-GOING/COMPLETED tabs
+        const navItems = document.querySelectorAll('.Nav-item');
+        const rows = document.querySelectorAll('.Status-row');
+        const statusHeader = document.querySelector('.Status-header');
+
+        function updateTableHeaders(selectedStatus) {
+            statusHeader.innerHTML = `
+                <div>REQUEST ID</div>
+                <div>STUDENT ID</div>
+                <div>STUDENT NAME</div>
+                <div>PROGRAM</div>
+                <div>STATUS</div>
+                <div>DATE SUBMITTED</div>
+                <div class="actions-header">ACTIONS</div>
+            `;
+
+            const statusColumnHeader = statusHeader.children[4];
+            const dateSubmittedColumnHeader = statusHeader.children[5];
+            const actionsHeader = statusHeader.querySelector('.actions-header');
+
+            // Adjust headers based on selected status
+            if (selectedStatus === 'ON-GOING') {
+                statusColumnHeader.textContent = 'REMARK';
+                dateSubmittedColumnHeader.style.display = 'block';
+                dateSubmittedColumnHeader.textContent = 'DATE SUBMITTED';
+                if (actionsHeader) actionsHeader.style.display = 'block';
+            } else if (selectedStatus === 'COMPLETED') {
+                statusColumnHeader.textContent = 'DATE COMPLETED';
+                dateSubmittedColumnHeader.style.display = 'block';
+                dateSubmittedColumnHeader.textContent = 'DATE SUBMITTED';
+                if (actionsHeader) actionsHeader.style.display = 'none'; // Hide actions for completed
+            } else { // ALL or PENDING
+                statusColumnHeader.textContent = 'STATUS';
+                dateSubmittedColumnHeader.style.display = 'block';
+                dateSubmittedColumnHeader.textContent = 'DATE SUBMITTED';
+                if (actionsHeader) actionsHeader.style.display = 'block';
+            }
+        }
+
+        navItems.forEach(tab => {
+            tab.addEventListener('click', () => {
+                navItems.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                const selectedStatus = tab.dataset.status.toUpperCase();
+                updateTableHeaders(selectedStatus);
+
+                rows.forEach(row => {
+                    const rowStatus = row.dataset.status.toUpperCase();
+
+                    const statusCell = row.querySelector('.status-cell');
+                    const remarkColumn = row.querySelector('.remark-column');
+                    const dateCompletedColumn = row.querySelector('.date-completed-column');
+                    const actionsDiv = row.querySelector('.actions');
+                    const actionsPlaceholder = row.querySelector('.actions-placeholder');
+                    const rowDateSubmitted = row.children[5]; // Date Submitted is always the 6th div
+
+                    // Hide all status/remark/date completed cells and actions by default
+                    if (statusCell) statusCell.style.display = 'none';
+                    if (remarkColumn) remarkColumn.style.display = 'none';
+                    if (dateCompletedColumn) dateCompletedColumn.style.display = 'none';
+                    if (actionsDiv) actionsDiv.style.display = 'none';
+                    if (actionsPlaceholder) actionsPlaceholder.style.display = 'none';
+                    if (rowDateSubmitted) rowDateSubmitted.style.display = 'block'; // Always show date submitted
+
+                    // Show row if it matches the selected status or if ALL is selected
+                    if (selectedStatus === 'ALL' || selectedStatus === rowStatus) {
+                        row.style.display = 'grid'; // Display the row
+
+                        if (rowStatus === 'PENDING') {
+                            if (statusCell) statusCell.style.display = 'block'; // Show status cell
+                            if (actionsDiv) actionsDiv.style.display = 'flex'; // Show actions
+                        } else if (rowStatus === 'ON-GOING') {
+                            if (remarkColumn) remarkColumn.style.display = 'block'; // Show remark column
+                            if (actionsDiv) actionsDiv.style.display = 'flex'; // Show actions
+                        } else if (rowStatus === 'COMPLETED') {
+                            if (dateCompletedColumn) dateCompletedColumn.style.display = 'block'; // Show date completed column
+                            if (rowDateSubmitted) rowDateSubmitted.style.display = 'block'; // Ensure date submitted is visible
+                            // Actions div remains hidden for completed items
+                        }
+                    } else {
+                        row.style.display = 'none'; // Hide the row
+                    }
+                });
+            });
+        });
+
+        // Dropdown for Add Remark button
+        document.querySelectorAll('.dropdown-toggle').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.stopPropagation(); // Prevent document click from closing immediately
+                const dropdownMenu = this.nextElementSibling;
+                dropdownMenu.classList.toggle('show');
+            });
+        });
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', function(event) {
+            document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+                if (!menu.contains(event.target) && !event.target.classList.contains('dropdown-toggle')) {
+                    menu.classList.remove('show');
+                }
+            });
+        });
+
+        // Handle remark selection
+        document.querySelectorAll('.dropdown-menu a').forEach(item => {
+            item.addEventListener('click', function(event) {
+                event.preventDefault();
+                const remarkText = this.dataset.remark;
+
+                const row = this.closest('.Status-row');
+                if (row) {
+                    // Find the current status/remark cell
+                    let statusOrRemarkCell = row.querySelector('.status-cell') || row.querySelector('.remark-column');
+
+                    if (statusOrRemarkCell) {
+                        statusOrRemarkCell.textContent = remarkText; // Update text
+                        statusOrRemarkCell.classList.remove('status-cell'); // Remove old class
+                        statusOrRemarkCell.classList.add('remark-column'); // Add new class for remark styling
+
+                        row.dataset.status = 'ON-GOING'; // Update row data status
+
+                        this.closest('.dropdown-menu').classList.remove('show'); // Hide dropdown
+
+                        // Show custom message box (instead of alert)
+                        const messageBox = document.createElement('div');
+                        messageBox.classList.add('custom-message-box');
+                        messageBox.innerHTML = `<p>Remark '${remarkText}' applied. Status updated to On-Going.</p><button class="custom-message-box-close">OK</button>`;
+                        document.body.appendChild(messageBox);
+                        messageBox.querySelector('.custom-message-box-close').addEventListener('click', () => {
+                            messageBox.remove();
+                        });
+
+                        // Re-trigger active tab to update table view
+                        const activeTab = document.querySelector('.Nav-item.active');
+                        if (activeTab) {
+                            activeTab.click();
+                        }
+                    }
+                }
+            });
+        });
+
+        // --- Custom Confirmation Modal Logic for Clearing ---
+        const confirmationModal = document.getElementById('confirmationModal');
+        const confirmClearBtn = document.getElementById('confirmClearBtn');
+        const cancelClearBtn = document.getElementById('cancelClearBtn');
+        let currentRowToClear = null; // To store the row element that triggered the modal
+
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('clear-button')) {
+                currentRowToClear = event.target.closest('.Status-row');
+                confirmationModal.classList.add('show-modal');
+                document.body.classList.add('modal-open'); /* Add this class to prevent background scrolling */
+            }
+        });
+
+        confirmClearBtn.addEventListener('click', function() {
+            if (currentRowToClear) {
+                // Show custom message box (instead of alert)
+                const messageBox = document.createElement('div');
+                messageBox.classList.add('custom-message-box');
+                messageBox.innerHTML = '<p>Request cleared successfully!</p><button class="custom-message-box-close">OK</button>';
+                document.body.appendChild(messageBox);
+                messageBox.querySelector('.custom-message-box-close').addEventListener('click', () => {
+                    messageBox.remove();
+                });
+
+                currentRowToClear.dataset.status = 'COMPLETED'; // Update row data status to COMPLETED
+                const statusCell = currentRowToClear.querySelector('.status-cell') || currentRowToClear.querySelector('.remark-column');
+                if (statusCell) {
+                    statusCell.classList.remove('status-cell', 'remark-column'); // Remove old classes
+                    statusCell.classList.add('date-completed-column'); // Add new class for completed styling
+
+                    const today = new Date();
+                    const dd = String(today.getDate()).padStart(2, '0');
+                    const mm = String(today.getMonth() + 1).padStart(2, '0');
+                    const yyyy = today.getFullYear(); // Corrected variable name
+                    statusCell.innerHTML = `<span>${mm}-${dd}-${yyyy}</span>`; // Update cell content to date completed
+                }
+
+                // Re-trigger active tab to update table view
+                const activeTab = document.querySelector('.Nav-item.active');
+                if (activeTab) {
+                    activeTab.click();
+                }
+            }
+            confirmationModal.classList.remove('show-modal'); // Hide modal
+            document.body.classList.remove('modal-open'); /* Remove background scrolling class */
+            currentRowToClear = null; // Reset stored row
+        });
+
+        cancelClearBtn.addEventListener('click', function() {
+            // Show custom message box (instead of alert)
+            const messageBox = document.createElement('div');
+            messageBox.classList.add('custom-message-box');
+            messageBox.innerHTML = '<p>Clearance cancelled.</p><button class="custom-message-box-close">OK</button>';
+            document.body.appendChild(messageBox);
+            messageBox.querySelector('.custom-message-box-close').addEventListener('click', () => {
+                messageBox.remove();
+            });
+
+            confirmationModal.classList.remove('show-modal'); // Hide modal
+            document.body.classList.remove('modal-open'); /* Remove background scrolling class */
+            currentRowToClear = null; // Reset stored row
+        });
+
+        // --- View Status Modal Logic (from the provided snippet) ---
+        // These are the elements for the viewStatusModal
+        const viewStatusModal = document.getElementById('viewStatusModal');
+        const closeButton = viewStatusModal.querySelector('.close-button');
+        const studentAvatarImg = viewStatusModal.querySelector('.student-avatar-img');
+        const modalStudentName = viewStatusModal.querySelector('.modal-student-name');
+        const modalStudentEmail = viewStatusModal.querySelector('.modal-student-email');
+        const modalStudentId = viewStatusModal.querySelector('.modal-student-id');
+        const modalRemarks = viewStatusModal.querySelector('.modal-remarks');
+        const statusOfficesSection = viewStatusModal.querySelector('.status-offices-section');
+        const requestedDocumentsSection = viewStatusModal.querySelector('.requested-documents-section');
+
+        const openModal = (modalElement) => {
+            modalElement.classList.add('show-modal');
+            document.body.classList.add('modal-open');
+        };
+
+        const closeModal = (modalElement) => {
+            modalElement.classList.remove('show-modal');
+            document.body.classList.remove('modal-open');
+        };
+
+        // Event listener for "view status" links
+        document.querySelectorAll('.view-status-link').forEach(link => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                const row = link.closest('.Status-row'); 
+                if (row) {
+                    // Extract data from data attributes (from the table row)
+                    const officeStatuses = JSON.parse(row.dataset.officeStatuses || '[]');
+                    const requestedDocuments = JSON.parse(row.dataset.requestedDocuments || '[]');
+                    const studentName = row.dataset.studentName || row.children[2].textContent;
+                    const studentId = row.dataset.studentId || row.children[1].textContent;
+                    const studentEmail = row.dataset.studentEmail || 'student@nu-dasma.edu.ph'; // Default if not present
+                    const studentAvatar = row.dataset.studentAvatar || 'https://placehold.co/80x80/cccccc/333333?text=' + studentName.charAt(0) + (studentName.split(' ')[1] ? studentName.split(' ')[1].charAt(0) : '');
+                    const remarks = row.dataset.remarks || 'No Remarks';
+
+
+                    // Populate student info
+                    studentAvatarImg.src = studentAvatar;
+                    modalStudentName.textContent = studentName;
+                    modalStudentEmail.textContent = studentEmail;
+                    modalStudentId.textContent = studentId;
+                    modalRemarks.textContent = remarks;
+
+                    // Clear previous statuses and documents
+                    statusOfficesSection.querySelectorAll('.office-status-item').forEach(item => item.remove());
+                    requestedDocumentsSection.querySelectorAll('.document-item, .modal-placeholder-text').forEach(item => item.remove());
+
+                    // Populate requested documents dynamically
+                    if (requestedDocuments.length > 0) {
+                        requestedDocuments.forEach(doc => {
+                            const documentItem = document.createElement('div');
+                            documentItem.classList.add('document-item');
+                            const documentNameSpan = document.createElement('span');
+                            documentNameSpan.classList.add('document-name');
+                            documentNameSpan.textContent = doc.name + ':';
+                            documentItem.appendChild(documentNameSpan);
+                            const documentCopiesSpan = document.createElement('span');
+                            documentCopiesSpan.classList.add('document-copies');
+                            documentCopiesSpan.textContent = doc.copies;
+                            documentItem.appendChild(documentCopiesSpan);
+                            requestedDocumentsSection.appendChild(documentItem);
+                        });
+                    } else {
+                        const noDocumentsText = document.createElement('p');
+                        noDocumentsText.classList.add('modal-placeholder-text');
+                        noDocumentsText.textContent = 'No documents requested.';
+                        requestedDocumentsSection.appendChild(noDocumentsText);
+                    }
+
+                    // Populate office statuses dynamically
+                    if (officeStatuses.length > 0) {
+                        officeStatuses.forEach(officeStatus => {
+                            const officeItem = document.createElement('div');
+                            officeItem.classList.add('office-status-item');
+                            const officeNameSpan = document.createElement('span');
+                            officeNameSpan.textContent = officeStatus.office + ':';
+                            officeItem.appendChild(officeNameSpan);
+                            const statusBadgeSpan = document.createElement('span');
+                            statusBadgeSpan.classList.add('status-badge');
+                            statusBadgeSpan.textContent = officeStatus.status;
+
+                            if (officeStatus.status === 'Completed') {
+                                statusBadgeSpan.classList.add('completed');
+                            } else if (officeStatus.status === 'Pending') {
+                                statusBadgeSpan.classList.add('pending');
+                            } else if (officeStatus.status === 'Issue Found') {
+                                statusBadgeSpan.classList.add('issue-found');
+                            } else if (officeStatus.status === 'On-going') {
+                                statusBadgeSpan.classList.add('on-going');
+                            }
+                            officeItem.appendChild(statusBadgeSpan);
+                            statusOfficesSection.appendChild(officeItem);
+                        });
+                    } else {
+                        const noStatusesText = document.createElement('p');
+                        noStatusesText.classList.add('modal-placeholder-text');
+                        noStatusesText.textContent = 'No status updates available.';
+                        statusOfficesSection.appendChild(noStatusesText);
+                    }
+
+
+                    openModal(viewStatusModal);
+                }
+            });
+        });
+
+        closeButton.addEventListener('click', () => {
+            closeModal(viewStatusModal);
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === viewStatusModal) {
+                closeModal(viewStatusModal);
+            }
+        });
+
+        // Initial load to show ALL requests
+        document.addEventListener('DOMContentLoaded', () => {
+            const initialTab = document.querySelector('.Nav-item.active');
+            if (initialTab) {
+                initialTab.click();
+            }
+        });
+    </script>
+</body>
+</html>
