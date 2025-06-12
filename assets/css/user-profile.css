@@ -267,3 +267,18 @@ body {
 .form-row select:invalid {
   color: #aaa;
 }
+
+.form-row input[type="text"]:focus,
+.form-row input[type="email"]:focus,
+.form-row input[type="date"]:focus,
+.form-row select:focus {
+    border-color: #2c2273; /* Blue border on focus */
+    box-shadow: 0 0 8px rgba(44, 34, 115, 0.3); /* Subtle blue shadow on focus */
+    outline: none; /* Remove default outline */
+}
+
+/* Optional: Style for inputs that have content (can be combined with JS) */
+.form-row input.has-content,
+.form-row select.has-content {
+    border-color: #5cb85c; /* Example: Green border if it has content */
+}
