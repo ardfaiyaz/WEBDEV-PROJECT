@@ -48,26 +48,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['applyclr_submitbtn']))
     $enrollmentPurpose = trim($_POST['Enrollment_Purpose'] ?? '');
     $studentRemarks = trim($_POST['REMARKS'] ?? '');
 
-    // Basic validation (add more robust validation as needed)
-    $errors = [];
-    if (empty($firstName)) $errors[] = "First name is required.";
-    if (empty($lastName)) $errors[] = "Last name is required.";
-    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "A valid email address is required.";
-    if (empty($mobileNo)) $errors[] = "Mobile number is required."; 
-    if (empty($birthdate)) $errors[] = "Birthdate is required.";
-    if (empty($houseNo)) $errors[] = "House number is required.";
-    if (empty($street)) $errors[] = "Street is required.";
-    if (empty($baranggay)) $errors[] = "Baranggay is required.";
-    if (empty($cityMun)) $errors[] = "City/Municipality is required.";
-    if (empty($province)) $errors[] = "Province is required.";
-    if (empty($sex)) $errors[] = "Sex is required.";
-    if (empty($birthplace)) $errors[] = "Birthplace is required.";
-    if (empty($nationality)) $errors[] = "Nationality is required.";
-    if (empty($course)) $errors[] = "Course/Major is required.";
-    if (empty($semStart)) $errors[] = "Year/Semester Start is required.";
-    if (empty($semEnd)) $errors[] = "Year/Semester End is required.";
-    if (empty($graduationDate)) $errors[] = "Date of Graduation is required.";
-    if (empty($enrollmentPurpose)) $errors[] = "Enrollment Purpose is required.";
 
     // Check for at least one document requested
     $documentRequestedCount = 0;
