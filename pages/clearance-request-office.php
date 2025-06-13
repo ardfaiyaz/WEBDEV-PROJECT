@@ -117,25 +117,38 @@ function formatStatusCode($statusCode) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clearance Requests - <?php echo $loggedInUserOfficeDescription; ?></title>
+    <title>Clearance Requests</title>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/RequestPOV.css"> </head>
+    <link rel="stylesheet" href="../assets/css/clearance-request.css">
+    <link rel="icon" type="image/png" href="../assets/images/school-logo.png" />
+</head>
 <body>
-    <header class="header">
+    <header class="topbar">
         <div class="logo-section">
-            <img src="../assets/images/school-logo.png" alt="NU Logo" class="logo"> <span class="university-name">NATIONAL<br>UNIVERSITY</span>
+            <a href="index.html" class="logo-link">
+                <img src="../assets/images/school-logo.png" alt="School Logo">
+                <span class="school-name">NATIONAL<br/>UNIVERSITY</span>
+            </a>
         </div>
-        <div class="header-right">
-            <div class="user-info">
-                <i class='bx bxs-bell icon-bell'></i>
-                <span>Hi, <?php echo $displayFirstName; ?></span>
-                <i class='bx bxs-user-circle icon-user'></i>
-            </div>
+
+        <nav class="top-navbar">
+            <ul class="navbar-menu">
+                <li class="menu-item"><a href="UserPOV.html"><i class='bx bxs-home icon-sidebar'></i> Home</a></li>
+                <li class="menu-item"><a href="#"><i class='bx bxs-user icon-sidebar'></i> Profile</a></li>
+                <li class="menu-item"><a href="About-us.html"><i class='bx bxs-file icon-sidebar'></i> About Us</a></li>
+                <li class="menu-item"><a href="#"><i class='bx bxs-log-out icon-sidebar'></i> Logout</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-right-section">
             <div class="search-bar">
                 <input type="text" placeholder="Search...">
                 <i class='bx bx-search icon-search'></i>
+            </div>
+            <div class="user-section">
+                <i class='bx bxs-bell'></i>
+                <span class="username">Hi, User</span>
+                <i class='bx bxs-user-circle'></i>
             </div>
         </div>
     </header>
