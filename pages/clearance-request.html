@@ -5,40 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clearance Requests</title>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/clearance-request.css">
-  
+    <link rel="icon" type="image/png" href="../assets/images/school-logo.png" />
+
 </head>
 <body>
-    <header class="header">
+    <header class="topbar">
         <div class="logo-section">
-            <img src="https://placehold.co/45x45/333/FFF?text=NU" alt="NU Logo" class="logo">
-            <span class="university-name">NATIONAL<br>UNIVERSITY</span>
+            <a href="index.html" class="logo-link">
+                <img src="../assets/images/school-logo.png" alt="School Logo">
+                <span class="school-name">NATIONAL<br/>UNIVERSITY</span>
+            </a>
         </div>
-        <div class="header-right">
-            <div class="user-info">
-                <i class='bx bxs-bell icon-bell'></i>
-                <span>Hi, Pia Elleine</span>
-                <i class='bx bxs-user-circle icon-user'></i>
-            </div>
-            <div class="search-bar">
-                <input type="text" placeholder="Search...">
-                <i class='bx bx-search icon-search'></i>
-            </div>
-        </div>
-    </header>
 
-    <div class="main-container">
-        <aside class="sidebar">
-            <ul class="sidebar-menu">
+        <nav class="top-navbar">
+            <ul class="navbar-menu">
                 <li class="menu-item"><a href="UserPOV.html"><i class='bx bxs-home icon-sidebar'></i> Home</a></li>
                 <li class="menu-item"><a href="#"><i class='bx bxs-user icon-sidebar'></i> Profile</a></li>
                 <li class="menu-item"><a href="About-us.html"><i class='bx bxs-file icon-sidebar'></i> About Us</a></li>
                 <li class="menu-item"><a href="#"><i class='bx bxs-log-out icon-sidebar'></i> Logout</a></li>
             </ul>
-        </aside>
+        </nav>
 
+        <div class="header-right-section">
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <i class='bx bx-search icon-search'></i>
+            </div>
+            <div class="user-section">
+                <i class='bx bxs-bell'></i>
+                <span class="username">Hi, User</span>
+                <i class='bx bxs-user-circle'></i>
+            </div>
+        </div>
+    </header>
+  
+    <div class="main-container">
         <main class="content-area">
             <div class="clearance-requests-header">
                 <h2>CLEARANCE REQUESTS</h2>
@@ -81,14 +83,13 @@
                         <div class="actions-header">ACTIONS</div>
                     </div>
 
-                    <!-- Existing Rows -->
                     <div class="Status-row" data-status="PENDING">
-                        <div>001</div>
-                        <div>2023-1701234</div>
-                        <div>HEART QUINTANILLA HERNANDEZ</div>
-                        <div>BSIT-MWA</div>
+                        <div class="reqid">001</div>
+                        <div class="studid">2023-1701234</div>
+                        <div class="studname">HEART QUINTANILLA HERNANDEZ</div>
+                        <div class="program">BSIT-MWA</div>
                         <div class="status-cell">PENDING</div>
-                        <div>05-25-2025</div>
+                        <div class="datesub">05-25-2025</div>
                         <div class="actions">
                             <div class="dropdown-wrapper">
                                 <button class="add-remark-button dropdown-toggle">ADD REMARK <i class='bx bx-chevron-down'></i></button>
@@ -104,32 +105,31 @@
                     </div>
 
                     <div class="Status-row" data-status="ON-GOING">
-                        <div>002</div>
-                        <div>2023-1701234</div>
-                        <div>HEART QUINTANILLA HERNANDEZ</div>
-                        <div>BSIT-MWA</div>
+                        <div class="reqid">002</div>
+                        <div class="studid">2023-1701234</div>
+                        <div class="studname">HEART QUINTANILLA HERNANDEZ</div>
+                        <div class="program">BSIT-MWA</div>
                         <div class="remark-column">
                             <span class="remark-text">Unpaid fees</span>
                         </div>
-                        <div>05-25-2025</div>
+                        <div class="datesub">05-25-2025</div>
                         <div class="actions">
                             <button class="clear-button">CLEAR</button>
                         </div>
                     </div>
 
                     <div class="Status-row" data-status="COMPLETED">
-                        <div>003</div>
-                        <div>2023-1701234</div>
-                        <div>HEART QUINTANILLA HERNANDEZ</div>
-                        <div>BSIT-MWA</div>
+                        <div class="reqid">003</div>
+                        <div class="studid">2023-1701234</div>
+                        <div class="studname">HEART QUINTANILLA HERNANDEZ</div>
+                        <div class="program">BSIT-MWA</div>
                         <div class="date-completed-column">
                             <span>05-25-2025</span>
                         </div>
-                        <div>05-25-2025</div>
+                        <div class="datesub">05-25-2025</div>
                         <div class="actions-placeholder"></div>
                     </div>
 
-                    <!-- New Example Rows based on previous conversation -->
                     <div class="Status-row" data-status="ON-GOING"
                         data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Issue Found"}, {"office": "Student Discipline Office", "status": "Pending"}, {"office": "Student Affairs Office", "status": "On-going"}, {"office": "Guidance Office", "status": "On-going"}, {"office": "Library", "status": "Pending"}, {"office": "ITSO", "status": "Completed"}, {"office": "Accounting Office", "status": "Issue Found"}, {"office": "Registrar Office", "status": "Completed"}]'
                         data-student-name="Pia Elleine Lucero"
@@ -138,14 +138,14 @@
                         data-requested-documents='[{"name": "Transcript of Records", "copies": "3 copies"}, {"name": "Certificate of Good Moral", "copies": "1 copy"}]'
                         data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=PL"
                         >
-                        <div>004</div>
-                        <div>2023-123456</div>
-                        <div>Pia Elleine Lucero</div>
-                        <div>BSIT-MWA</div>
+                        <div class="reqid">004</div>
+                        <div class="studid">2023-123456</div>
+                        <div class="studname">Pia Elleine Lucero</div>
+                        <div class="program">BSIT-MWA</div>
                         <div class="remark-column">
                             <span class="remark-text">On-going</span>
                         </div>
-                        <div>05-19-2025</div>
+                        <div class="datesub">05-19-2025</div>
                         <div class="actions">
                             <div class="dropdown-wrapper">
                                 <button class="add-remark-button dropdown-toggle">ADD REMARK <i class='bx bx-chevron-down'></i></button>
@@ -169,14 +169,14 @@
                         data-requested-documents='[{"name": "Certificate of Enrollment", "copies": "1 copy"}]'
                         data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=BC"
                         >
-                        <div>005</div>
-                        <div>2023-123456</div>
-                        <div>Bryan Cancel</div>
-                        <div>BSArch</div>
+                        <div class="reqid">005</div>
+                        <div class="studid">2023-123456</div>
+                        <div class="studname">Bryan Cancel</div>
+                        <div class="program">BSArch</div>
                         <div class="date-completed-column">
                             <span>05-25-2025</span>
                         </div>
-                        <div>05-19-2025</div>
+                        <div class="datesub">05-19-2025</div>
                         <div class="actions">
                              <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">View Status Detail</a>
                              <span class="status-completed-text">Claim Stub Released</span>
@@ -191,12 +191,12 @@
                         data-requested-documents='[{"name": "Letter of Recommendation", "copies": "1 copy"}]'
                         data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=MD"
                         >
-                        <div>006</div>
-                        <div>2023-123457</div>
-                        <div>Melthon Donaire</div>
-                        <div>BSPsy</div>
+                        <div class="reqid">006</div>
+                        <div class="studid">2023-123457</div>
+                        <div class="studname">Melthon Donaire</div>
+                        <div class="program">BSPsy</div>
                         <div class="status-cell">PENDING</div>
-                        <div>05-26-2025</div>
+                        <div class="datesub">05-26-2025</div>
                         <div class="actions">
                             <div class="dropdown-wrapper">
                                 <button class="add-remark-button dropdown-toggle">ADD REMARK <i class='bx bx-chevron-down'></i></button>
@@ -220,14 +220,14 @@
                         data-requested-documents='[{"name": "Medical Certificate", "copies": "1 copy"}]'
                         data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=HB"
                         >
-                        <div>007</div>
-                        <div>2023-123458</div>
-                        <div>Hero Buta</div>
-                        <div>BSHM</div>
+                        <div class="reqid">007</div>
+                        <div class="studid">2023-123458</div>
+                        <div class="studname">Hero Buta</div>
+                        <div class="program">BSHM</div>
                         <div class="date-completed-column">
                             <span>05-26-2025</span>
                         </div>
-                        <div>05-26-2025</div>
+                        <div class="datesub">05-26-2025</div>
                         <div class="actions">
                              <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">View Status Detail</a>
                              <span class="status-completed-text">Claim Stub Released</span>
@@ -242,12 +242,12 @@
                         data-requested-documents='[{"name": "Transcript of Records", "copies": "5 copies"}, {"name": "Course Description", "copies": "2 copies"}]'
                         data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=AJ"
                         >
-                        <div>008</div>
-                        <div>2023-987654</div>
-                        <div>Alex Johnson</div>
-                        <div>BSECE</div>
+                        <div class="reqid">008</div>
+                        <div class="studid">2023-987654</div>
+                        <div class="studname">Alex Johnson</div>
+                        <div class="program">BSECE</div>
                         <div class="status-cell">PENDING</div>
-                        <div>05-20-2025</div>
+                        <div class="datesub">05-20-2025</div>
                         <div class="actions">
                             <div class="dropdown-wrapper">
                                 <button class="add-remark-button dropdown-toggle">ADD REMARK <i class='bx bx-chevron-down'></i></button>
@@ -271,14 +271,14 @@
                         data-requested-documents='[{"name": "Transcript of Records", "copies": "1 copy"}]'
                         data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=SL"
                         >
-                        <div>009</div>
-                        <div>2023-112233</div>
-                        <div>Sarah Lee</div>
-                        <div>BSCS</div>
+                        <div class="reqid">009</div>
+                        <div class="studid">2023-112233</div>
+                        <div class="studname">Sarah Lee</div>
+                        <div class="program">BSCS</div>
                         <div class="date-completed-column">
                             <span>05-27-2025</span>
                         </div>
-                        <div>05-21-2025</div>
+                        <div class="datesub">05-21-2025</div>
                         <div class="actions">
                              <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">View Status Detail</a>
                              <span class="status-completed-text">Claim Stub Released</span>
@@ -289,7 +289,6 @@
         </main>
     </div>
 
-    <!-- View Status Modal (integrated from the provided snippet) -->
     <div id="viewStatusModal" class="modal-overlay">
         <div class="modal-content view-status-modal-content">
             <span class="close-button">&times;</span>
@@ -322,7 +321,6 @@
         </div>
     </div>
 
-    <!-- Confirmation Modal (from original clearance requests) -->
     <div id="confirmationModal" class="modal-overlay">
         <div class="modal-content">
             <i class='bx bx-question-mark modal-icon'></i>
@@ -335,6 +333,340 @@
         </div>
     </div>
 
-    <script src="../js/clearance-request-office.js"></script>
+    <script>
+        // Logic for ALL/PENDING/ON-GOING/COMPLETED tabs
+        const navItems = document.querySelectorAll('.Nav-item');
+        const rows = document.querySelectorAll('.Status-row');
+        const statusHeader = document.querySelector('.Status-header');
+
+        function updateTableHeaders(selectedStatus) {
+            statusHeader.innerHTML = `
+                <div>REQUEST ID</div>
+                <div>STUDENT ID</div>
+                <div>STUDENT NAME</div>
+                <div>PROGRAM</div>
+                <div>STATUS</div>
+                <div>DATE SUBMITTED</div>
+                <div class="actions-header">ACTIONS</div>
+            `;
+
+            const statusColumnHeader = statusHeader.children[4];
+            const dateSubmittedColumnHeader = statusHeader.children[5];
+            const actionsHeader = statusHeader.querySelector('.actions-header');
+
+            // Adjust headers based on selected status
+            if (selectedStatus === 'ON-GOING') {
+                statusColumnHeader.textContent = 'REMARK';
+                dateSubmittedColumnHeader.style.display = 'block';
+                dateSubmittedColumnHeader.textContent = 'DATE SUBMITTED';
+                if (actionsHeader) actionsHeader.style.display = 'block';
+            } else if (selectedStatus === 'COMPLETED') {
+                statusColumnHeader.textContent = 'DATE COMPLETED';
+                dateSubmittedColumnHeader.style.display = 'block';
+                dateSubmittedColumnHeader.textContent = 'DATE SUBMITTED';
+                if (actionsHeader) actionsHeader.style.display = 'none'; // Hide actions for completed
+            } else { // ALL or PENDING
+                statusColumnHeader.textContent = 'STATUS';
+                dateSubmittedColumnHeader.style.display = 'block';
+                dateSubmittedColumnHeader.textContent = 'DATE SUBMITTED';
+                if (actionsHeader) actionsHeader.style.display = 'block';
+            }
+        }
+
+        navItems.forEach(tab => {
+            tab.addEventListener('click', () => {
+                navItems.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                const selectedStatus = tab.dataset.status.toUpperCase();
+                updateTableHeaders(selectedStatus);
+
+                rows.forEach(row => {
+                    const rowStatus = row.dataset.status.toUpperCase();
+
+                    const statusCell = row.querySelector('.status-cell');
+                    const remarkColumn = row.querySelector('.remark-column');
+                    const dateCompletedColumn = row.querySelector('.date-completed-column');
+                    const actionsDiv = row.querySelector('.actions');
+                    const actionsPlaceholder = row.querySelector('.actions-placeholder');
+                    const rowDateSubmitted = row.children[5]; // Date Submitted is always the 6th div
+
+                    // Hide all status/remark/date completed cells and actions by default
+                    if (statusCell) statusCell.style.display = 'none';
+                    if (remarkColumn) remarkColumn.style.display = 'none';
+                    if (dateCompletedColumn) dateCompletedColumn.style.display = 'none';
+                    if (actionsDiv) actionsDiv.style.display = 'none';
+                    if (actionsPlaceholder) actionsPlaceholder.style.display = 'none';
+                    if (rowDateSubmitted) rowDateSubmitted.style.display = 'block'; // Always show date submitted
+
+                    // Show row if it matches the selected status or if ALL is selected
+                    if (selectedStatus === 'ALL' || selectedStatus === rowStatus) {
+                        row.style.display = 'grid'; // Display the row
+
+                        if (rowStatus === 'PENDING') {
+                            if (statusCell) statusCell.style.display = 'block'; // Show status cell
+                            if (actionsDiv) actionsDiv.style.display = 'flex'; // Show actions
+                        } else if (rowStatus === 'ON-GOING') {
+                            if (remarkColumn) remarkColumn.style.display = 'block'; // Show remark column
+                            if (actionsDiv) actionsDiv.style.display = 'flex'; // Show actions
+                        } else if (rowStatus === 'COMPLETED') {
+                            if (dateCompletedColumn) dateCompletedColumn.style.display = 'block'; // Show date completed column
+                            if (rowDateSubmitted) rowDateSubmitted.style.display = 'block'; // Ensure date submitted is visible
+                            // Actions div remains hidden for completed items
+                        }
+                    } else {
+                        row.style.display = 'none'; // Hide the row
+                    }
+                });
+            });
+        });
+
+        // Dropdown for Add Remark button
+        document.querySelectorAll('.dropdown-toggle').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.stopPropagation(); // Prevent document click from closing immediately
+                const dropdownMenu = this.nextElementSibling;
+                dropdownMenu.classList.toggle('show');
+            });
+        });
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', function(event) {
+            document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+                if (!menu.contains(event.target) && !event.target.classList.contains('dropdown-toggle')) {
+                    menu.classList.remove('show');
+                }
+            });
+        });
+
+        // Handle remark selection
+        document.querySelectorAll('.dropdown-menu a').forEach(item => {
+            item.addEventListener('click', function(event) {
+                event.preventDefault();
+                const remarkText = this.dataset.remark;
+
+                const row = this.closest('.Status-row');
+                if (row) {
+                    // Find the current status/remark cell
+                    let statusOrRemarkCell = row.querySelector('.status-cell') || row.querySelector('.remark-column');
+
+                    if (statusOrRemarkCell) {
+                        statusOrRemarkCell.textContent = remarkText; // Update text
+                        statusOrRemarkCell.classList.remove('status-cell'); // Remove old class
+                        statusOrRemarkCell.classList.add('remark-column'); // Add new class for remark styling
+
+                        row.dataset.status = 'ON-GOING'; // Update row data status
+
+                        this.closest('.dropdown-menu').classList.remove('show'); // Hide dropdown
+
+                        // Show custom message box (instead of alert)
+                        const messageBox = document.createElement('div');
+                        messageBox.classList.add('custom-message-box');
+                        messageBox.innerHTML = `<p>Remark '${remarkText}' applied. Status updated to On-Going.</p><button class="custom-message-box-close">OK</button>`;
+                        document.body.appendChild(messageBox);
+                        messageBox.querySelector('.custom-message-box-close').addEventListener('click', () => {
+                            messageBox.remove();
+                        });
+
+                        // Re-trigger active tab to update table view
+                        const activeTab = document.querySelector('.Nav-item.active');
+                        if (activeTab) {
+                            activeTab.click();
+                        }
+                    }
+                }
+            });
+        });
+
+        // --- Custom Confirmation Modal Logic for Clearing ---
+        const confirmationModal = document.getElementById('confirmationModal');
+        const confirmClearBtn = document.getElementById('confirmClearBtn');
+        const cancelClearBtn = document.getElementById('cancelClearBtn');
+        let currentRowToClear = null; // To store the row element that triggered the modal
+
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('clear-button')) {
+                currentRowToClear = event.target.closest('.Status-row');
+                confirmationModal.classList.add('show-modal');
+                document.body.classList.add('modal-open'); /* Add this class to prevent background scrolling */
+            }
+        });
+
+        confirmClearBtn.addEventListener('click', function() {
+            if (currentRowToClear) {
+                // Show custom message box (instead of alert)
+                const messageBox = document.createElement('div');
+                messageBox.classList.add('custom-message-box');
+                messageBox.innerHTML = '<p>Request cleared successfully!</p><button class="custom-message-box-close">OK</button>';
+                document.body.appendChild(messageBox);
+                messageBox.querySelector('.custom-message-box-close').addEventListener('click', () => {
+                    messageBox.remove();
+                });
+
+                currentRowToClear.dataset.status = 'COMPLETED'; // Update row data status to COMPLETED
+                const statusCell = currentRowToClear.querySelector('.status-cell') || currentRowToClear.querySelector('.remark-column');
+                if (statusCell) {
+                    statusCell.classList.remove('status-cell', 'remark-column'); // Remove old classes
+                    statusCell.classList.add('date-completed-column'); // Add new class for completed styling
+
+                    const today = new Date();
+                    const dd = String(today.getDate()).padStart(2, '0');
+                    const mm = String(today.getMonth() + 1).padStart(2, '0');
+                    const yyyy = today.getFullYear();
+                    statusCell.innerHTML = `<span>${mm}-${dd}-${yyyy}</span>`; // Update cell content to date completed
+                }
+
+                // Re-trigger active tab to update table view
+                const activeTab = document.querySelector('.Nav-item.active');
+                if (activeTab) {
+                    activeTab.click();
+                }
+            }
+            confirmationModal.classList.remove('show-modal'); // Hide modal
+            document.body.classList.remove('modal-open'); /* Remove background scrolling class */
+            currentRowToClear = null; // Reset stored row
+        });
+
+        cancelClearBtn.addEventListener('click', function() {
+            // Show custom message box (instead of alert)
+            const messageBox = document.createElement('div');
+            messageBox.classList.add('custom-message-box');
+            messageBox.innerHTML = '<p>Clearance cancelled.</p><button class="custom-message-box-close">OK</button>';
+            document.body.appendChild(messageBox);
+            messageBox.querySelector('.custom-message-box-close').addEventListener('click', () => {
+                messageBox.remove();
+            });
+
+            confirmationModal.classList.remove('show-modal'); // Hide modal
+            document.body.classList.remove('modal-open'); /* Remove background scrolling class */
+            currentRowToClear = null; // Reset stored row
+        });
+
+        // --- View Status Modal Logic (from the provided snippet) ---
+        // These are the elements for the viewStatusModal
+        const viewStatusModal = document.getElementById('viewStatusModal');
+        const closeButton = viewStatusModal.querySelector('.close-button');
+        const studentAvatarImg = viewStatusModal.querySelector('.student-avatar-img');
+        const modalStudentName = viewStatusModal.querySelector('.modal-student-name');
+        const modalStudentEmail = viewStatusModal.querySelector('.modal-student-email');
+        const modalStudentId = viewStatusModal.querySelector('.modal-student-id');
+        const modalRemarks = viewStatusModal.querySelector('.modal-remarks');
+        const statusOfficesSection = viewStatusModal.querySelector('.status-offices-section');
+        const requestedDocumentsSection = viewStatusModal.querySelector('.requested-documents-section');
+
+        const openModal = (modalElement) => {
+            modalElement.classList.add('show-modal');
+            document.body.classList.add('modal-open');
+        };
+
+        const closeModal = (modalElement) => {
+            modalElement.classList.remove('show-modal');
+            document.body.classList.remove('modal-open');
+        };
+
+        // Event listener for "view status" links
+        document.querySelectorAll('.view-status-link').forEach(link => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                const row = link.closest('.Status-row'); 
+                if (row) {
+                    // Extract data from data attributes (from the table row)
+                    const officeStatuses = JSON.parse(row.dataset.officeStatuses || '[]');
+                    const requestedDocuments = JSON.parse(row.dataset.requestedDocuments || '[]');
+                    const studentName = row.dataset.studentName || row.children[2].textContent;
+                    const studentId = row.dataset.studentId || row.children[1].textContent;
+                    const studentEmail = row.dataset.studentEmail || 'student@nu-dasma.edu.ph'; // Default if not present
+                    const studentAvatar = row.dataset.studentAvatar || 'https://placehold.co/80x80/cccccc/333333?text=' + studentName.charAt(0) + (studentName.split(' ')[1] ? studentName.split(' ')[1].charAt(0) : '');
+                    const remarks = row.dataset.remarks || 'No Remarks';
+
+
+                    // Populate student info
+                    studentAvatarImg.src = studentAvatar;
+                    modalStudentName.textContent = studentName;
+                    modalStudentEmail.textContent = studentEmail;
+                    modalStudentId.textContent = studentId;
+                    modalRemarks.textContent = remarks;
+
+                    // Clear previous statuses and documents
+                    statusOfficesSection.querySelectorAll('.office-status-item').forEach(item => item.remove());
+                    requestedDocumentsSection.querySelectorAll('.document-item, .modal-placeholder-text').forEach(item => item.remove());
+
+                    // Populate requested documents dynamically
+                    if (requestedDocuments.length > 0) {
+                        requestedDocuments.forEach(doc => {
+                            const documentItem = document.createElement('div');
+                            documentItem.classList.add('document-item');
+                            const documentNameSpan = document.createElement('span');
+                            documentNameSpan.classList.add('document-name');
+                            documentNameSpan.textContent = doc.name + ':';
+                            documentItem.appendChild(documentNameSpan);
+                            const documentCopiesSpan = document.createElement('span');
+                            documentCopiesSpan.classList.add('document-copies');
+                            documentCopiesSpan.textContent = doc.copies;
+                            documentItem.appendChild(documentCopiesSpan);
+                            requestedDocumentsSection.appendChild(documentItem);
+                        });
+                    } else {
+                        const noDocumentsText = document.createElement('p');
+                        noDocumentsText.classList.add('modal-placeholder-text');
+                        noDocumentsText.textContent = 'No documents requested.';
+                        requestedDocumentsSection.appendChild(noDocumentsText);
+                    }
+
+                    // Populate office statuses dynamically
+                    if (officeStatuses.length > 0) {
+                        officeStatuses.forEach(officeStatus => {
+                            const officeItem = document.createElement('div');
+                            officeItem.classList.add('office-status-item');
+                            const officeNameSpan = document.createElement('span');
+                            officeNameSpan.textContent = officeStatus.office + ':';
+                            officeItem.appendChild(officeNameSpan);
+                            const statusBadgeSpan = document.createElement('span');
+                            statusBadgeSpan.classList.add('status-badge');
+                            statusBadgeSpan.textContent = officeStatus.status;
+
+                            if (officeStatus.status === 'Completed') {
+                                statusBadgeSpan.classList.add('completed');
+                            } else if (officeStatus.status === 'Pending') {
+                                statusBadgeSpan.classList.add('pending');
+                            } else if (officeStatus.status === 'Issue Found') {
+                                statusBadgeSpan.classList.add('issue-found');
+                            } else if (officeStatus.status === 'On-going') {
+                                statusBadgeSpan.classList.add('on-going');
+                            }
+                            officeItem.appendChild(statusBadgeSpan);
+                            statusOfficesSection.appendChild(officeItem);
+                        });
+                    } else {
+                        const noStatusesText = document.createElement('p');
+                        noStatusesText.classList.add('modal-placeholder-text');
+                        noStatusesText.textContent = 'No status updates available.';
+                        statusOfficesSection.appendChild(noStatusesText);
+                    }
+
+
+                    openModal(viewStatusModal);
+                }
+            });
+        });
+
+        closeButton.addEventListener('click', () => {
+            closeModal(viewStatusModal);
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === viewStatusModal) {
+                closeModal(viewStatusModal);
+            }
+        });
+
+        // Initial load to show ALL requests
+        document.addEventListener('DOMContentLoaded', () => {
+            const initialTab = document.querySelector('.Nav-item.active');
+            if (initialTab) {
+                initialTab.click();
+            }
+        });
+    </script>
 </body>
 </html>
