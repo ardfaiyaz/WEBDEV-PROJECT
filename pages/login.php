@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 } elseif ($user['role_code'] === 'ADMIN') {
                     header("Location: admin-index.php"); // Keep admin redirect as is
                 } elseif ($user['role_code'] === 'SUB_ADMIN') {
-                    header("Location: admin-index.html"); // Keep sub-admin redirect as is
+                    header("Location: admin-index.php"); // Keep sub-admin redirect as is
                 }
 
                 exit(); // Always exit after a header redirect
