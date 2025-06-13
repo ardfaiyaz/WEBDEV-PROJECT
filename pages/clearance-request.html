@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clearance Requests</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/clearance-request.css">
+  
+</head>
+<body>
+    <header class="header">
+        <div class="logo-section">
+            <img src="https://placehold.co/45x45/333/FFF?text=NU" alt="NU Logo" class="logo">
+            <span class="university-name">NATIONAL<br>UNIVERSITY</span>
+        </div>
+        <div class="header-right">
+            <div class="user-info">
+                <i class='bx bxs-bell icon-bell'></i>
+                <span>Hi, Pia Elleine</span>
+                <i class='bx bxs-user-circle icon-user'></i>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <i class='bx bx-search icon-search'></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="menu-item"><a href="UserPOV.html"><i class='bx bxs-home icon-sidebar'></i> Home</a></li>
+                <li class="menu-item"><a href="#"><i class='bx bxs-user icon-sidebar'></i> Profile</a></li>
+                <li class="menu-item"><a href="About-us.html"><i class='bx bxs-file icon-sidebar'></i> About Us</a></li>
+                <li class="menu-item"><a href="#"><i class='bx bxs-log-out icon-sidebar'></i> Logout</a></li>
+            </ul>
+        </aside>
+
+        <main class="content-area">
+            <div class="clearance-requests-header">
+                <h2>CLEARANCE REQUESTS</h2>
+            </div>
+            <div class="Status-Request">
+                <div class="status-box">
+                    <h6>Total Requests</h6>
+                    <p>600</p>
+                </div>
+                <div class="status-box">
+                    <h6>Pending</h6>
+                    <p>200</p>
+                </div>
+                <div class="status-box">
+                    <h6>On-Going</h6>
+                    <p>200</p>
+                </div>
+                <div class="status-box">
+                    <h6>Completed</h6>
+                    <p>200</p>
+                </div>
+            </div>
+
+            <div class="Status">
+                <ul class="navtabs">
+                    <li class="Nav-item active" data-status="ALL">ALL</li>
+                    <li class="Nav-item" data-status="PENDING">PENDING</li>
+                    <li class="Nav-item" data-status="ON-GOING">ON-GOING</li>
+                    <li class="Nav-item" data-status="COMPLETED">COMPLETED</li>
+                </ul>
+
+                <div class="Status-table">
+                    <div class="Status-header">
+                        <div>REQUEST ID</div>
+                        <div>STUDENT ID</div>
+                        <div>STUDENT NAME</div>
+                        <div>PROGRAM</div>
+                        <div>STATUS</div>
+                        <div>DATE SUBMITTED</div>
+                        <div class="actions-header">ACTIONS</div>
+                    </div>
+
+                    <!-- Existing Rows -->
+                    <div class="Status-row" data-status="PENDING">
+                        <div>001</div>
+                        <div>2023-1701234</div>
+                        <div>HEART QUINTANILLA HERNANDEZ</div>
+                        <div>BSIT-MWA</div>
+                        <div class="status-cell">PENDING</div>
+                        <div>05-25-2025</div>
+                        <div class="actions">
+                            <div class="dropdown-wrapper">
+                                <button class="add-remark-button dropdown-toggle">ADD REMARK <i class='bx bx-chevron-down'></i></button>
+                                <div class="dropdown-menu">
+                                    <a href="#" data-remark="Unpaid Fees">Unpaid Fees</a>
+                                    <a href="#" data-remark="Incomplete Documents">Incomplete Documents</a>
+                                    <a href="#" data-remark="Missing Signatures">Missing Signatures</a>
+                                    <a href="#" data-remark="Other">Other (Specify)</a>
+                                </div>
+                            </div>
+                            <button class="clear-button">CLEAR</button>
+                        </div>
+                    </div>
+
+                    <div class="Status-row" data-status="ON-GOING">
+                        <div>002</div>
+                        <div>2023-1701234</div>
+                        <div>HEART QUINTANILLA HERNANDEZ</div>
+                        <div>BSIT-MWA</div>
+                        <div class="remark-column">
+                            <span class="remark-text">Unpaid fees</span>
+                        </div>
+                        <div>05-25-2025</div>
+                        <div class="actions">
+                            <button class="clear-button">CLEAR</button>
+                        </div>
+                    </div>
+
+                    <div class="Status-row" data-status="COMPLETED">
+                        <div>003</div>
+                        <div>2023-1701234</div>
+                        <div>HEART QUINTANILLA HERNANDEZ</div>
+                        <div>BSIT-MWA</div>
+                        <div class="date-completed-column">
+                            <span>05-25-2025</span>
+                        </div>
+                        <div>05-25-2025</div>
+                        <div class="actions-placeholder"></div>
+                    </div>
+
+                    <!-- New Example Rows based on previous conversation -->
+                    <div class="Status-row" data-status="ON-GOING"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Issue Found"}, {"office": "Student Discipline Office", "status": "Pending"}, {"office": "Student Affairs Office", "status": "On-going"}, {"office": "Guidance Office", "status": "On-going"}, {"office": "Library", "status": "Pending"}, {"office": "ITSO", "status": "Completed"}, {"office": "Accounting Office", "status": "Issue Found"}, {"office": "Registrar Office", "status": "Completed"}]'
+                        data-student-name="Pia Elleine Lucero"
+                        data-student-email="luceropl@students.nu-dasma.edu.ph"
+                        data-student-id="2023-123456"
+                        data-requested-documents='[{"name": "Transcript of Records", "copies": "3 copies"}, {"name": "Certificate of Good Moral", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=PL"
+                        >
+                        <div>004</div>
+                        <div>2023-123456</div>
+                        <div>Pia Elleine Lucero</div>
+                        <div>BSIT-MWA</div>
+                        <div class="remark-column">
+                            <span class="remark-text">On-going</span>
+                        </div>
+                        <div>05-19-2025</div>
+                        <div class="actions">
+                            <div class="dropdown-wrapper">
+                                <button class="add-remark-button dropdown-toggle">ADD REMARK <i class='bx bx-chevron-down'></i></button>
+                                <div class="dropdown-menu">
+                                    <a href="#" data-remark="Unpaid Fees">Unpaid Fees</a>
+                                    <a href="#" data-remark="Incomplete Documents">Incomplete Documents</a>
+                                    <a href="#" data-remark="Missing Signatures">Missing Signatures</a>
+                                    <a href="#" data-remark="Other">Other (Specify)</a>
+                                </div>
+                            </div>
+                            <button class="clear-button">CLEAR</button>
+                            <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">View Status Detail</a>
+                        </div>
+                    </div>
+
+                    <div class="Status-row" data-status="COMPLETED"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Completed"}, {"office": "Student Discipline Office", "status": "Completed"}, {"office": "Student Affairs Office", "status": "Completed"}, {"office": "Guidance Office", "status": "Completed"}, {"office": "Library", "status": "Completed"}, {"office": "ITSO", "status": "Completed"}, {"office": "Accounting Office", "status": "Completed"}, {"office": "Registrar Office", "status": "Completed"}]'
+                        data-student-name="Bryan Cancel"
+                        data-student-email="cancelb@students.nu-dasma.edu.ph"
+                        data-student-id="2023-123456"
+                        data-requested-documents='[{"name": "Certificate of Enrollment", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=BC"
+                        >
+                        <div>005</div>
+                        <div>2023-123456</div>
+                        <div>Bryan Cancel</div>
+                        <div>BSArch</div>
+                        <div class="date-completed-column">
+                            <span>05-25-2025</span>
+                        </div>
+                        <div>05-19-2025</div>
+                        <div class="actions">
+                             <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">View Status Detail</a>
+                             <span class="status-completed-text">Claim Stub Released</span>
+                        </div>
+                    </div>
+
+                    <div class="Status-row" data-status="PENDING"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Pending"}, {"office": "Student Discipline Office", "status": "Pending"}, {"office": "Student Affairs Office", "status": "Pending"}, {"office": "Guidance Office", "status": "Pending"}, {"office": "Library", "status": "Pending"}, {"office": "ITSO", "status": "Pending"}, {"office": "Accounting Office", "status": "Pending"}, {"office": "Registrar Office", "status": "Pending"}]'
+                        data-student-name="Melthon Donaire"
+                        data-student-email="donairem@students.nu-dasma.edu.ph"
+                        data-student-id="2023-123457"
+                        data-requested-documents='[{"name": "Letter of Recommendation", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=MD"
+                        >
+                        <div>006</div>
+                        <div>2023-123457</div>
+                        <div>Melthon Donaire</div>
+                        <div>BSPsy</div>
+                        <div class="status-cell">PENDING</div>
+                        <div>05-26-2025</div>
+                        <div class="actions">
+                            <div class="dropdown-wrapper">
+                                <button class="add-remark-button dropdown-toggle">ADD REMARK <i class='bx bx-chevron-down'></i></button>
+                                <div class="dropdown-menu">
+                                    <a href="#" data-remark="Unpaid Fees">Unpaid Fees</a>
+                                    <a href="#" data-remark="Incomplete Documents">Incomplete Documents</a>
+                                    <a href="#" data-remark="Missing Signatures">Missing Signatures</a>
+                                    <a href="#" data-remark="Other">Other (Specify)</a>
+                                </div>
+                            </div>
+                            <button class="clear-button">CLEAR</button>
+                            <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">View Status Detail</a>
+                        </div>
+                    </div>
+
+                    <div class="Status-row" data-status="COMPLETED"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Completed"}, {"office": "Student Discipline Office", "status": "Completed"}, {"office": "Student Affairs Office", "status": "Completed"}, {"office": "Guidance Office", "status": "Completed"}, {"office": "Library", "status": "Completed"}, {"office": "ITSO", "status": "Completed"}, {"office": "Accounting Office", "status": "Completed"}, {"office": "Registrar Office", "status": "Completed"}]'
+                        data-student-name="Hero Buta"
+                        data-student-email="butah@students.nu-dasma.edu.ph"
+                        data-student-id="2023-123458"
+                        data-requested-documents='[{"name": "Medical Certificate", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=HB"
+                        >
+                        <div>007</div>
+                        <div>2023-123458</div>
+                        <div>Hero Buta</div>
+                        <div>BSHM</div>
+                        <div class="date-completed-column">
+                            <span>05-26-2025</span>
+                        </div>
+                        <div>05-26-2025</div>
+                        <div class="actions">
+                             <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">View Status Detail</a>
+                             <span class="status-completed-text">Claim Stub Released</span>
+                        </div>
+                    </div>
+
+                    <div class="Status-row" data-status="PENDING"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Pending"}, {"office": "Student Discipline Office", "status": "Pending"}, {"office": "Student Affairs Office", "status": "On-going"}, {"office": "Guidance Office", "status": "Pending"}, {"office": "Library", "status": "Issue Found"}, {"office": "ITSO", "status": "Pending"}, {"office": "Accounting Office", "status": "Pending"}, {"office": "Registrar Office", "status": "On-going"}]'
+                        data-student-name="Alex Johnson"
+                        data-student-email="johnsona@students.nu-dasma.edu.ph"
+                        data-student-id="2023-987654"
+                        data-requested-documents='[{"name": "Transcript of Records", "copies": "5 copies"}, {"name": "Course Description", "copies": "2 copies"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=AJ"
+                        >
+                        <div>008</div>
+                        <div>2023-987654</div>
+                        <div>Alex Johnson</div>
+                        <div>BSECE</div>
+                        <div class="status-cell">PENDING</div>
+                        <div>05-20-2025</div>
+                        <div class="actions">
+                            <div class="dropdown-wrapper">
+                                <button class="add-remark-button dropdown-toggle">ADD REMARK <i class='bx bx-chevron-down'></i></button>
+                                <div class="dropdown-menu">
+                                    <a href="#" data-remark="Unpaid Fees">Unpaid Fees</a>
+                                    <a href="#" data-remark="Incomplete Documents">Incomplete Documents</a>
+                                    <a href="#" data-remark="Missing Signatures">Missing Signatures</a>
+                                    <a href="#" data-remark="Other">Other (Specify)</a>
+                                </div>
+                            </div>
+                            <button class="clear-button">CLEAR</button>
+                            <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">View Status Detail</a>
+                        </div>
+                    </div>
+
+                    <div class="Status-row" data-status="COMPLETED"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Completed"}, {"office": "Student Discipline Office", "status": "Completed"}, {"office": "Student Affairs Office", "status": "Completed"}, {"office": "Guidance Office", "status": "Completed"}, {"office": "Library", "status": "Completed"}, {"office": "ITSO", "status": "Completed"}, {"office": "Accounting Office", "status": "Completed"}, {"office": "Registrar Office", "status": "Completed"}]'
+                        data-student-name="Sarah Lee"
+                        data-student-email="lees@students.nu-dasma.edu.ph"
+                        data-student-id="2023-112233"
+                        data-requested-documents='[{"name": "Transcript of Records", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=SL"
+                        >
+                        <div>009</div>
+                        <div>2023-112233</div>
+                        <div>Sarah Lee</div>
+                        <div>BSCS</div>
+                        <div class="date-completed-column">
+                            <span>05-27-2025</span>
+                        </div>
+                        <div>05-21-2025</div>
+                        <div class="actions">
+                             <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">View Status Detail</a>
+                             <span class="status-completed-text">Claim Stub Released</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- View Status Modal (integrated from the provided snippet) -->
+    <div id="viewStatusModal" class="modal-overlay">
+        <div class="modal-content view-status-modal-content">
+            <span class="close-button">&times;</span>
+            <div class="view-status-modal-inner">
+                <div class="student-info-section">
+                    <img src="" alt="Student Avatar" class="student-avatar-img">
+                    <div class="student-text-info">
+                        <h3 class="modal-student-name"></h3>
+                        <p class="modal-student-id"></p>
+                        <p class="modal-student-email"></p>
+                    </div>
+                </div>
+
+                <div class="status-offices-section">
+                    <h4>STATUS</h4>
+                </div>
+
+                <div class="requested-documents-section">
+                    <h4>REQUESTED DOCUMENTS</h4>
+                </div>
+
+                <div class="remarks-section">
+                    <h4>OTHER REMARKS</h4>
+                    <div class="remarks-box">
+                        <p class="modal-remarks">No Remarks</p>
+                    </div>
+                    <button class="view-consent-file-button">View Consent File</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal (from original clearance requests) -->
+    <div id="confirmationModal" class="modal-overlay">
+        <div class="modal-content">
+            <i class='bx bx-question-mark modal-icon'></i>
+            <h2>Confirm Clearance</h2>
+            <p>Are you sure you want to clear this request?</p>
+            <div class="modal-buttons">
+                <button id="confirmClearBtn" class="modal-button confirm">Yes, Clear</button>
+                <button id="cancelClearBtn" class="modal-button cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/clearance-request-office.js"></script>
+</body>
+</html>
