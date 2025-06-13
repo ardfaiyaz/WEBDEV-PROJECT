@@ -1,158 +1,131 @@
+// In your admin-request-stubs.js file
+
 document.addEventListener('DOMContentLoaded', () => {
-            const navItems = document.querySelectorAll('.local-abroad-tabs .tab-item');
-            const rows = document.querySelectorAll('.view-request-data-row');
-            const viewStatusLinks = document.querySelectorAll('.view-status-link');
-            const viewStatusModal = document.getElementById('viewStatusModal');
-            const closeButton = viewStatusModal.querySelector('.close-button');
+    const viewStatusDetailButtons = document.querySelectorAll('.view-status-detail-button');
+    const viewStatusModal = document.getElementById('viewStatusModal');
+    const closeButton = viewStatusModal.querySelector('.close-button');
 
-            const studentAvatarImg = viewStatusModal.querySelector('.student-avatar-img'); // Get the new img tag
-            const modalStudentName = viewStatusModal.querySelector('.modal-student-name');
-            const modalStudentEmail = viewStatusModal.querySelector('.modal-student-email');
-            const modalStudentId = viewStatusModal.querySelector('.modal-student-id');
-            const modalRemarks = viewStatusModal.querySelector('.modal-remarks');
-            const statusOfficesSection = viewStatusModal.querySelector('.status-offices-section');
-            const requestedDocumentsSection = viewStatusModal.querySelector('.requested-documents-section');
+    // Get modal content elements
+    const modalStudentAvatar = viewStatusModal.querySelector('.student-avatar-img');
+    const modalStudentName = viewStatusModal.querySelector('.modal-student-name');
+    const modalStudentId = viewStatusModal.querySelector('.modal-student-id');
+    const modalStudentEmail = viewStatusModal.querySelector('.modal-student-email');
+    const statusOfficesSection = viewStatusModal.querySelector('.status-offices-section');
+    const requestedDocumentsSection = viewStatusModal.querySelector('.requested-documents-section');
+    const modalRemarks = viewStatusModal.querySelector('.modal-remarks');
 
-            navItems.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    navItems.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
+    // Function to open the modal
+    function openModal() {
+        viewStatusModal.style.display = 'flex'; // Use flex to center the modal
+    }
 
-                    const selectedType = tab.dataset.type.toUpperCase();
+    // Function to close the modal
+    function closeModal() {
+        viewStatusModal.style.display = 'none';
+    }
 
-                    rows.forEach(row => {
-                        const rowType = row.dataset.type.toUpperCase();
-                        if (selectedType === rowType) {
-                            row.style.display = 'grid';
-                        } else {
-                            row.style.display = 'none';
-                        }
-                    });
-                });
+    // Event listeners for opening the modal
+    viewStatusDetailButtons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default link behavior if applicable
+
+            const dataRow = this.closest('.data-row'); // Get the parent data-row
+
+            // Retrieve data from data attributes
+            const studentName = dataRow.dataset.studentName;
+            const studentId = dataRow.dataset.studentId;
+            const studentEmail = dataRow.dataset.studentEmail;
+            const studentAvatar = dataRow.dataset.studentAvatar;
+            const officeStatuses = JSON.parse(dataRow.dataset.officeStatuses);
+            const requestedDocuments = JSON.parse(dataRow.dataset.requestedDocuments);
+
+            // Populate the modal with data
+            modalStudentAvatar.src = studentAvatar;
+            modalStudentName.textContent = studentName;
+            modalStudentId.textContent = `Student ID: ${studentId}`;
+            modalStudentEmail.textContent = `Email: ${studentEmail}`;
+
+            // Clear previous content
+            statusOfficesSection.querySelectorAll('.status-item').forEach(item => item.remove());
+            requestedDocumentsSection.querySelectorAll('.document-item').forEach(item => item.remove());
+
+            // Populate office statuses
+            officeStatuses.forEach(office => {
+                const statusItem = document.createElement('div');
+                statusItem.classList.add('status-item');
+                statusItem.innerHTML = `
+                    <div class="office-name">${office.office}:</div>
+                    <div class="office-status status-${office.status.toLowerCase().replace(' ', '-')}">${office.status}</div>
+                `;
+                statusOfficesSection.appendChild(statusItem);
             });
 
-            const initialTab = document.querySelector('.local-abroad-tabs .tab-item.active');
-            if (initialTab) {
-                initialTab.click();
+            // Populate requested documents
+            if (requestedDocuments && requestedDocuments.length > 0) {
+                requestedDocuments.forEach(doc => {
+                    const documentItem = document.createElement('div');
+                    documentItem.classList.add('document-item');
+                    documentItem.textContent = `${doc.name} (${doc.copies})`;
+                    requestedDocumentsSection.appendChild(documentItem);
+                });
+            } else {
+                const noDocuments = document.createElement('p');
+                noDocuments.textContent = "No documents requested.";
+                requestedDocumentsSection.appendChild(noDocuments);
             }
 
-            const openModal = (modalElement) => {
-                modalElement.classList.add('show-modal');
-                document.body.classList.add('modal-open');
-            };
-
-            const closeModal = (modalElement) => {
-                modalElement.classList.remove('show-modal');
-                document.body.classList.remove('modal-open');
-            };
-
-            viewStatusLinks.forEach(link => {
-                link.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    const row = link.closest('.view-request-data-row');
-                    if (row) {
-                        // Populate student info
-                        studentAvatarImg.src = row.dataset.studentAvatar || 'https://placehold.co/80x80/e0e0e0/777777?text=NA'; // Set avatar source
-                        modalStudentName.textContent = row.dataset.studentName || 'N/A';
-                        modalStudentEmail.textContent = row.dataset.studentEmail || 'N/A';
-                        modalStudentId.textContent = row.dataset.studentId || 'N/A';
-                        modalRemarks.textContent = row.dataset.remarks || 'No Remarks'; // Assuming remarks might be added to data-attributes
-
-                        // Clear previous statuses and documents
-                        statusOfficesSection.querySelectorAll('.office-status-item').forEach(item => item.remove());
-                        requestedDocumentsSection.querySelectorAll('.document-item, .modal-placeholder-text').forEach(item => item.remove()); // Clear previous documents and placeholder
-
-                        // Populate requested documents dynamically
-                        const requestedDocuments = JSON.parse(row.dataset.requestedDocuments || '[]');
-                        if (requestedDocuments.length > 0) {
-                            requestedDocuments.forEach(doc => {
-                                const documentItem = document.createElement('div');
-                                documentItem.classList.add('document-item'); // Add a class for styling
-
-                                const documentNameSpan = document.createElement('span');
-                                documentNameSpan.classList.add('document-name');
-                                documentNameSpan.textContent = doc.name + ':';
-                                documentItem.appendChild(documentNameSpan);
-
-                                const documentCopiesSpan = document.createElement('span');
-                                documentCopiesSpan.classList.add('document-copies');
-                                documentCopiesSpan.textContent = doc.copies;
-                                documentItem.appendChild(documentCopiesSpan);
-
-                                requestedDocumentsSection.appendChild(documentItem);
-                            });
-                        } else {
-                            // Display "No documents requested" if the list is empty
-                            const noDocumentsText = document.createElement('p');
-                            noDocumentsText.classList.add('modal-placeholder-text'); // Reusing existing style if suitable
-                            noDocumentsText.textContent = 'No documents requested.';
-                            requestedDocumentsSection.appendChild(noDocumentsText);
-                        }
-
-                        // Populate office statuses dynamically
-                        const officeStatuses = JSON.parse(row.dataset.officeStatuses || '[]');
-                        officeStatuses.forEach(officeStatus => {
-                            const officeItem = document.createElement('div');
-                            officeItem.classList.add('office-status-item');
-
-                            const officeNameSpan = document.createElement('span');
-                            officeNameSpan.textContent = officeStatus.office + ':';
-                            officeItem.appendChild(officeNameSpan);
-
-                            const statusBadgeSpan = document.createElement('span');
-                            statusBadgeSpan.classList.add('status-badge');
-                            statusBadgeSpan.textContent = officeStatus.status;
-
-                            // Apply color coding based on status
-                            if (officeStatus.status === 'Completed') {
-                                statusBadgeSpan.classList.add('completed');
-                            } else if (officeStatus.status === 'Pending') {
-                                statusBadgeSpan.classList.add('pending');
-                            } else if (officeStatus.status === 'Issue Found') {
-                                statusBadgeSpan.classList.add('issue-found');
-                            } else if (officeStatus.status === 'On-going') {
-                                statusBadgeSpan.classList.add('on-going');
-                            }
-
-                            officeItem.appendChild(statusBadgeSpan);
-                            statusOfficesSection.appendChild(officeItem);
-                        });
-
-                        openModal(viewStatusModal);
-                    }
-                });
-            });
-
-            closeButton.addEventListener('click', () => {
-                closeModal(viewStatusModal);
-            });
-
-            window.addEventListener('click', (event) => {
-                if (event.target === viewStatusModal) {
-                    closeModal(viewStatusModal);
+            // Set remarks (you'll need to decide how to derive a general remark,
+            // or if you want to show remarks per office - current HTML assumes one general remark)
+            // For now, let's just pick the first 'issue found' remark or default
+            let generalRemark = "No Remarks";
+            const issueFoundOffice = officeStatuses.find(office => office.status === "Issue Found" && office.remarks);
+            if (issueFoundOffice) {
+                generalRemark = issueFoundOffice.remarks;
+            } else {
+                const pendingOffice = officeStatuses.find(office => office.status === "Pending" && office.remarks);
+                if (pendingOffice) {
+                    generalRemark = pendingOffice.remarks;
                 }
-            });
+            }
+            modalRemarks.textContent = generalRemark;
 
-            document.addEventListener('click', function(event) {
-                if (event.target.classList.contains('view-status-detail-button')) {
-                    const messageBox = document.createElement('div');
-                    messageBox.classList.add('custom-message-box');
-                    messageBox.innerHTML = '<p>View Status Detail clicked for this request!</p><button class="custom-message-box-close">OK</button>';
-                    document.body.appendChild(messageBox);
 
-                    messageBox.querySelector('.custom-message-box-close').addEventListener('click', () => {
-                        messageBox.remove();
-                    });
-                }
-                if (event.target.classList.contains('release-claim-stub-button')) {
-                    const messageBox = document.createElement('div');
-                    messageBox.classList.add('custom-message-box');
-                    messageBox.innerHTML = '<p>Release Claim Stub clicked!</p><button class="custom-message-box-close">OK</button>';
-                    document.body.appendChild(messageBox);
+            openModal();
+        });
+    });
 
-                    messageBox.querySelector('.custom-message-box-close').addEventListener('click', () => {
-                        messageBox.remove();
-                    });
+    // Event listener for closing the modal
+    closeButton.addEventListener('click', closeModal);
+
+    // Close modal if clicking outside the modal content
+    window.addEventListener('click', (event) => {
+        if (event.target === viewStatusModal) {
+            closeModal();
+        }
+    });
+
+    // Handle tab switching (Local/Abroad)
+    const tabItems = document.querySelectorAll('.tab-item');
+    tabItems.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const type = tab.dataset.type;
+
+            // Remove active class from all tabs and add to clicked tab
+            tabItems.forEach(item => item.classList.remove('active'));
+            tab.classList.add('active');
+
+            // Show/hide data rows based on type
+            const dataRows = document.querySelectorAll('.view-request-data-row');
+            dataRows.forEach(row => {
+                if (row.dataset.type === type) {
+                    row.style.display = 'grid'; // Or 'table-row-group' if using tbody
+                } else {
+                    row.style.display = 'none';
                 }
             });
         });
+    });
+
+    // Initial display for LOCAL tab
+    document.querySelector('.tab-item[data-type="LOCAL"]').click();
+});

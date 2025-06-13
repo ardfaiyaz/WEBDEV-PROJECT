@@ -1,14 +1,12 @@
 <?php
-session_start(); // IMPORTANT: Start the session at the very beginning of the file
-
-// Include the database connection file
-require_once '../php/database.php'; // Adjust path if 'database.php' is in a different directory
+session_start();
+require_once '../php/database.php'; 
 
 // 2. Handle Form Submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = trim($_POST['email']); // Trim whitespace
+    $email = trim($_POST['email']);
     $password = $_POST['password'];
-    $accountType = $_POST['accountType']; // 'student' or 'admin' from your HTML form
+    $accountType = $_POST['accountType'];
 
     // Map the HTML form's accountType to the database's role_code
     $roleCode = '';
