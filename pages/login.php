@@ -46,12 +46,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 // IMPORTANT SECURITY STEP: Regenerate session ID to prevent session fixation
                 session_regenerate_id(true); 
+                
 
                 // Redirect based on role code
                 if ($user['role_code'] === 'STUD') {
                     header("Location: index.php"); // Redirect students to index.php
                 } elseif ($user['role_code'] === 'ADMIN') {
-                    header("Location: admin-index.html"); // Keep admin redirect as is
+                    header("Location: admin-index.php"); // Keep admin redirect as is
                 } elseif ($user['role_code'] === 'SUB_ADMIN') {
                     header("Location: admin-index.html"); // Keep sub-admin redirect as is
                 }
