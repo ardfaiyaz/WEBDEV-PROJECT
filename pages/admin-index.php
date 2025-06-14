@@ -51,14 +51,15 @@ $displayFirstName = $_SESSION['firstname'] ?? 'User'; // Default to 'User' if no
         <h2>STUDENT CLEARANCE SYSTEM</h2>
         <p class="description">Effortlessly manage and track your student clearance requests.</p>
         <div class="cards">
-          <a href="track-clearance.html" class="card">
+
+          <a href="clearance-request.html" class="card">
             <i class='bx bx-list-ul icon'></i> <!-- Changed icon class here -->
             <h3>View Requests</h3>
             <p>Browse all incoming student requests for documents, letters, and clearance applications.</p>
           </a>
 
 
-          <a href="apply-clearance.html" class="card">
+          <a href="admin-request-stubs.html" class="card">
             <i class='bx bx-task icon'></i> <!-- Changed icon class here -->
             <h3>Process Requests</h3>
             <p>Approve, decline, or forward student requests with notes and file attachments.</p>
