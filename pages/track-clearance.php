@@ -1,5 +1,5 @@
 <?php
-session_start(); // Start the session at the very beginning
+session_start(); // Start the session at the very beginning <pushing again>
 
 // Include the database connection file
 require_once __DIR__ . '/../php/database.php';
