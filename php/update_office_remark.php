@@ -1,72 +1,63 @@
 <?php
-// update_office_remark.php
+include 'database.php';
 
-session_start(); // Start session to access session variables
+header('Content-Type: application/json');
 
-// REMOVE these temporary debugging lines in a production environment!
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+session_start();
 
-require_once 'api_config.php';
-require_once 'database.php'; // This provides the $pdo object
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Decode the JSON payload from the request body
-    $data = json_decode(file_get_contents("php://input"));
-
-    // Validate if both request_id and remark are provided
-    if (!isset($data->request_id) || !isset($data->remark)) {
-        echo json_encode(["success" => false, "message" => "Request ID or remark not provided."]);
-        exit();
-    }
-
-    // --- CRITICAL ADDITION: Get current user's office_code from session ---
-    if (!isset($_SESSION['office_code'])) {
-        // If office_code is not in session, the user is not properly logged in or session is incomplete.
-        echo json_encode(["success" => false, "message" => "User office code not found in session. Please re-login."]);
-        exit();
-    }
-    $userOfficeCode = $_SESSION['office_code'];
-    // --- END CRITICAL ADDITION ---
-
-    // Get the values.
-    $requestId = $data->request_id;
-    $remark = $data->remark;
-
-    // Update office_remarks and status_code to 'ON'
-    // CRITICAL CHANGE: Add office_code to the WHERE clause to restrict updates to the current office's requests.
-    $sql = "UPDATE clearance_status
-            SET office_remarks = :remark, status_code = 'ON'
-            WHERE req_id = :request_id AND office_code = :office_code";
-
-    try {
-        // Prepare the SQL statement
-        $stmt = $pdo->prepare($sql);
-
-        // Execute the statement, binding ALL placeholders
-        $stmt->execute([
-            ':remark' => $remark,
-            ':request_id' => $requestId,
-            ':office_code' => $userOfficeCode // Bind the logged-in user's office code
-        ]);
-
-        // Check if any rows were affected
-        if ($stmt->rowCount() > 0) {
-            echo json_encode(["success" => true, "message" => "Remark added and status updated to ON-GOING."]);
-        } else {
-            // This might mean:
-            // 1. The request_id didn't exist for this office.
-            // 2. The request_id existed, but not for this office_code.
-            // 3. The status was already 'ON' and remark was the same.
-            echo json_encode(["success" => false, "message" => "No record found for this office or status already ON-GOING for Request ID: " . $requestId]);
-        }
-    } catch (PDOException $e) {
-        error_log("Database error in update_office_remark.php: " . $e->getMessage());
-        echo json_encode(["success" => false, "message" => "Database query error: " . $e->getMessage()]);
-    }
-
-} else {
-    echo json_encode(["success" => false, "message" => "Invalid request method. Only POST is allowed."]);
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['office_code'])) {
+    echo json_encode(['error' => 'Unauthorized access or office not assigned.']);
+    exit();
 }
+
+$office_code = $_SESSION['office_code'];
+$data = json_decode(file_get_contents('php://input'), true);
+
+$req_id = isset($data['req_id']) ? intval($data['req_id']) : 0;
+$office_remarks = isset($data['office_remarks']) ? trim($data['office_remarks']) : '';
+
+if ($req_id === 0) {
+    echo json_encode(['error' => 'Invalid request ID.']);
+    exit();
+}
+
+// Check if a record for this req_id and office_code already exists
+$check_sql = "SELECT COUNT(*) FROM clearance_status WHERE req_id = ? AND office_code = ?";
+$check_stmt = $conn->prepare($check_sql);
+$check_stmt->bind_param("is", $req_id, $office_code);
+$check_stmt->execute();
+$check_result = $check_stmt->get_result();
+$row = $check_result->fetch_row();
+$exists = $row[0] > 0;
+$check_stmt->close();
+
+if ($exists) {
+    // Update existing record
+    $sql = "UPDATE clearance_status SET office_remarks = ? WHERE req_id = ? AND office_code = ?";
+    $stmt = $conn->prepare($sql);
+    if ($stmt === false) {
+        echo json_encode(['error' => 'Prepare failed: ' . $conn->error]);
+        exit();
+    }
+    $stmt->bind_param("sis", $office_remarks, $req_id, $office_code);
+} else {
+    // Insert new record (assuming default status 'PENDING' if not explicitly set)
+    $sql = "INSERT INTO clearance_status (req_id, office_code, status_code, office_remarks) VALUES (?, ?, 'PENDING', ?)";
+    $stmt = $conn->prepare($sql);
+    if ($stmt === false) {
+        echo json_encode(['error' => 'Prepare failed: ' . $conn->error]);
+        exit();
+    }
+    $stmt->bind_param("iss", $req_id, $office_code, $office_remarks);
+}
+
+
+if ($stmt->execute()) {
+    echo json_encode(['success' => 'Office remarks updated successfully.']);
+} else {
+    echo json_encode(['error' => 'Failed to update office remarks: ' . $stmt->error]);
+}
+
+$stmt->close();
+$conn->close();
 ?>
