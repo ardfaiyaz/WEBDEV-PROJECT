@@ -2,865 +2,897 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
 
 @font-face {
-  font-family: 'AkwePro';
-  src: url('../fonts/akwe-pro-ext-sc-bold.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'AkwePro';
+    src: url('../fonts/akwe-pro-ext-sc-bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Montserrat', sans-serif; /* Preferred font from previous code */
-            background-color: #f5f5f5; /* Light gray background */
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        body.modal-open {
-            overflow: hidden; /* Prevent scrolling when modal is open */
-        }
-
-        /* Header */
-        .topbar {
-            background-color: #2c2273;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center; /* Vertically align items */
-            padding: 16px 50px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            flex-wrap: wrap; /* Allow items to wrap on smaller screens */
-        }
-
-        .topbar .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo-link {
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo-section img {
-            width: 50px;
-        }
-
-        .school-name {
-            font-family: 'AkwePro', sans-serif;
-            font-size: 22px;
-            line-height: 1.2;
-        }
-
-        /* New: Top Navigation Bar */
-        .top-navbar {
-            flex-grow: 1; /* Allows the nav bar to take up available space */
-            display: flex;
-            justify-content: center; /* Center the menu items */
-            margin: 0 20px; /* Add some horizontal margin */
-        }
-
-        .navbar-menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            gap: 30px; /* Space between menu items */
-        }
-
-        .navbar-menu .menu-item a {
-            display: flex;
-            align-items: center;
-            padding: 10px 15px;
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-            border-radius: 8px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .navbar-menu .menu-item a:hover {
-            color: #b0c4de; /* Subtle text color change on hover */
-        }
-
-        .navbar-menu .menu-item.active a {
-            background-color: #6a5acd; /* Active color for top nav */
-        }
-
-        .navbar-menu .icon-sidebar {
-            font-size: 1.2em;
-            margin-right: 8px;
-            color: white;
-        }
-
-        .navbar-menu .menu-item a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px; /* Thickness of the underline */
-            background-color: #6a5acd; /* Color of the underline */
-            transform: scaleX(0); /* Start hidden (no width) */
-            transform-origin: bottom right; /* Animate from right to left */
-            transition: transform 0.3s ease-out; /* Animation speed and easing */
-        }
-
-        .navbar-menu .menu-item a:hover::after {
-            transform: scaleX(1); /* Expand to full width on hover */
-            transform-origin: bottom left; /* Animate from left to right on hover */
-        }
-
-        /* Header Right Section (for search and user) */
-        .header-right-section {
-            display: flex;
-            align-items: center;
-            gap: 25px; /* Space between search and user section */
-        }
-
-        /* Search Bar */
-        .search-bar {
-            margin-right: 10px;
-            background-color: rgba(255, 255, 255, 0.15);
-            border-radius: 25px;
-            display: flex; /* Keep flex for alignment, but icon will be absolute */
-            align-items: center;
-            width: 220px;
-            transition: all 0.6s ease;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            position: relative;
-            height: 40px;
-        }
-
-        .search-bar:focus-within {
-            background-color: white;
-            box-shadow: 0 0 0 3px rgba(106, 90, 205, 0.5);
-        }
-
-        .search-bar input {
-            font-family: 'Montserrat', sans-serif; /* Use Montserrat for input text */
-            border: none;
-            background: transparent;
-            outline: none;
-            color: white;
-            font-size: 0.95em;
-            flex-grow: 1;
-            width: 100%;
-            padding: 8px 40px 8px 18px; /* (top, right, bottom, left) */
-            height: 100%;
-            box-sizing: border-box;
-        }
-
-        .search-bar:focus-within input {
-            color: #333; /* Dark text on focus */
-        }
-
-        .search-bar input::placeholder {
-            color: rgba(255, 255, 255, 0.7); /* Lighter placeholder text */
-        }
-        .search-bar:focus-within input::placeholder {
-            color: #777; /* Darker placeholder on focus */
-        }
-
-        .icon-search {
-            color: white;
-            font-size: 1.3em;
-            transition: color 0.3s ease;
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none; /* So clicks go through to input */
-        }
-
-        .search-bar:focus-within .icon-search {
-            color: #6a5acd; /* Purple icon on focus */
-        }
-
-        .user-section {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 16px;
-        }
-
-        .user-section span {
-            font-weight: 600;
-            color: white;
-        }
-
-        .user-section i {
-            font-size: 34px;
-            cursor: pointer;
-            color: white; /* Ensure icons are white */
-        }
-
-        /* Main Container */
-        .main-container {
-            display: flex;
-            flex-direction: column; /* Changed to column since sidebar is gone */
-            flex: 1;
-        }
-
-        /* Main Content Area */
-        .content-area {
-            flex: 1;
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            gap: 30px; /* Space between sections */
-        }
-
-        /* Clearance Requests Header */
-        .clearance-requests-header {
-            background-color: #f0f0f0;
-            padding: 15px 40px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            width: fit-content;
-            border-left: 5px solid #6a5acd;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Soft shadow */
-        }
-
-        .clearance-requests-header h2 {
-            font-size: 24px;
-            font-weight: 700;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Status Request Summary Boxes */
-        .Status-Request {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            width: 100%;
-            padding: 30px;
-            background-color: #fff;
-            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.08);
-            border-radius: 8px;
-            margin-top: 0;
-            flex-wrap: wrap;
-        }
-
-        .status-box {
-            background-color: #f1f1f1;
-            border-radius: 8px;
-            padding: 20px 30px;
-            text-align: center;
-            flex: 1;
-            min-width: 180px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-
-        .status-box:hover {
-            background-color: #e6e6e6;
-            transform: translateY(-3px);
-        }
-
-        .status-box h6 {
-            font-size: 14px;
-            margin-bottom: 8px;
-            color: #666;
-            font-weight: 600;
-        }
-
-        .status-box p {
-            font-weight: bold;
-            font-size: 28px;
-            color: #2c2273;
-        }
-
-        /* Main Status Table Section */
-        .Status {
-            display: flex;
-            flex-direction: column;
-            background-color: #ffffff;
-            margin-top: 0;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.08);
-            width: 100%;
-            position: relative;
-        }
-
-        .navtabs {
-            display: flex;
-            justify-content: flex-start;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            border-bottom: 2px solid #ddd;
-            gap: 40px;
-            position: sticky;
-            top: 0;
-            width: 100%;
-            background-color: #fff;
-            z-index: 10;
-            padding-bottom: 10px;
-            white-space: nowrap;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .Nav-item {
-            font-weight: 600;
-            padding: 10px 16px;
-            cursor: pointer;
-            position: relative;
-            text-align: center;
-            min-width: 100px;
-            transition: color 0.3s ease;
-            color: #666;
-        }
-
-        .Nav-item:hover {
-            color: #2c2273;
-        }
-
-        .Nav-item.active {
-            color: #2c2273;
-        }
-
-        .Nav-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: -12px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background-color: #6a5acd;
-            border-radius: 2px;
-        }
-
-        .Status-table {
-            margin-top: 20px;
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .Status-header {
-            display: grid;
-            grid-template-columns: repeat(6, minmax(120px, 1fr)) minmax(150px, 1fr);
-            padding: 14px 0;
-            align-items: center;
-            text-align: center;
-            min-width: 900px;
-            gap: 10px;
-
-        }
-
-        .Status-row {
-            display: grid;
-            grid-template-columns: repeat(6, minmax(120px, 1fr)) minmax(150px, 1fr);
-            padding: 14px;
-            align-items: center;
-            text-align: center;
-            min-width: 900px;
-            gap: 10px;
-        }
-
-        .reqid ,
-        .studid ,
-        .studname ,
-        .program,
-        .date-completed-column ,
-        .datesub ,
-        .remark-text {
-            text-align: center;
-        }
-
-        .Status-header {
-            font-weight: 700;
-            background-color: #f8f8f8;
-            border-bottom: 2px solid #ddd;
-            color: #333;
-            /* Removed redundant text-align: left here */
-            border-radius: 6px 6px 0 0;
-        }
-
-        /* This rule was redundant and has been removed, as the general .Status-header div rule covers it */
-        /* .Status-header div:last-child {
-            text-align: center;
-        } */
-
-        .Status-header div {
-            font-weight: 600;
-            font-size: 0.9em;
-            color: #666;
-            text-transform: uppercase;
-            padding: 10px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            text-align: center; /* <--- This centers all header texts */
-        }
-
-        .Status-row {
-            background-color: #fff;
-            border: 1px solid #eee;
-            border-radius: 6px;
-            margin-bottom: 10px;
-            transition: all 0.3s ease;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            text-align: left;
-        }
-
-        .Status-row:hover {
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transform: translateY(-2px);
-        }
-
-        .Status-row .actions {
-            padding: 0; /* Remove the default cell padding */
-        }
-
-        .actions {
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            align-items: center; /* Centered all items in the actions column */
-            justify-content: center;
-            padding: 5px 10px 5px 10px;
-        }
-
-        .actions-placeholder {
-            height: 100%;
-            display: block;
-        }
-
-        .dropdown-wrapper {
-            position: relative;
-            display: block;
-            width: 80%;
-        }
-
-        .clear-button {
-            background-color: #28a745;
-            color: white;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
-            white-space: nowrap;
-            width: 80%;
-            text-align: center;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .clear-button:hover {
-            background-color: #218838;
-        }
-
-        .add-remark-button {
-            background-color: #007bff;
-            color: white;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center; /* Centered text and icon within the button */
-            gap: 5px;
-            white-space: nowrap;
-            width: 100%;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .add-remark-button:hover {
-            background-color: #0056b3;
-        }
-
-        .add-remark-button i {
-            font-size: 16px;
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            width: 100%;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 100;
-            border-radius: 5px;
-            left: 0;
-        }
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu a {
-            font-size: 14px;
-            color: black;
-            padding: 8px 16px;
-            text-decoration: none;
-            display: block;
-            white-space: nowrap;
-        }
-
-        .dropdown-menu a:hover {
-            background-color: #f1f1f1;
-        }
-
-        .status-cell {
-            text-align: center;
-            font-weight: 500;
-            color: #333;
-        }
-
-        .remark-column {
-            text-align: center;
-            font-style: italic;
-            color: #666;
-        }
-
-        .date-completed-column {
-            font-weight: 600;
-            color: #555;
-        }
-
-        /* Modal CSS */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.3s ease;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .modal-overlay.show-modal {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 30px;
-            border: 1px solid #888;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            text-align: center;
-            position: relative;
-            transform: translateY(-20px);
-            transition: transform 0.3s ease, opacity 0.3s ease;
-            opacity: 0;
-            border-radius: 10px;
-        }
-
-        .modal-overlay.show-modal .modal-content {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        .modal-icon {
-            font-size: 60px;
-            color: #6a5acd;
-            margin-bottom: 15px;
-            border: 3px solid #6a5acd;
-            border-radius: 50%;
-            padding: 10px;
-            display: inline-block;
-        }
-
-        .modal-content h2 {
-            margin-top: 0;
-            color: #333;
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-
-        .modal-content p {
-            font-size: 16px;
-            color: #555;
-            margin-bottom: 25px;
-        }
-
-        .modal-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .modal-button {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-
-        .modal-button.confirm {
-            background-color: #28a745;
-            color: white;
-        }
-
-        .modal-button.confirm:hover {
-            background-color: #218838;
-            transform: translateY(-2px);
-        }
-
-        .modal-button.cancel {
-            background-color: #dc3545;
-            color: white;
-        }
-
-        .modal-button.cancel:hover {
-            background-color: #c82333;
-            transform: translateY(-2px);
-        }
-
-        /* Custom Message Box (for alerts) */
-        .custom-message-box {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            z-index: 1002;
-            text-align: center;
-        }
-
-        .custom-message-box p {
-            margin-bottom: 15px;
-            font-size: 1.1em;
-            color: #333;
-        }
-
-        .custom-message-box-close {
-            background-color: #2c2273;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
-        }
-
-        .custom-message-box-close:hover {
-            background-color: #1f1850;
-        }
-
-       
-        /* Responsive Adjustments */
-        @media (max-width: 1200px) {
-            .topbar {
-                padding: 16px 30px;
-            }
-            .navbar-menu {
-                gap: 20px;
-            }
-            .header-right-section {
-                gap: 15px;
-            }
-            .search-bar {
-                width: 180px;
-            }
-            .search-bar:focus-within {
-                width: 240px;
-            }
-            .Status-Request {
-                justify-content: center;
-                gap: 15px;
-            }
-            .status-box {
-                min-width: 150px;
-            }
-            .Status-header,
-            .Status-row {
-                grid-template-columns: repeat(6, minmax(100px, 1fr)) minmax(150px, 1fr);
-                min-width: unset;
-                gap: 5px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .topbar {
-                flex-direction: column; /* Stack logo, nav, and right section */
-                align-items: flex-start;
-                gap: 15px;
-                padding: 15px 20px;
-            }
-            .logo-section {
-                width: 100%; /* Take full width */
-                justify-content: center; /* Center logo on smaller screens */
-            }
-            .top-navbar {
-                width: 100%;
-                justify-content: center; /* Center menu items in the nav bar */
-                margin: 0; /* Remove horizontal margin */
-            }
-            .navbar-menu {
-                flex-wrap: wrap; /* Allow menu items to wrap */
-                justify-content: center; /* Center wrapped items */
-                gap: 10px; /* Adjust gap for wrapped items */
-            }
-            .navbar-menu .menu-item a {
-                padding: 8px 12px;
-                font-size: 0.9em;
-            }
-            .navbar-menu .icon-sidebar {
-                margin-right: 5px;
-            }
-
-            .header-right-section {
-                width: 100%; /* Take full width */
-                justify-content: space-between; /* Space out search and user */
-                gap: 15px;
-                flex-direction: row; /* Keep search and user in a row */
-            }
-            .search-bar {
-                flex-grow: 1; /* Allow search bar to grow */
-                width: auto; /* Reset fixed width */
-                max-width: unset;
-            }
-            .search-bar:focus-within {
-                width: auto; /* Reset fixed width expansion on focus */
-            }
-
-            .content-area {
-                padding: 20px;
-            }
-            .clearance-requests-header h2 {
-                font-size: 1.6em;
-            }
-
-            .Status-Request {
-                flex-direction: column;
-                align-items: center;
-                padding: 20px;
-            }
-            .status-box {
-                width: 100%;
-                max-width: 300px;
-                margin-bottom: 10px;
-            }
-
-            .Status {
-                padding: 20px;
-            }
-            .navtabs {
-                gap: 20px;
-                padding-bottom: 5px;
-            }
-            .Nav-item {
-                min-width: 70px;
-                font-size: 14px;
-                padding: 8px 10px;
-            }
-            .Nav-item.active::after {
-                bottom: -7px;
-            }
-
-            .Status-header,
-            .Status-row {
-                font-size: 12px;
-                padding: 8px 0;
-                gap: 5px;
-                grid-template-columns: repeat(7, minmax(80px, 1fr));
-                min-width: 600px;
-            }
-
-            .actions {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 5px;
-            }
-            .add-remark-button, .clear-button {
-                width: 100%;
-                text-align: left;
-            }
-            .dropdown-menu {
-                min-width: 100%;
-            }
-
-            /* Modal responsive */
-            .view-status-modal-content {
-                max-width: 90%;
-                padding: 15px;
-            }
-            .office-status-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 5px;
-            }
-            .status-badge {
-                width: 100%;
-                min-width: unset;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .topbar {
-                padding: 10px;
-            }
-            .logo-section img {
-                width: 40px;
-            }
-            .school-name {
-                font-size: 18px;
-            }
-            .user-section span {
-                display: none; /* Hide username to save space */
-            }
-            .user-section i {
-                font-size: 28px; /* Smaller icons */
-            }
-
-            .clearance-requests-header h2 {
-                font-size: 1.3em;
-                padding: 10px 20px;
-            }
-
-            .status-box p {
-                font-size: 24px;
-            }
-            .Status-header,
-            .Status-row {
-                grid-template-columns: repeat(7, minmax(60px, 1fr));
-                min-width: 450px;
-            }
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif; /* Preferred font from previous code */
+    background-color: #f5f5f5; /* Light gray background */
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+body.modal-open {
+    overflow: hidden; /* Prevent scrolling when modal is open */
+}
+
+/* Header */
+.topbar {
+    background-color: #2c2273;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Vertically align items */
+    padding: 16px 50px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+}
+
+.topbar .logo-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-section img {
+    width: 50px;
+}
+
+.school-name {
+    font-family: 'AkwePro', sans-serif;
+    font-size: 22px;
+    line-height: 1.2;
+}
+
+/* New: Top Navigation Bar */
+.top-navbar {
+    flex-grow: 1; /* Allows the nav bar to take up available space */
+    display: flex;
+    justify-content: center; /* Center the menu items */
+    margin: 0 20px; /* Add some horizontal margin */
+}
+
+.navbar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 30px; /* Space between menu items */
+}
+
+.navbar-menu .menu-item a {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.navbar-menu .menu-item a:hover {
+    color: #b0c4de; /* Subtle text color change on hover */
+}
+
+.navbar-menu .menu-item.active a {
+    background-color: #6a5acd; /* Active color for top nav */
+}
+
+.navbar-menu .icon-sidebar {
+    font-size: 1.2em;
+    margin-right: 8px;
+    color: white;
+}
+
+.navbar-menu .menu-item a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px; /* Thickness of the underline */
+    background-color: #6a5acd; /* Color of the underline */
+    transform: scaleX(0); /* Start hidden (no width) */
+    transform-origin: bottom right; /* Animate from right to left */
+    transition: transform 0.3s ease-out; /* Animation speed and easing */
+}
+
+.navbar-menu .menu-item a:hover::after {
+    transform: scaleX(1); /* Expand to full width on hover */
+    transform-origin: bottom left; /* Animate from left to right on hover */
+}
+
+/* Header Right Section (for search and user) */
+.header-right-section {
+    display: flex;
+    align-items: center;
+    gap: 25px; /* Space between search and user section */
+}
+
+/* Search Bar */
+.search-bar {
+    margin-right: 10px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 25px;
+    display: flex; /* Keep flex for alignment, but icon will be absolute */
+    align-items: center;
+    width: 220px;
+    transition: all 0.6s ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    height: 40px;
+}
+
+.search-bar:focus-within {
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(106, 90, 205, 0.5);
+}
+
+.search-bar input {
+    font-family: 'Montserrat', sans-serif; /* Use Montserrat for input text */
+    border: none;
+    background: transparent;
+    outline: none;
+    color: white;
+    font-size: 0.95em;
+    flex-grow: 1;
+    width: 100%;
+    padding: 8px 40px 8px 18px; /* (top, right, bottom, left) */
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.search-bar:focus-within input {
+    color: #333; /* Dark text on focus */
+}
+
+.search-bar input::placeholder {
+    color: rgba(255, 255, 255, 0.7); /* Lighter placeholder text */
+}
+
+.search-bar:focus-within input::placeholder {
+    color: #777; /* Darker placeholder on focus */
+}
+
+.icon-search {
+    color: white;
+    font-size: 1.3em;
+    transition: color 0.3s ease;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; /* So clicks go through to input */
+}
+
+.search-bar:focus-within .icon-search {
+    color: #6a5acd; /* Purple icon on focus */
+}
+
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 16px;
+}
+
+.user-section span {
+    font-weight: 600;
+    color: white;
+}
+
+.user-section i {
+    font-size: 34px;
+    cursor: pointer;
+    color: white; /* Ensure icons are white */
+}
+
+/* Main Container */
+.main-container {
+    display: flex;
+    flex-direction: column; /* Changed to column since sidebar is gone */
+    flex: 1;
+}
+
+/* Main Content Area */
+.content-area {
+    flex: 1;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Space between sections */
+}
+
+/* Clearance Requests Header */
+.clearance-requests-header {
+    background-color: #f0f0f0;
+    padding: 15px 40px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    width: fit-content;
+    border-left: 5px solid #6a5acd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Soft shadow */
+}
+
+.clearance-requests-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Status Request Summary Boxes */
+.Status-Request {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+    padding: 30px;
+    background-color: #fff;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    margin-top: 0;
+    flex-wrap: wrap;
+}
+
+.status-box {
+    background-color: #f1f1f1;
+    border-radius: 8px;
+    padding: 20px 30px;
+    text-align: center;
+    flex: 1;
+    min-width: 180px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.status-box:hover {
+    background-color: #e6e6e6;
+    transform: translateY(-3px);
+}
+
+.status-box h6 {
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #666;
+    font-weight: 600;
+}
+
+.status-box p {
+    font-weight: bold;
+    font-size: 28px;
+    color: #2c2273;
+}
+
+/* Main Status Table Section */
+.Status {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    margin-top: 0;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    position: relative;
+}
+
+.navtabs {
+    display: flex;
+    justify-content: flex-start;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-bottom: 2px solid #ddd;
+    gap: 40px;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background-color: #fff;
+    z-index: 10;
+    padding-bottom: 10px;
+    white-space: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.Nav-item {
+    font-weight: 600;
+    padding: 10px 16px;
+    cursor: pointer;
+    position: relative;
+    text-align: center;
+    min-width: 100px;
+    transition: color 0.3s ease;
+    color: #666;
+}
+
+.Nav-item:hover {
+    color: #2c2273;
+}
+
+.Nav-item.active {
+    color: #2c2273;
+}
+
+.Nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #6a5acd;
+    border-radius: 2px;
+}
+
+.Status-table {
+    margin-top: 20px;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.Status-header {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(120px, 1fr)) minmax(150px, 1fr);
+    padding: 14px 0;
+    align-items: center;
+    text-align: center;
+    min-width: 900px;
+    gap: 10px;
+}
+
+.Status-row {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(120px, 1fr)) minmax(150px, 1fr);
+    padding: 14px;
+    align-items: center;
+    text-align: center;
+    min-width: 900px;
+    gap: 10px;
+}
+
+.reqid,
+.studid,
+.studname,
+.program,
+.date-completed-column,
+.datesub,
+.remark-text {
+    text-align: center;
+}
+
+.Status-header {
+    font-weight: 700;
+    background-color: #f8f8f8;
+    border-bottom: 2px solid #ddd;
+    color: #333;
+    /* Removed redundant text-align: left here */
+    border-radius: 6px 6px 0 0;
+}
+
+/* This rule was redundant and has been removed, as the general .Status-header div rule covers it */
+/* .Status-header div:last-child {
+    text-align: center;
+} */
+
+.Status-header div {
+    font-weight: 600;
+    font-size: 0.9em;
+    color: #666;
+    text-transform: uppercase;
+    padding: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center; /* <--- This centers all header texts */
+}
+
+.Status-row {
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    text-align: left;
+}
+
+.Status-row:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.Status-row .actions {
+    padding: 0; /* Remove the default cell padding */
+}
+
+.actions {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center; /* Centered all items in the actions column */
+    justify-content: center;
+    padding: 5px 10px 5px 10px;
+}
+
+.actions-placeholder {
+    height: 100%;
+    display: block;
+}
+
+.dropdown-wrapper {
+    position: relative;
+    display: block;
+    width: 80%;
+}
+
+.clear-button {
+    background-color: #28a745;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+    width: 80%;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.clear-button:hover {
+    background-color: #218838;
+}
+
+.add-remark-button {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centered text and icon within the button */
+    gap: 5px;
+    white-space: nowrap;
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.add-remark-button:hover {
+    background-color: #0056b3;
+}
+
+.add-remark-button i {
+    font-size: 16px;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    width: 100%;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    border-radius: 5px;
+    left: 0;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-menu a {
+    font-size: 14px;
+    color: black;
+    padding: 8px 16px;
+    text-decoration: none;
+    display: block;
+    white-space: nowrap;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f1f1f1;
+}
+
+.status-cell {
+    text-align: center;
+    font-weight: 500;
+    color: #333;
+}
+
+.remark-column {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+}
+
+.date-completed-column {
+    font-weight: 600;
+    color: #555;
+}
+
+/* Modal CSS */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-overlay.show-modal {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 30px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    position: relative;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    border-radius: 10px;
+}
+
+.modal-overlay.show-modal .modal-content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.modal-icon {
+    font-size: 60px;
+    color: #6a5acd;
+    margin-bottom: 15px;
+    border: 3px solid #6a5acd;
+    border-radius: 50%;
+    padding: 10px;
+    display: inline-block;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.modal-content p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 25px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.modal-button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.modal-button.confirm {
+    background-color: #28a745;
+    color: white;
+}
+
+.modal-button.confirm:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.modal-button.cancel {
+    background-color: #dc3545;
+    color: white;
+}
+
+.modal-button.cancel:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+}
+
+/* Custom Message Box (for alerts) */
+.custom-message-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1002;
+    text-align: center;
+}
+
+.custom-message-box p {
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    color: #333;
+}
+
+.custom-message-box-close {
+    background-color: #2c2273;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.custom-message-box-close:hover {
+    background-color: #1f1850;
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+    .topbar {
+        padding: 16px 30px;
+    }
+
+    .navbar-menu {
+        gap: 20px;
+    }
+
+    .header-right-section {
+        gap: 15px;
+    }
+
+    .search-bar {
+        width: 180px;
+    }
+
+    .search-bar:focus-within {
+        width: 240px;
+    }
+
+    .Status-Request {
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .status-box {
+        min-width: 150px;
+    }
+
+    .Status-header,
+    .Status-row {
+        grid-template-columns: repeat(6, minmax(100px, 1fr)) minmax(150px, 1fr);
+        min-width: unset;
+        gap: 5px;
+    }
+}
+
+@media (max-width: 768px) {
+    .topbar {
+        flex-direction: column; /* Stack logo, nav, and right section */
+        align-items: flex-start;
+        gap: 15px;
+        padding: 15px 20px;
+    }
+
+    .logo-section {
+        width: 100%; /* Take full width */
+        justify-content: center; /* Center logo on smaller screens */
+    }
+
+    .top-navbar {
+        width: 100%;
+        justify-content: center; /* Center menu items in the nav bar */
+        margin: 0; /* Remove horizontal margin */
+    }
+
+    .navbar-menu {
+        flex-wrap: wrap; /* Allow menu items to wrap */
+        justify-content: center; /* Center wrapped items */
+        gap: 10px; /* Adjust gap for wrapped items */
+    }
+
+    .navbar-menu .menu-item a {
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }
+
+    .navbar-menu .icon-sidebar {
+        margin-right: 5px;
+    }
+
+    .header-right-section {
+        width: 100%; /* Take full width */
+        justify-content: space-between; /* Space out search and user */
+        gap: 15px;
+        flex-direction: row; /* Keep search and user in a row */
+    }
+
+    .search-bar {
+        flex-grow: 1; /* Allow search bar to grow */
+        width: auto; /* Reset fixed width */
+        max-width: unset;
+    }
+
+    .search-bar:focus-within {
+        width: auto; /* Reset fixed width expansion on focus */
+    }
+
+    .content-area {
+        padding: 20px;
+    }
+
+    .clearance-requests-header h2 {
+        font-size: 1.6em;
+    }
+
+    .Status-Request {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .status-box {
+        width: 100%;
+        max-width: 300px;
+        margin-bottom: 10px;
+    }
+
+    .Status {
+        padding: 20px;
+    }
+
+    .navtabs {
+        gap: 20px;
+        padding-bottom: 5px;
+    }
+
+    .Nav-item {
+        min-width: 70px;
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+
+    .Nav-item.active::after {
+        bottom: -7px;
+    }
+
+    .Status-header,
+    .Status-row {
+        font-size: 12px;
+        padding: 8px 0;
+        gap: 5px;
+        grid-template-columns: repeat(7, minmax(80px, 1fr));
+        min-width: 600px;
+    }
+
+    .actions {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .add-remark-button,
+    .clear-button {
+        width: 100%;
+        text-align: left;
+    }
+
+    .dropdown-menu {
+        min-width: 100%;
+    }
+
+    /* Modal responsive */
+    .view-status-modal-content {
+        max-width: 90%;
+        padding: 15px;
+    }
+
+    .office-status-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .status-badge {
+        width: 100%;
+        min-width: unset;
+    }
+}
+
+@media (max-width: 480px) {
+    .topbar {
+        padding: 10px;
+    }
+
+    .logo-section img {
+        width: 40px;
+    }
+
+    .school-name {
+        font-size: 18px;
+    }
+
+    .user-section span {
+        display: none; /* Hide username to save space */
+    }
+
+    .user-section i {
+        font-size: 28px; /* Smaller icons */
+    }
+
+    .clearance-requests-header h2 {
+        font-size: 1.3em;
+        padding: 10px 20px;
+    }
+
+    .status-box p {
+        font-size: 24px;
+    }
+
+    .Status-header,
+    .Status-row {
+        grid-template-columns: repeat(7, minmax(60px, 1fr));
+        min-width: 450px;
+    }
+}
