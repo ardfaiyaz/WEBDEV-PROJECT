@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Request - National University</title>
+    <title>View Request</title>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/admin-request-stubs.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../assets/images/school-logo.png" />
 </head>
 <body>
     <header class="topbar">
         <div class="logo-section">
             <a href="index.html" class="logo-link">
-                <img src="../assets/images/school-logo.png" alt="School Logo">
+                <img src="../assets/icons/NU_shield.svg.png" alt="School Logo">
                 <span class="school-name">NATIONAL<br/>UNIVERSITY</span>
             </a>
         </div>
@@ -33,7 +33,7 @@
             </div>
             <div class="user-section">
                 <i class='bx bxs-bell'></i>
-                <span class="username">Hi, <span id="current-username">asdasd</span></span>
+                <span class="username">Hi, <span id="current-username">Admin</span></span>
                 <i class='bx bxs-user-circle'></i>
             </div>
         </div>
@@ -42,9 +42,11 @@
     <div class="main-container">
         <main class="content-area">
             <div class="page-header-controls view-request-header">
-                <h1 class="page-title  primary-button view-request-title-button">View Request</h1>
+                <div class="page-title-container">
+                    <h2>View Request</h2>
+                </div>
                 <div class="header-actions">
-                    <a href="student_clearances.html" class="back-link">Back to My Clearances</a>
+                    <a href="clearance-request.html" class="back-link">Back to My Clearances</a>
                 </div>
             </div>
 
@@ -80,10 +82,7 @@
                         <div>2023-123456</div>
                         <div>Pia Elleine Lucero</div>
                         <div>BSIT-MWA</div>
-                        <div>
-                            <span>On-going</span>
-                            <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">view status</a>
-                        </div>
+                        <div> <span>On-going</span> </div>
                         <div class="action-cell">
                             <button class="action-button secondary-button view-status-detail-button">View Status Detail</button>
                             <button class="action-button primary-button release-claim-stub-button">Release Claim Stub</button>
@@ -91,138 +90,185 @@
                     </div>
 
                     <div class="data-row view-request-data-row" data-type="LOCAL"
-                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Completed", "remarks": "Thesis defense form submitted and approved."}, {"office": "Student Discipline Office", "status": "Completed", "remarks": "No disciplinary record issues."}, {"office": "Student Affairs Office", "status": "Completed", "remarks": "All student activity records processed."}, {"office": "Guidance Office", "status": "Completed", "remarks": "Counseling session completed."}, {"office": "Library", "status": "Completed", "remarks": "All books returned and fines paid."}, {"office": "ITSO", "status": "Completed", "remarks": "All IT obligations cleared."}, {"office": "Accounting Office", "status": "Completed", "remarks": "All financial obligations settled."}, {"office": "Registrar Office", "status": "Completed", "remarks": "All academic records verified."}]'
-                        data-student-name="Pia Elleine Lucero"
-                        data-student-email="luceropl@students.nu-dasma.edu.ph"
-                        data-student-id="2023-123456"
-                        data-requested-documents='[{"name": "Transcript of Records", "copies": "2 copies"}, {"name": "Diploma (Photocopy)", "copies": "1 copy"}]'
-                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=PE"
-                        >
-                        <div>1</div>
-                        <div>05-19-2025</div>
-                        <div>2023-123456</div>
-                        <div>Pia Elleine Lucero</div>
-                        <div>BSIT-MWA</div>
-                        <div>
-                            <span>Completed</span>
-                            <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">view status</a>
-                        </div>
-                        <div class="action-cell">
-                            <button class="action-button secondary-button view-status-detail-button">View Status Detail</button>
-                            <span class="status-completed-text">Claim Stub Released</span>
-                        </div>
-                    </div>
-
-                    <div class="data-row view-request-data-row" data-type="LOCAL"
-                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Completed", "remarks": "All academic requirements met."}, {"office": "Student Discipline Office", "status": "On-going", "remarks": "Pending review of a minor infraction."}, {"office": "Student Affairs Office", "status": "Completed", "remarks": "Participation records verified."}, {"office": "Guidance Office", "status": "Completed", "remarks": "Guidance interview completed."}, {"office": "Library", "status": "Pending", "remarks": "Has outstanding library materials."}, {"office": "ITSO", "status": "Completed", "remarks": "No IT outstanding issues."}, {"office": "Accounting Office", "status": "Completed", "remarks": "Account balance is clear."}, {"office": "Registrar Office", "status": "Completed", "remarks": "Enrollment records confirmed."}]'
-                        data-student-name="Bryan Cancel"
-                        data-student-email="cancelb@students.nu-dasma.edu.ph"
-                        data-student-id="2023-123456"
-                        data-requested-documents='[{"name": "Certificate of Enrollment", "copies": "1 copy"}]'
-                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=BC"
-                        >
-                        <div>2</div>
-                        <div>05-19-2025</div>
-                        <div>2023-123456</div>
-                        <div>Bryan Cancel</div>
-                        <div>BSArch</div>
-                        <div>
-                            <span>Complete</span>
-                            <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">view status</a>
-                        </div>
-                        <div class="action-cell">
-                            <button class="action-button primary-button release-claim-stub-button blue-button">Release Claim Stub</button>
-                        </div>
-                    </div>
-
-                    <div class="data-row view-request-data-row" data-type="LOCAL"
-                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Completed", "remarks": "Recommendation letter drafted."}, {"office": "Student Discipline Office", "status": "Completed", "remarks": "No disciplinary actions."}, {"office": "Student Affairs Office", "status": "On-going", "remarks": "Awaiting approval for community service hours."}, {"office": "Guidance Office", "status": "Completed", "remarks": "Career counseling finished."}, {"office": "Library", "status": "Completed", "remarks": "No pending library items."}, {"office": "ITSO", "status": "Completed", "remarks": "Device loan cleared."}, {"office": "Accounting Office", "status": "Pending", "remarks": "Final payment for miscellaneous fees due."}, {"office": "Registrar Office", "status": "Completed", "remarks": "Enrollment and graduation records verified."}]'
-                        data-student-name="Melthon Donaire"
-                        data-student-email="donairem@students.nu-dasma.edu.ph"
-                        data-student-id="2023-123456"
-                        data-requested-documents='[{"name": "Letter of Recommendation", "copies": "1 copy"}]'
-                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=MD"
-                        >
-                        <div>3</div>
-                        <div>05-19-2025</div>
-                        <div>2023-123456</div>
-                        <div>Melthon Donaire</div>
-                        <div>BSPsy</div>
-                        <div>
-                            <span>Complete</span>
-                            <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">view status</a>
-                        </div>
-                        <div class="action-cell">
-                            <button class="action-button primary-button release-claim-stub-button green-button">Release Claim Stub</button>
-                        </div>
-                    </div>
-
-                    <div class="data-row view-request-data-row" data-type="LOCAL"
-                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Completed", "remarks": "Medical leave approved."}, {"office": "Student Discipline Office", "status": "Completed", "remarks": "No pending cases."}, {"office": "Student Affairs Office", "status": "Completed", "remarks": "Health declaration form submitted."}, {"office": "Guidance Office", "status": "Completed", "remarks": "Mental health check-up completed."}, {"office": "Library", "status": "Completed", "remarks": "No library arrears."}, {"office": "ITSO", "status": "Completed", "remarks": "Account access verified."}, {"office": "Accounting Office", "status": "Completed", "remarks": "Medical fee paid."}, {"office": "Registrar Office", "status": "Completed", "remarks": "Attendance records confirmed."}]'
-                        data-student-name="Hero Buta"
-                        data-student-email="butah@students.nu-dasma.edu.ph"
-                        data-student-id="2023-123456"
-                        data-requested-documents='[{"name": "Medical Certificate", "copies": "1 copy"}]'
-                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=HB"
-                        >
-                        <div>4</div>
-                        <div>05-19-2025</div>
-                        <div>2023-123456</div>
-                        <div>Hero Buta</div>
-                        <div>BSHM</div>
-                        <div>
-                            <span>Complete</span>
-                            <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">view status</a>
-                        </div>
-                        <div class="action-cell">
-                            <button class="action-button primary-button release-claim-stub-button green-button">Release Claim Stub</button>
-                        </div>
-                    </div>
-
-                    <div class="data-row view-request-data-row" data-type="ABROAD" style="display: none;"
-                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Pending", "remarks": "Awaiting faculty approval for international study."}, {"office": "Student Discipline Office", "status": "Pending", "remarks": "Background check in progress."}, {"office": "Student Affairs Office", "status": "On-going", "remarks": "Interview scheduled for scholarship eligibility."}, {"office": "Guidance Office", "status": "Pending", "remarks": "Overseas study counseling not yet initiated."}, {"office": "Library", "status": "Issue Found", "remarks": "Lost international journal."}, {"office": "ITSO", "status": "Pending", "remarks": "Needs to reset campus network password."}, {"office": "Accounting Office", "status": "Pending", "remarks": "International transfer fees pending."}, {"office": "Registrar Office", "status": "On-going", "remarks": "Verifying foreign institution equivalency."}]'
-                        data-student-name="Alex Johnson"
-                        data-student-email="johnsona@students.nu-dasma.edu.ph"
-                        data-student-id="2023-987654"
-                        data-requested-documents='[{"name": "Transcript of Records", "copies": "5 copies"}, {"name": "Course Description", "copies": "2 copies"}]'
-                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=AJ"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Completed", "remarks": "Thesis defense form submitted."}, {"office": "Student Discipline Office", "status": "Completed", "remarks": "Disciplinary record check cleared."}, {"office": "Student Affairs Office", "status": "Pending", "remarks": "Awaiting club clearance."}, {"office": "Guidance Office", "status": "Completed", "remarks": "Counseling session completed."}, {"office": "Library", "status": "Completed", "remarks": "All books returned."}, {"office": "ITSO", "status": "Issue Found", "remarks": "Unreturned IT equipment."}, {"office": "Accounting Office", "status": "Completed", "remarks": "All fees paid."}, {"office": "Registrar Office", "status": "On-going", "remarks": "Final grades review."}]'
+                        data-student-name="Cruz, Juan Dela"
+                        data-student-email="juandc@students.nu-dasma.edu.ph"
+                        data-student-id="2022-098765"
+                        data-requested-documents='[{"name": "Certificate of Enrollment", "copies": "2 copies"}, {"name": "Transcript of Records", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=JD"
                         >
                         <div>2</div>
                         <div>05-20-2025</div>
-                        <div>2023-987654</div>
-                        <div>Alex Johnson</div>
-                        <div>BSECE</div>
-                        <div>
-                            <span>Pending</span>
-                            <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">view status</a>
-                        </div>
+                        <div>2022-098765</div>
+                        <div>Juan Dela Cruz</div>
+                        <div>BSCS</div>
+                        <div> <span>Issue Found</span> </div>
                         <div class="action-cell">
                             <button class="action-button secondary-button view-status-detail-button">View Status Detail</button>
+                            <button class="action-button primary-button release-claim-stub-button">Release Claim Stub</button>
                         </div>
                     </div>
 
-                    <div class="data-row view-request-data-row" data-type="ABROAD" style="display: none;"
-                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Completed", "remarks": "Study abroad approval granted."}, {"office": "Student Discipline Office", "status": "Completed", "remarks": "Clear disciplinary record for international travel."}, {"office": "Student Affairs Office", "status": "Completed", "remarks": "Visa support letter issued."}, {"office": "Guidance Office", "status": "Completed", "remarks": "Pre-departure briefing attended."}, {"office": "Library", "status": "Completed", "remarks": "No outstanding library fees."}, {"office": "ITSO", "status": "Completed", "remarks": "International access configured."}, {"office": "Accounting Office", "status": "Completed", "remarks": "Overseas study payment confirmed."}, {"office": "Registrar Office", "status": "Completed", "remarks": "Foreign university credit transfer processed."}]'
-                        data-student-name="Sarah Lee"
-                        data-student-email="lees@students.nu-dasma.edu.ph"
-                        data-student-id="2023-112233"
-                        data-requested-documents='[{"name": "Transcript of Records", "copies": "1 copy"}]'
-                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=SL"
+                    <div class="data-row view-request-data-row" data-type="LOCAL"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Pending", "remarks": "Approval needed for practicum."}, {"office": "Student Discipline Office", "status": "Completed", "remarks": "No disciplinary issues."}, {"office": "Student Affairs Office", "status": "Completed", "remarks": "Student activities cleared."}, {"office": "Guidance Office", "status": "Issue Found", "remarks": "Required follow-up session."}, {"office": "Library", "status": "Pending", "remarks": "Late return of a journal."}, {"office": "ITSO", "status": "Completed", "remarks": "No outstanding IT concerns."}, {"office": "Accounting Office", "status": "On-going", "remarks": "Final payment processing."}, {"office": "Registrar Office", "status": "Pending", "remarks": "Validation of grades."}]'
+                        data-student-name="Santos, Maria Lena"
+                        data-student-email="marials@students.nu-dasma.edu.ph"
+                        data-student-id="2021-112233"
+                        data-requested-documents='[{"name": "Good Moral Certificate", "copies": "1 copy"}, {"name": "Course Description", "copies": "1 set"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=MS"
                         >
                         <div>3</div>
                         <div>05-21-2025</div>
-                        <div>2023-112233</div>
-                        <div>Sarah Lee</div>
-                        <div>BSCS</div>
-                        <div>
-                            <span>Completed</span>
-                            <a href="#" class="view-status-link" data-modal-target="#viewStatusModal">view status</a>
-                        </div>
+                        <div>2021-112233</div>
+                        <div>Maria Lena Santos</div>
+                        <div>BSARCH</div>
+                        <div> <span>Pending</span> </div>
                         <div class="action-cell">
                             <button class="action-button secondary-button view-status-detail-button">View Status Detail</button>
-                            <span class="status-completed-text">Claim Stub Released</span>
+                            <button class="action-button primary-button release-claim-stub-button">Release Claim Stub</button>
                         </div>
                     </div>
+
+                    <div class="data-row view-request-data-row" data-type="LOCAL"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Completed", "remarks": "Internship report approved."}, {"office": "Student Discipline Office", "status": "Completed", "remarks": "Clean record."}, {"office": "Student Affairs Office", "status": "Issue Found", "remarks": "Unsettled club dues."}, {"office": "Guidance Office", "status": "Completed", "remarks": "Guidance cleared."}, {"office": "Library", "status": "Completed", "remarks": "No outstanding library items."}, {"office": "ITSO", "status": "On-going", "remarks": "Deactivating student account."}, {"office": "Accounting Office", "status": "Pending", "remarks": "Waiting for final balance confirmation."}, {"office": "Registrar Office", "status": "Completed", "remarks": "Degree confirmed."}]'
+                        data-student-name="Reyes, Kevin Lee"
+                        data-student-email="kevinlr@students.nu-dasma.edu.ph"
+                        data-student-id="2020-445566"
+                        data-requested-documents='[{"name": "Graduation Clearance", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=KR"
+                        >
+                        <div>4</div>
+                        <div>05-22-2025</div>
+                        <div>2020-445566</div>
+                        <div>Kevin Lee Reyes</div>
+                        <div>BSTM</div>
+                        <div> <span>On-going</span> </div>
+                        <div class="action-cell">
+                            <button class="action-button secondary-button view-status-detail-button">View Status Detail</button>
+                            <button class="action-button primary-button release-claim-stub-button">Release Claim Stub</button>
+                        </div>
+                    </div>
+
+                    <div class="data-row view-request-data-row" data-type="LOCAL"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "On-going", "remarks": "Reviewing capstone project."}, {"office": "Student Discipline Office", "status": "Pending", "remarks": "Minor infraction review."}, {"office": "Student Affairs Office", "status": "On-going", "remarks": "Verifying attendance in university events."}, {"office": "Guidance Office", "status": "Completed", "remarks": "No pending guidance sessions."}, {"office": "Library", "status": "Issue Found", "remarks": "Damaged book."}, {"office": "ITSO", "status": "Pending", "remarks": "Account deactivation request."}, {"office": "Accounting Office", "status": "Completed", "remarks": "No outstanding balance."}, {"office": "Registrar Office", "status": "Pending", "remarks": "Transcript issuance processing."}]'
+                        data-student-name="Lim, Sophia Anne"
+                        data-student-email="sophiaal@students.nu-dasma.edu.ph"
+                        data-student-id="2022-778899"
+                        data-requested-documents='[{"name": "Certificate of Completion", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=SL"
+                        >
+                        <div>5</div>
+                        <div>05-23-2025</div>
+                        <div>2022-778899</div>
+                        <div>Sophia Anne Lim</div>
+                        <div>BSEE</div>
+                        <div> <span>Issue Found</span> </div>
+                        <div class="action-cell">
+                            <button class="action-button secondary-button view-status-detail-button">View Status Detail</button>
+                            <button class="action-button primary-button release-claim-stub-button">Release Claim Stub</button>
+                        </div>
+                    </div>
+
+                    <div class="data-row view-request-data-row" data-type="ABROAD"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Completed", "remarks": "Recommendation letter issued."}, {"office": "International Affairs Office", "status": "On-going", "remarks": "Visa application support."}, {"office": "Student Discipline Office", "status": "Completed", "remarks": "No records."}, {"office": "Accounting Office", "status": "Completed", "remarks": "Overseas payment verified."}, {"office": "Registrar Office", "status": "Pending", "remarks": "Apostille processing."}]'
+                        data-student-name="Tan, Benjamin Kyle"
+                        data-student-email="benjamint@students.nu-dasma.edu.ph"
+                        data-student-id="2020-001122"
+                        data-requested-documents='[{"name": "Transcript of Records (WES)", "copies": "1 copy"}, {"name": "Diploma (Apostilled)", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=BT"
+                        >
+                        <div>6</div>
+                        <div>05-24-2025</div>
+                        <div>2020-001122</div>
+                        <div>Benjamin Kyle Tan</div>
+                        <div>BSME</div>
+                        <div> <span>Pending</span> </div>
+                        <div class="action-cell">
+                            <button class="action-button secondary-button view-status-detail-button">View Status Detail</button>
+                            <button class="action-button primary-button release-claim-stub-button">Release Claim Stub</button>
+                        </div>
+                    </div>
+
+                    <div class="data-row view-request-data-row" data-type="ABROAD"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Pending", "remarks": "Curriculum review for equivalency."}, {"office": "International Affairs Office", "status": "Issue Found", "remarks": "Missing proof of scholarship."}, {"office": "Student Discipline Office", "status": "Completed", "remarks": "Clear."}, {"office": "Accounting Office", "status": "Pending", "remarks": "International transaction verification."}, {"office": "Registrar Office", "status": "On-going", "remarks": "Issuing academic certification."}]'
+                        data-student-name="Yap, Chloe Grace"
+                        data-student-email="chloegy@students.nu-dasma.edu.ph"
+                        data-student-id="2021-334455"
+                        data-requested-documents='[{"name": "Academic Transcript", "copies": "1 copy"}, {"name": "Certificate of Enrollment for Visa", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=CG"
+                        >
+                        <div>7</div>
+                        <div>05-25-2025</div>
+                        <div>2021-334455</div>
+                        <div>Chloe Grace Yap</div>
+                        <div>BSN</div>
+                        <div> <span>Issue Found</span> </div>
+                        <div class="action-cell">
+                            <button class="action-button secondary-button view-status-detail-button">View Status Detail</button>
+                            <button class="action-button primary-button release-claim-stub-button">Release Claim Stub</button>
+                        </div>
+                    </div>
+
+                    <div class="data-row view-request-data-row" data-type="ABROAD"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "On-going", "remarks": "Faculty recommendations in progress."}, {"office": "International Affairs Office", "status": "Pending", "remarks": "Embassy liaison awaiting documents."}, {"office": "Student Discipline Office", "status": "Issue Found", "remarks": "Past minor violation."}, {"office": "Accounting Office", "status": "On-going", "remarks": "Foreign exchange rate adjustments."}, {"office": "Registrar Office", "status": "Completed", "remarks": "Course descriptions ready."}]'
+                        data-student-name="Sy, Daniel John"
+                        data-student-email="danieljs@students.nu-dasma.edu.ph"
+                        data-student-id="2022-667788"
+                        data-requested-documents='[{"name": "Letter of Recommendation", "copies": "2 copies"}, {"name": "Proof of Enrollment", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=DJ"
+                        >
+                        <div>8</div>
+                        <div>05-26-2025</div>
+                        <div>2022-667788</div>
+                        <div>Daniel John Sy</div>
+                        <div>BSCE</div>
+                        <div> <span>On-going</span> </div>
+                        <div class="action-cell">
+                            <button class="action-button secondary-button view-status-detail-button">View Status Detail</button>
+                            <button class="action-button primary-button release-claim-stub-button">Release Claim Stub</button>
+                        </div>
+                    </div>
+
+                    <div class="data-row view-request-data-row" data-type="ABROAD"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Issue Found", "remarks": "Incomplete research output."}, {"office": "International Affairs Office", "status": "Completed", "remarks": "Travel advisory provided."}, {"office": "Student Discipline Office", "status": "Pending", "remarks": "Final clearance needed."}, {"office": "Accounting Office", "status": "Issue Found", "remarks": "Pending overseas remittance."}, {"office": "Registrar Office", "status": "Pending", "remarks": "Transcript of records for WES evaluation."}]'
+                        data-student-name="Go, Erika Mae"
+                        data-student-email="erikag@students.nu-dasma.edu.ph"
+                        data-student-id="2020-990011"
+                        data-requested-documents='[{"name": "Official Transcript (Sealed)", "copies": "1 copy"}, {"name": "Certificate of Good Standing", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=EM"
+                        >
+                        <div>9</div>
+                        <div>05-27-2025</div>
+                        <div>2020-990011</div>
+                        <div>Erika Mae Go</div>
+                        <div>BSBA</div>
+                        <div> <span>Issue Found</span> </div>
+                        <div class="action-cell">
+                            <button class="action-button secondary-button view-status-detail-button">View Status Detail</button>
+                            <button class="action-button primary-button release-claim-stub-button">Release Claim Stub</button>
+                        </div>
+                    </div>
+
+                    <div class="data-row view-request-data-row" data-type="ABROAD"
+                        data-office-statuses='[{"office": "Dean/Program Chair/Principal", "status": "Completed", "remarks": "Dean's approval for study abroad."}, {"office": "International Affairs Office", "status": "On-going", "remarks": "Pre-departure briefing scheduled."}, {"office": "Student Discipline Office", "status": "Completed", "remarks": "No issues."}, {"office": "Accounting Office", "status": "Completed", "remarks": "Fees for international exchange settled."}, {"office": "Registrar Office", "status": "On-going", "remarks": "Transfer credit evaluation."}]'
+                        data-student-name="Chua, Andrew James"
+                        data-student-email="andrewjc@students.nu-dasma.edu.ph"
+                        data-student-id="2021-223344"
+                        data-requested-documents='[{"name": "Study Plan Approval", "copies": "1 copy"}]'
+                        data-student-avatar="https://placehold.co/80x80/cccccc/333333?text=AJ"
+                        >
+                        <div>10</div>
+                        <div>05-28-2025</div>
+                        <div>2021-223344</div>
+                        <div>Andrew James Chua</div>
+                        <div>BSIT</div>
+                        <div> <span>On-going</span> </div>
+                        <div class="action-cell">
+                            <button class="action-button secondary-button view-status-detail-button">View Status Detail</button>
+                            <button class="action-button primary-button release-claim-stub-button">Release Claim Stub</button>
+                        </div>
+                    </div>
+
                 </div>
             </section>
         </main>
@@ -259,6 +305,18 @@
             </div>
         </div>
     </div>
+
+    <div id="confirmationModal" class="modal-overlay">
+        <div class="modal-content confirmation-modal-content">
+            <h4 class="confirmation-modal-title">Confirm Action</h4>
+            <p class="confirmation-modal-message">Are you sure you want to release the claim stub?</p>
+            <div class="confirmation-buttons">
+                <button class="action-button confirm-yes">Yes</button>
+                <button class="action-button secondary-button confirm-no">No</button>
+            </div>
+        </div>
+    </div>
+
     <script src="../js/admin-request-stubs.js"></script>
 </body>
 </html>

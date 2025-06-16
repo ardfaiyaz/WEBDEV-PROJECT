@@ -1,5 +1,3 @@
-// In your admin-request-stubs.js file
-
 document.addEventListener('DOMContentLoaded', () => {
     const viewStatusDetailButtons = document.querySelectorAll('.view-status-detail-button');
     const viewStatusModal = document.getElementById('viewStatusModal');
@@ -17,11 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to open the modal
     function openModal() {
         viewStatusModal.style.display = 'flex'; // Use flex to center the modal
+        document.body.classList.add('modal-open'); // Prevent scrolling
     }
 
     // Function to close the modal
     function closeModal() {
         viewStatusModal.style.display = 'none';
+        document.body.classList.remove('modal-open'); // Re-enable scrolling
     }
 
     // Event listeners for opening the modal
@@ -46,37 +46,59 @@ document.addEventListener('DOMContentLoaded', () => {
             modalStudentEmail.textContent = `Email: ${studentEmail}`;
 
             // Clear previous content
-            statusOfficesSection.querySelectorAll('.status-item').forEach(item => item.remove());
+            // Select by class within the specific section to avoid clearing other potential elements
+            statusOfficesSection.querySelectorAll('.office-status-item').forEach(item => item.remove());
             requestedDocumentsSection.querySelectorAll('.document-item').forEach(item => item.remove());
 
+
             // Populate office statuses
+            const officeStatusList = document.createElement('ul');
+            officeStatusList.classList.add('office-status-list');
             officeStatuses.forEach(office => {
-                const statusItem = document.createElement('div');
-                statusItem.classList.add('status-item');
+                const statusItem = document.createElement('li');
+                statusItem.classList.add('office-status-item');
                 statusItem.innerHTML = `
                     <div class="office-name">${office.office}:</div>
-                    <div class="office-status status-${office.status.toLowerCase().replace(' ', '-')}">${office.status}</div>
+                    <div class="status-badge status-${office.status.toLowerCase().replace(' ', '-')}">${office.status}</div>
                 `;
-                statusOfficesSection.appendChild(statusItem);
+                officeStatusList.appendChild(statusItem);
             });
+            // Clear previous status list and append new one
+            const oldStatusList = statusOfficesSection.querySelector('.office-status-list');
+            if (oldStatusList) {
+                oldStatusList.remove();
+            }
+            statusOfficesSection.appendChild(officeStatusList);
+
 
             // Populate requested documents
+            const documentList = document.createElement('ul');
+            documentList.classList.add('document-list');
             if (requestedDocuments && requestedDocuments.length > 0) {
                 requestedDocuments.forEach(doc => {
-                    const documentItem = document.createElement('div');
+                    const documentItem = document.createElement('li');
                     documentItem.classList.add('document-item');
-                    documentItem.textContent = `${doc.name} (${doc.copies})`;
-                    requestedDocumentsSection.appendChild(documentItem);
+                    documentItem.innerHTML = `
+                        <div class="document-name">${doc.name}</div>
+                        <div class="document-copies">${doc.copies}</div>
+                    `;
+                    documentList.appendChild(documentItem);
                 });
             } else {
                 const noDocuments = document.createElement('p');
                 noDocuments.textContent = "No documents requested.";
-                requestedDocumentsSection.appendChild(noDocuments);
+                documentList.appendChild(noDocuments); // Append to list for consistency
             }
+            // Clear previous document list and append new one
+            const oldDocumentList = requestedDocumentsSection.querySelector('.document-list');
+            if (oldDocumentList) {
+                oldDocumentList.remove();
+            }
+            requestedDocumentsSection.appendChild(documentList);
+
 
             // Set remarks (you'll need to decide how to derive a general remark,
             // or if you want to show remarks per office - current HTML assumes one general remark)
-            // For now, let's just pick the first 'issue found' remark or default
             let generalRemark = "No Remarks";
             const issueFoundOffice = officeStatuses.find(office => office.status === "Issue Found" && office.remarks);
             if (issueFoundOffice) {
@@ -88,7 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             modalRemarks.textContent = generalRemark;
-
 
             openModal();
         });
@@ -128,4 +149,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial display for LOCAL tab
     document.querySelector('.tab-item[data-type="LOCAL"]').click();
+
+
+    // New Confirmation Pop-up Logic
+    const releaseStubButtons = document.querySelectorAll('.release-claim-stub-button');
+    const confirmationModal = document.getElementById('confirmationModal');
+    const confirmYesButton = confirmationModal.querySelector('.confirm-yes');
+    const confirmNoButton = confirmationModal.querySelector('.confirm-no');
+    let currentButton = null; // To store the button that was clicked
+
+    releaseStubButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            currentButton = button; // Store the clicked button
+            confirmationModal.classList.add('show-modal'); // Show the confirmation modal
+            document.body.classList.add('modal-open'); // Prevent scrolling
+        });
+    });
+
+    confirmYesButton.addEventListener('click', () => {
+        if (currentButton) {
+            currentButton.textContent = 'Claim Stub Released';
+            currentButton.classList.add('claim-stub-released');
+            currentButton.classList.remove('primary-button');
+            currentButton.disabled = true; // Disable the button after click
+        }
+        confirmationModal.classList.remove('show-modal'); // Hide the confirmation modal
+        document.body.classList.remove('modal-open'); // Re-enable scrolling
+    });
+
+    confirmNoButton.addEventListener('click', () => {
+        confirmationModal.classList.remove('show-modal'); // Hide the confirmation modal
+        document.body.classList.remove('modal-open'); // Re-enable scrolling
+        currentButton = null; // Clear the stored button
+    });
+
+    // Close confirmation modal if clicking outside (optional, based on modal-overlay behavior)
+    confirmationModal.addEventListener('click', (event) => {
+        if (event.target === confirmationModal) {
+            confirmationModal.classList.remove('show-modal');
+            document.body.classList.remove('modal-open');
+            currentButton = null;
+        }
+    });
 });
