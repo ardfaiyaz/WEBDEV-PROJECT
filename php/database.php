@@ -1,5 +1,4 @@
 <?php
-// php/database.php
 
 $host = 'localhost';
 $db   = 'clearance';

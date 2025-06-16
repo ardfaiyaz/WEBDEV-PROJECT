@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 } elseif ($user['role_code'] === 'ADMIN') {
                     header("Location: admin-index.php"); // Redirect admins
                 } elseif ($user['role_code'] === 'SUB_ADMIN') {
-                    header("Location: clearance-request.html"); // Redirect sub-admins
+                    header("Location: clearance-request.php"); // Redirect sub-admins
                 }
 
                 exit(); // Always exit after a header redirect

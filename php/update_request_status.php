@@ -1,59 +1,62 @@
 <?php
-// update_request_status.php
+include 'database.php';
 
-session_start(); // Start session to access session variables
+header('Content-Type: application/json');
 
-// REMOVE these temporary debugging lines in a production environment!
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+session_start();
 
-require_once 'api_config.php';
-require_once 'database.php'; // This provides the $pdo object
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = json_decode(file_get_contents("php://input"));
-
-    if (!isset($data->request_id)) {
-        echo json_encode(["success" => false, "message" => "Request ID not provided."]);
-        exit();
-    }
-
-    // --- CRITICAL ADDITION: Get current user's office_code from session ---
-    if (!isset($_SESSION['office_code'])) {
-        echo json_encode(["success" => false, "message" => "User office code not found in session. Please re-login."]);
-        exit();
-    }
-    $userOfficeCode = $_SESSION['office_code'];
-    // --- END CRITICAL ADDITION ---
-
-    $requestId = $data->request_id;
-
-    // Update status_code to 'COMP'
-    // CRITICAL CHANGE: Add office_code to the WHERE clause
-    $sql = "UPDATE clearance_status
-            SET status_code = 'COMP'
-            WHERE req_id = :request_id AND office_code = :office_code";
-
-    try {
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([
-            ':request_id' => $requestId,
-            ':office_code' => $userOfficeCode // Bind the logged-in user's office code
-        ]);
-
-        if ($stmt->rowCount() > 0) {
-            echo json_encode(["success" => true, "message" => "Request status updated to COMPLETED."]);
-        } else {
-            // This might mean the request_id didn't exist for this office or status was already 'COMP'
-            echo json_encode(["success" => false, "message" => "No record found for this office or status already completed for Request ID: " . $requestId]);
-        }
-    } catch (PDOException $e) {
-        error_log("Database error in update_request_status.php: " . $e->getMessage());
-        echo json_encode(["success" => false, "message" => "Database query error: " . $e->getMessage()]);
-    }
-
-} else {
-    echo json_encode(["success" => false, "message" => "Invalid request method. Only POST is allowed."]);
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['office_code'])) {
+    echo json_encode(['error' => 'Unauthorized access or office not assigned.']);
+    exit();
 }
+
+$office_code = $_SESSION['office_code'];
+$data = json_decode(file_get_contents('php://input'), true);
+
+$req_id = isset($data['req_id']) ? intval($data['req_id']) : 0;
+$status_code = isset($data['status_code']) ? trim($data['status_code']) : '';
+
+if ($req_id === 0 || empty($status_code)) {
+    echo json_encode(['error' => 'Invalid request ID or status code.']);
+    exit();
+}
+
+// Check if a record for this req_id and office_code already exists
+$check_sql = "SELECT COUNT(*) FROM clearance_status WHERE req_id = ? AND office_code = ?";
+$check_stmt = $conn->prepare($check_sql);
+$check_stmt->bind_param("is", $req_id, $office_code);
+$check_stmt->execute();
+$check_result = $check_stmt->get_result();
+$row = $check_result->fetch_row();
+$exists = $row[0] > 0;
+$check_stmt->close();
+
+if ($exists) {
+    // Update existing record
+    $sql = "UPDATE clearance_status SET status_code = ? WHERE req_id = ? AND office_code = ?";
+    $stmt = $conn->prepare($sql);
+    if ($stmt === false) {
+        echo json_encode(['error' => 'Prepare failed: ' . $conn->error]);
+        exit();
+    }
+    $stmt->bind_param("sis", $status_code, $req_id, $office_code);
+} else {
+    // Insert new record
+    $sql = "INSERT INTO clearance_status (req_id, office_code, status_code) VALUES (?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    if ($stmt === false) {
+        echo json_encode(['error' => 'Prepare failed: ' . $conn->error]);
+        exit();
+    }
+    $stmt->bind_param("iss", $req_id, $office_code, $status_code);
+}
+
+if ($stmt->execute()) {
+    echo json_encode(['success' => 'Request status updated successfully.']);
+} else {
+    echo json_encode(['error' => 'Failed to update request status: ' . $stmt->error]);
+}
+
+$stmt->close();
+$conn->close();
 ?>

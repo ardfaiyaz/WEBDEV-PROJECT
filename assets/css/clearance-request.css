@@ -863,4 +863,219 @@
                 grid-template-columns: repeat(7, minmax(60px, 1fr));
                 min-width: 450px;
             }
+            .modal-overlay {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+        }
+        .modal-overlay.show-modal {
+            display: flex;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 10px;
+            width: 80%; /* Could be adjusted */
+            max-width: 500px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            text-align: center;
+            position: relative;
+        }
+        .modal-icon {
+            font-size: 60px;
+            color: #ffc107; /* Warning color */
+            margin-bottom: 15px;
+        }
+        .modal-buttons {
+            margin-top: 20px;
+        }
+        .modal-button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .modal-button.confirm {
+            background-color: #28a745;
+            color: white;
+        }
+        .modal-button.cancel {
+            background-color: #dc3545;
+            color: white;
+        }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Custom Message Box styles */
+        #customMessageBoxContainer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1001;
+        }
+        .custom-message-box {
+            background-color: #333;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            max-width: 300px;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        .custom-message-box.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        .custom-message-box p {
+            margin: 0;
+            flex-grow: 1;
+        }
+        .custom-message-box-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+        .custom-message-box-close:hover {
+            color: #ccc;
+        }
+
+        /* Styles for View Status Modal (from your original HTML) */
+        .view-status-modal-content {
+            max-width: 700px;
+            text-align: left;
+            padding: 30px;
+        }
+        .student-info-section {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .student-avatar-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-right: 20px;
+            object-fit: cover;
+            border: 2px solid #eee;
+        }
+        .student-text-info h3 {
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+        .student-text-info p {
+            margin: 0 0 3px 0;
+            color: #555;
+            font-size: 0.9em;
+        }
+        .status-offices-section,
+        .requested-documents-section,
+        .remarks-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .status-offices-section h4,
+        .requested-documents-section h4,
+        .remarks-section h4 {
+            margin-top: 0;
+            color: #0056b3;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .office-status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px dotted #ddd;
+        }
+        .office-status-item:last-child {
+            border-bottom: none;
+        }
+        .office-status-item span {
+            font-weight: bold;
+        }
+        .office-status-item .status-tag {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            color: white;
+        }
+        .status-tag.PEND { background-color: #ffc107; } /* Orange */
+        .status-tag.ON { background-color: #007bff; }   /* Blue */
+        .status-tag.COMP { background-color: #28a745; } /* Green */
+        .status-tag.NA { background-color: #6c757d; } /* Grey */
+
+        .document-item {
+            padding: 8px 0;
+            border-bottom: 1px dotted #ddd;
+        }
+        .document-item:last-child {
+            border-bottom: none;
+        }
+
+        .remarks-box {
+            background-color: #e9ecef;
+            border-radius: 5px;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+        }
+        .modal-remarks {
+            margin: 0;
+            color: #495057;
+            font-style: italic;
+        }
+        .view-consent-file-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            display: block; /* Make it a block element to control margin */
+            margin-top: 10px;
+        }
+        .view-consent-file-button:hover {
+            background-color: #0056b3;
+        }
         }
