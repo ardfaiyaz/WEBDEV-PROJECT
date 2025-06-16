@@ -3,10 +3,6 @@
 
 session_start(); // Start session to access session variables
 
-// REMOVE these temporary debugging lines in a production environment!
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
 require_once 'api_config.php';
 require_once 'database.php'; // This provides the $pdo object

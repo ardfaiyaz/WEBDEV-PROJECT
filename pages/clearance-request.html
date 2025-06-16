@@ -28,7 +28,7 @@
 
         <div class="header-right-section">
             <div class="search-bar">
-                <input type="text" placeholder="Search...">
+                <input type="text" id="searchInput" placeholder="Search by Student ID or Name...">
                 <i class='bx bx-search icon-search'></i>
             </div>
             <div class="user-section">
@@ -149,9 +149,9 @@ const REMARKS_MAPPING = {
 // --- DOM Elements ---
 const navItems = document.querySelectorAll('.Nav-item');
 const requestsContainer = document.getElementById('requests-container');
-const statusHeader = document.querySelector('.Status-header'); // Still useful for general selection
-const statusOrRemarkHeader = document.getElementById('statusOrRemarkHeader'); // New ID
-const actionsHeader = document.getElementById('actionsHeader'); // New ID
+const statusHeader = document.querySelector('.Status-header');
+const statusOrRemarkHeader = document.getElementById('statusOrRemarkHeader');
+const actionsHeader = document.getElementById('actionsHeader');
 const confirmationModal = document.getElementById('confirmationModal');
 const confirmClearBtn = document.getElementById('confirmClearBtn');
 const cancelClearBtn = document.getElementById('cancelClearBtn');
@@ -163,6 +163,9 @@ const ongoingRequestsSpan = document.getElementById('ongoing-requests');
 const completedRequestsSpan = document.getElementById('completed-requests');
 const currentUsernameSpan = document.getElementById('current-username');
 const userOfficeCodeSpan = document.getElementById('user-office-code');
+
+// --- NEW: Search Bar Elements ---
+const searchInput = document.getElementById('searchInput');
 
 
 // --- Functions ---
@@ -203,11 +206,8 @@ async function fetchClearanceRequests(officeCode) {
         if (data.success) {
             allRequests = data.requests;
             updateStatusCounts();
-            const activeTabOnLoad = document.querySelector('.Nav-item.active');
-            if (activeTabOnLoad) {
-                // Trigger the click event to render based on the initially active tab
-                activeTabOnLoad.click();
-            }
+            // Instead of directly rendering based on active tab, call filterAndRenderRequests
+            filterAndRenderRequests();
         } else {
             console.error("Failed to fetch requests:", data.message);
             showMessageBox("Error: Could not fetch clearance requests.");
@@ -232,7 +232,7 @@ function updateStatusCounts() {
 
 
 // --- MODIFIED: Create Request Row ---
-function createRequestRow(request, filterStatusFrontend) { // Now accepts filterStatusFrontend
+function createRequestRow(request, filterStatusFrontend) {
     const row = document.createElement('div');
     row.classList.add('Status-row');
     row.dataset.statusFrontend = getFrontendStatus(request.status_code);
@@ -240,18 +240,16 @@ function createRequestRow(request, filterStatusFrontend) { // Now accepts filter
     row.dataset.requestId = request.req_id;
 
     let statusDisplay = getFrontendStatus(request.status_code);
-    let fifthColumnContent = ''; // This will be either 'STATUS' or 'REMARK' content
-    let actionsContent = ''; // This will be the buttons or empty
+    let fifthColumnContent = '';
+    let actionsContent = '';
 
-    // Determine content for the 5th column (Status/Remark)
     if (filterStatusFrontend === 'ON-GOING') {
         fifthColumnContent = `<div class="remark-column"><span class="remark-text">${request.office_remarks || 'N/A'}</span></div>`;
     } else {
-        fifthColumnContent = `<div>${statusDisplay}</div>`; // For ALL, PENDING, COMPLETED, show status
+        fifthColumnContent = `<div>${statusDisplay}</div>`;
     }
 
-    // Determine content for the ACTION column (7th column)
-    if (filterStatusFrontend !== 'ALL') { // Only show actions if NOT 'ALL' view
+    if (filterStatusFrontend !== 'ALL') {
         if (request.status_code === 'PEND') {
             const customRemarks = REMARKS_MAPPING[currentUserOfficeCode] || [];
             const dropdownItems = customRemarks.map(remark =>
@@ -270,11 +268,10 @@ function createRequestRow(request, filterStatusFrontend) { // Now accepts filter
         } else if (request.status_code === 'ON') {
             actionsContent = `<button class="clear-button">CLEAR</button>`;
         } else if (request.status_code === 'COMP') {
-            actionsContent = `<div class="actions-placeholder"></div>`; // Placeholder if needed for alignment
+            actionsContent = `<div class="actions-placeholder"></div>`;
         }
     } else {
-        // If filterStatusFrontend is 'ALL', actionsContent remains empty, implicitly hiding buttons.
-        actionsContent = `<div class="actions-placeholder"></div>`; // Keep a placeholder for consistent column count
+        actionsContent = `<div class="actions-placeholder"></div>`;
     }
 
 
@@ -298,37 +295,67 @@ function getFrontendStatus(dbStatusCode) {
     }
 }
 
-// --- MODIFIED: Render Requests ---
-function renderRequests(filterStatusFrontend) {
+// --- MODIFIED: Render Requests (now called by filterAndRenderRequests) ---
+function renderRequests(requestsToDisplay, filterStatusFrontend) {
     requestsContainer.innerHTML = '';
 
-    const filteredRequests = filterStatusFrontend === 'ALL'
-        ? allRequests
-        : allRequests.filter(req => getFrontendStatus(req.status_code) === filterStatusFrontend);
+    if (requestsToDisplay.length === 0) {
+        requestsContainer.innerHTML = '<div style="padding-top:20px">No requests found matching your criteria.</div>';
+        return;
+    }
 
-    filteredRequests.forEach(request => {
-        // Pass filterStatusFrontend to createRequestRow
+    requestsToDisplay.forEach(request => {
         const row = createRequestRow(request, filterStatusFrontend);
         requestsContainer.appendChild(row);
     });
 
-    attachEventListenersToRows(); // Re-attach event listeners after rendering
+    attachEventListenersToRows();
 }
+
+
+// --- NEW: filterAndRenderRequests function ---
+function filterAndRenderRequests() {
+    // 1. Get the currently active tab's status filter
+    const activeTab = document.querySelector('.Nav-item.active');
+    const selectedStatusFrontend = activeTab ? activeTab.dataset.statusFrontend.toUpperCase() : 'ALL';
+    updateTableHeaders(selectedStatusFrontend); // Update headers based on active tab
+
+    // 2. Get the search term and normalize it
+    const searchTerm = searchInput.value.toLowerCase().trim();
+
+    // 3. Apply tab filtering first
+    let filteredByTab = allRequests;
+    if (selectedStatusFrontend !== 'ALL') {
+        filteredByTab = allRequests.filter(req => getFrontendStatus(req.status_code) === selectedStatusFrontend);
+    }
+
+    // 4. Apply search filtering to the tab-filtered results
+    const finalFilteredRequests = filteredByTab.filter(req => {
+        // Search by request ID, student ID, or student name
+        const requestIdMatch = req.req_id.toString().toLowerCase().includes(searchTerm);
+        const studentIdMatch = req.student_id.toLowerCase().includes(searchTerm);
+        const studentNameMatch = req.student_name.toLowerCase().includes(searchTerm);
+        const programMatch = req.program.toLowerCase().includes(searchTerm); // Also search by program
+
+        return requestIdMatch || studentIdMatch || studentNameMatch || programMatch;
+    });
+
+    // 5. Render the final filtered requests
+    renderRequests(finalFilteredRequests, selectedStatusFrontend);
+}
+
 
 // --- MODIFIED: Update Table Headers ---
 function updateTableHeaders(selectedStatusFrontend) {
-    // Reset to default (e.g., for PENDING view)
     statusOrRemarkHeader.textContent = 'STATUS';
-    statusOrRemarkHeader.style.display = 'block'; // Ensure it's visible
-    actionsHeader.style.display = 'block'; // Ensure actions header is visible
+    statusOrRemarkHeader.style.display = 'block';
+    actionsHeader.style.display = 'block';
 
     if (selectedStatusFrontend === 'ON-GOING') {
         statusOrRemarkHeader.textContent = 'REMARK';
     } else if (selectedStatusFrontend === 'COMPLETED' || selectedStatusFrontend === 'ALL') {
-        // For COMPLETED and ALL, the header should be 'STATUS' (default) and hide 'ACTIONS'
-        actionsHeader.style.display = 'none'; // Hide the ACTIONS header
+        actionsHeader.style.display = 'none';
     }
-    // If it's 'PENDING', it keeps default 'STATUS' and 'ACTIONS' visible
 }
 
 function attachEventListenersToRows() {
@@ -360,6 +387,7 @@ function attachEventListenersToRows() {
                 const data = await response.json();
                 if (data.success) {
                     showMessageBox("Remark added and status updated to ON-GOING!");
+                    // Re-fetch and re-render everything to update UI correctly
                     await fetchClearanceRequests(currentUserOfficeCode);
                 } else {
                     console.error("Failed to add remark:", data.message);
@@ -388,10 +416,8 @@ navItems.forEach(tab => {
     tab.addEventListener('click', () => {
         navItems.forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
-
-        const selectedStatusFrontend = tab.dataset.statusFrontend.toUpperCase();
-        updateTableHeaders(selectedStatusFrontend); // Update headers BEFORE rendering rows
-        renderRequests(selectedStatusFrontend);
+        // Call filterAndRenderRequests instead of direct renderRequests
+        filterAndRenderRequests();
     });
 });
 
@@ -414,6 +440,7 @@ confirmClearBtn.addEventListener('click', async function() {
             const data = await response.json();
             if (data.success) {
                 showMessageBox("Request cleared successfully!");
+                // Re-fetch and re-render everything to update UI correctly
                 await fetchClearanceRequests(currentUserOfficeCode);
             } else {
                 console.error("Failed to clear request:", data.message);
@@ -435,6 +462,10 @@ cancelClearBtn.addEventListener('click', function() {
     document.body.classList.remove('modal-open');
     currentRowToClear = null;
 });
+
+// --- NEW: Search Input Event Listener ---
+searchInput.addEventListener('keyup', filterAndRenderRequests);
+
 
 // --- Initial Load ---
 document.addEventListener('DOMContentLoaded', () => {

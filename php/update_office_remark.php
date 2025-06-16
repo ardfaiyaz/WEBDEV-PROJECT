@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Update office_remarks and status_code to 'ON'
     // CRITICAL CHANGE: Add office_code to the WHERE clause to restrict updates to the current office's requests.
     $sql = "UPDATE clearance_status
-            SET office_remarks = :remark, status_code = 'ON'
+            SET office_remarks = :remark, status_code = 'ISSUE'
             WHERE req_id = :request_id AND office_code = :office_code";
 
     try {
