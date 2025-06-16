@@ -16,7 +16,7 @@
 
 body {
   font-family: 'Montserrat', sans-serif;
-  background-color: #f5f5f5;
+  background-color: #f5f5f5; /* This is the general background color */
   color: #2c2c2c;
   display: flex;
   flex-direction: column;
@@ -29,23 +29,22 @@ body {
   color: white;
   display: flex;
   justify-content: space-between;
-  padding: 16px 50px;
+  padding: 16px 80px;
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
-/* Updated logo-section for hamburger menu integration */
 .topbar .logo-section {
   display: flex;
   align-items: center;
-  gap: 15px; /* Space between hamburger, logo, and text */
+  gap: 15px;
 }
 
 .logo-link {
   text-decoration: none;
   color: inherit;
-  display: flex; /* Ensure logo and text align well */
+  display: flex;
   align-items: center;
   gap: 15px;
 }
@@ -78,52 +77,413 @@ body {
 }
 
 
-/* Hero Banner Section - This is where the image and text are combined */
+/* Hero Banner Section */
 .hero-banner {
-  /* IMPORTANT: Ensure this URL points to your actual image file. */
-  /* This uses the image you uploaded: image_6df717.jpg */
   background-image: url('../images/about-us-bg.png');
-  background-size: cover; /* Makes the image cover the entire area of the div */
-  background-position: center center; /* Centers the image within the div */
-  background-repeat: no-repeat; /* Prevents the image from repeating */
-  height: 75vh; /* Adjust height as needed to fit content and visuals */
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 75vh;
   display: flex;
-  align-items: center; /* Vertically centers the content (text) inside the banner */
-  position: relative; /* Needed if you want to absolutely position elements later */
-  color: white; /* Sets default text color to white for contrast against the image */
-  padding-left: 90px; /* Aligns text with header padding */
+  align-items: center;
+  position: relative;
+  color: white;
+  padding-left: 90px;
 }
 
 .hero-content {
-  max-width: 40vw; /* Limits the width of the text for readability */
- /* Pushes content up from the bottom to make space for the yellow bar */
-  /* Adding a subtle text shadow for better readability over complex backgrounds */
+  max-width: 50vw;
 }
 
 .hero-banner h1 {
-    font-weight: bold;
-  font-size: 3.5em; /* Large font size as in the image */
+  font-weight: bold;
+  font-size: 3.5em;
   margin-bottom: 15px;
   line-height: 1.1;
   text-transform: uppercase;
-  font-family: 'Montserrat', sans-serif; /* Use AkwePro for the large heading if desired */
-  color: white; /* Explicitly set to white to ensure visibility */
+  font-family: 'Montserrat', sans-serif;
+  color: white;
+  animation: slideInLeft 1s ease-out forwards;
 }
 
 .hero-banner p {
-  font-family: 'Montserrat', sans-serif; /* Use Montserrat for the paragraph text */
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.1em;
   line-height: 1.6;
-  max-width: 30vw;
-  color: white; /* Explicitly set to white to ensure visibility */
+  max-width: 40vw;
+  color: white;
+  animation: slideInLeft 1s ease-out 0.3s forwards;
 }
 
-/* About System Bar at the bottom */
+/* About System Bar */
 .about-system-bar {
-  background-color: #ffd700; /* Yellow color from the image */
-  padding: 20px 50px;
-  color: #2c2c2c; /* Dark text color for contrast */
+  color: black;
+  font-family: 'Montserrat', sans-serif;
+  width: 100%;
+  min-height: 40vh; /* Ensures the section has a minimum height */
+  display: flex; /* Use flexbox to arrange left and right sides */
+  align-items: stretch; /* Make children stretch to fill container height */
+}
+
+.left-side {
+  background-color: #ffcf00; /* Yellow background for the left side */
+  width: 70%; /* Occupy 70% of the wrapper's width */
+  padding: 60px 40px 60px 120px; /* Top, Right spacing, Bottom, Left padding for content */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Vertically center content */
+  animation: fadeInScale 1s ease-out forwards;
+}
+
+.left-side h1 {
+  font-size: 4em;
   font-weight: bold;
-  font-size: 1.2em;
-  text-transform: uppercase;
+  margin-bottom: 30px;
+  animation: slideInUp 0.8s ease-out forwards;
+  opacity: 0;
+  animation-delay: 0.2s;
+}
+
+.left-side p {
+  margin-top: 15px;
+  font-size: 1.3em;
+  line-height: 1.6;
+  animation: slideInUp 0.8s ease-out forwards;
+  opacity: 0;
+  animation-delay: 0.4s;
+}
+
+.right-side {
+  width: 30%; /* Occupy 30% of the wrapper's width */
+  background-color: transparent; /* No specific background, will show body background */
+  display: flex;
+  justify-content: center; /* Horizontally center image, though it will cover fully */
+  align-items: center; /* Vertically center image, though it will cover fully */
+  padding: 0; /* Removed padding so image can truly cover the whole field */
+  overflow: hidden; /* Ensure the image doesn't overflow if it scales larger than needed */
+}
+
+.right-side img {
+  width: 100%; /* Make image fill the entire width of its parent */
+  height: 100%; /* Make image fill the entire height of its parent */
+  object-fit: cover; /* Cover the area, cropping if necessary */
+  display: block; /* Remove any extra space below the image */
+  animation: slideInRight 1.2s ease-out forwards;
+}
+
+/* Team Info Section Styles */
+.team-info-section {
+    background-color: #fff;
+    padding: 80px 90px; /* Consistent padding around text and overall section */
+    text-align: center;
+    color: #2c2c2c;
+}
+
+.team-info-section .section-subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #888;
+    margin-bottom: 10px;
+    /* Animations remain purely CSS for these text elements */
+    animation: fadeInScale 1s ease-out forwards;
+}
+
+.team-info-section .section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3.5em;
+    font-weight: bold;
+    color: #2c2273;
+    margin-bottom: 30px;
+    animation: fadeInScale 1s ease-out 0.2s forwards;
+}
+
+.team-info-section .section-description {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.2em;
+    line-height: 1.6;
+    max-width: 900px;
+    margin: 0 auto 60px auto;
+    color: #555;
+    animation: fadeInScale 1s ease-out 0.4s forwards;
+}
+
+/* Grid layout for team members */
+.team-members-grid {
+    display: grid;
+    gap: 50px; /* Space between cards */
+    max-width: 90vw; /* Overall grid is 80% of the viewport width */
+    margin: 0 auto; /* Center the grid */
+    padding-bottom: 50px; /* Padding at the bottom of the section */
+    place-items: center; /* Centers content both horizontally and vertically within grid cells */
+
+    /* Default for smaller screens: allows wrapping, minimum 300px wide cards */
+    grid-template-columns: repeat(auto-fit, minmax(300px, auto)); /* height auto for content */
+}
+
+/* Specific layout for larger screens: force 5 columns */
+@media (min-width: 1200px) { /* Adjust this breakpoint if 5 cards don't fit well */
+    .team-members-grid {
+        grid-template-columns: repeat(5, 1fr); /* Explicitly 5 columns for a single line */
+        justify-content: center; /* Center the whole row if space allows */
+    }
+    /* Remove margin-bottom if all are in one row */
+    .team-members-grid .team-member-card {
+        margin-bottom: 0;
+    }
+}
+
+
+/* Team member card styles */
+.team-member-card {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 0; /* NO PADDING HERE - content inside will manage its own padding */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%; /* Ensure it fills its grid column */
+    overflow: hidden; /* To contain the image and info card, and respect border-radius */
+
+    /* Initial state for JS animation */
+    opacity: 0;
+    transform: translateY(50px);
+}
+
+/* Class added by JavaScript to trigger the animation */
+.team-member-card.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Smooth transition for animation */
+}
+
+.team-member-card:hover {
+    cursor: pointer;
+    transform: translateY(-10px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.team-member-card img {
+    width: 100%; /* Image takes 100% width of its card */
+    height: 300px; /* Added a fixed height to ensure consistent image display */
+    object-fit: cover; /* Ensures the image covers the area, cropping if needed */
+    border-radius: 0;
+    margin-bottom: 0; /* IMPORTANT: Remove margin below the image */
+    padding: 0; /* IMPORTANT: Zero padding for the image itself */
+    border: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25); /* Shadow for the image */
+    display: block; /* Prevent extra space below image */
+}
+
+.member-info {
+    background-color: #fff;
+    padding: 20px; /* Padding for the content inside this info box */
+    text-align: center;
+    border-top: 1px solid #eee; /* Subtle separator */
+    border-radius: 0 0 8px 8px; /* Rounded bottom corners */
+    width: 100%; /* Ensure it takes full width of the parent card */
+}
+
+.member-info h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #2c2273;
+}
+
+.member-info p {
+    margin-top: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1em; 
+    color: #666;
+    margin-bottom: 0;
+}
+
+/* Footer Styles */
+.footer {
+    background-color: #2c2273; /* Dark background similar to topbar */
+    color: white;
+    padding: 40px 90px 0; /* Top padding, left/right padding, no bottom padding for now */
+    font-family: 'Montserrat', sans-serif;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Align items to the top of the flex container */
+    flex-wrap: wrap; /* Allow content to wrap on smaller screens */
+    padding-bottom: 40px; /* Padding above the copyright section */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator above copyright */
+}
+
+.footer-logo-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px; /* Space below logo on smaller screens */
+    flex-basis: 30%; /* Take up roughly 30% of space */
+    min-width: 250px; /* Ensure logo section doesn't get too small */
+}
+
+.footer-logo-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.footer-logo-section img {
+    width: 60px; /* Slightly larger logo for footer */
+}
+
+.footer-school-name {
+    font-family: 'AkwePro', sans-serif;
+    font-size: 24px; /* Slightly larger text for footer logo */
+    line-height: 1.2;
+}
+
+.footer-links, .footer-contact {
+    flex-basis: 30%; /* Take up roughly 30% of space each */
+    min-width: 280px; /* Ensure these sections don't get too small */
+    margin-bottom: 20px; /* Space below sections on smaller screens */
+}
+
+.footer-links h4, .footer-contact h4 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #ffcf00; /* Yellow heading */
+}
+
+.footer-links ul {
+    list-style: none;
+}
+
+.footer-links ul li {
+    margin-bottom: 10px;
+}
+
+.footer-links ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1em;
+    transition: color 0.3s ease;
+}
+
+.footer-links ul li a:hover {
+    color: #ffcf00; /* Yellow on hover */
+}
+
+.footer-contact p {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.footer-contact p i {
+    font-size: 1.4em;
+    color: #ffcf00; /* Yellow icon */
+    margin-top: 2px; /* Align icon better with text */
+}
+
+.footer-bottom {
+    text-align: center;
+    padding: 20px 0;
+    font-size: 0.9em;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Media Queries for Footer Responsiveness */
+@media (max-width: 1024px) {
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-logo-section,
+    .footer-links,
+    .footer-contact {
+        flex-basis: 100%; /* Stack elements vertically */
+        margin-bottom: 40px; /* More space between stacked sections */
+    }
+
+    .footer-logo-section {
+        margin-bottom: 30px;
+    }
+
+    .footer-contact p {
+        justify-content: center; /* Center icons and text */
+    }
+}
+
+@media (max-width: 768px) {
+    .footer {
+        padding: 30px 40px 0;
+    }
+}
+
+
+/* --- ANIMATIONS KEYFRAMES --- */
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes expandWidth {
+    from {
+        width: 0;
+        opacity: 0;
+    }
+    to {
+        width: 100%;
+        opacity: 1;
+    }
 }
