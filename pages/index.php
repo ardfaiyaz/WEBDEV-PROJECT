@@ -38,8 +38,9 @@ $displayFirstName = $_SESSION['firstname'] ?? 'User'; // Default to 'User' if no
   <div class="content-wrapper">
     <aside class="sidebar" id="sidebar">
       <ul class="icon-menu">
-        <li><a href="index.php"><i class='bx bxs-home'></i><span class="label">Home</span></a></li> <li><a href="user-profile.html"><i class='bx bxs-user'></i><span class="label">Profile</span></a></li>
-        <li><a href="track-clearance.html"><i class='bx bxs-file'></i><span class="label">My Clearances</span></a></li>
+        <li><a href="index.php"><i class='bx bxs-home'></i><span class="label">Home</span></a></li> 
+        <li><a href="user-profile.php"><i class='bx bxs-user'></i><span class="label">Profile</span></a></li>
+        <li><a href="track-clearance.php"><i class='bx bxs-file'></i><span class="label">My Clearances</span></a></li>
         <li><a href="../php/logout.php"><i class='bx bxs-log-out'></i><span class="label">Logout</span></a></li> </ul>
     </aside>
 
