@@ -1,90 +1,112 @@
-// Sidebar toggle logic
-const sidebar = document.getElementById('sidebar');
-const mainContent = document.getElementById('mainContent');
-sidebar.addEventListener('click', () => {
-    sidebar.classList.toggle('active');
-    mainContent.classList.toggle('shifted');
-});
-
-// --- JavaScript for Delete Button and Modal ---
-const deleteProfileBtn = document.getElementById('deleteProfileBtn');
-const deleteConfirmationModal = document.getElementById('deleteConfirmationModal');
-const closeButton = document.querySelector('.close-button');
-const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
-
-// Function to show modal with animation
-function showModal() {
-    deleteConfirmationModal.style.display = 'flex'; // Make it flex so justify/align work
-    // Force reflow to ensure transition plays from the start
-    // This is a common trick to re-trigger CSS transitions
-    deleteConfirmationModal.offsetWidth;
-    deleteConfirmationModal.classList.add('fade-in');
-}
-
-// Function to hide modal with animation
-function hideModal() {
-    deleteConfirmationModal.classList.remove('fade-in');
-    deleteConfirmationModal.classList.add('fade-out');
-    setTimeout(() => {
-        deleteConfirmationModal.style.display = 'none'; // Hide it fully after animation
-        deleteConfirmationModal.classList.remove('fade-out');
-    }, 300); // Match CSS transition duration
-}
-
-// Show the modal when delete button is clicked
-deleteProfileBtn.addEventListener('click', showModal);
-
-// Hide the modal when close button or cancel button is clicked
-closeButton.addEventListener('click', hideModal);
-cancelDeleteBtn.addEventListener('click', hideModal);
-
-// Hide modal if clicked outside of modal content
-window.addEventListener('click', (event) => {
-    if (event.target === deleteConfirmationModal) { // Use strict equality
-        hideModal();
+document.addEventListener('DOMContentLoaded', function() {
+    // Sidebar toggle logic (ensure these elements exist in user-profile.php)
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+    // Check if elements exist before adding event listener
+    if (sidebar && mainContent) {
+        // Assuming there's a button or another mechanism to toggle this.
+        // If sidebar itself is clicked to toggle, this works:
+        sidebar.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            mainContent.classList.toggle('shifted');
+        });
+        // If you have a specific button for sidebar toggle, bind to that instead.
     }
-});
 
-// Handle the actual deletion (THIS IS WHERE YOU NEED PHP!)
+
+    // --- JavaScript for Delete Button and Modal ---
+    const deleteProfileBtn = document.getElementById('deleteProfileBtn');
+    const deleteConfirmationModal = document.getElementById('deleteConfirmationModal');
+    const closeButton = document.querySelector('.close-button'); // Corrected selector for inner close button
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+
+    // Ensure all necessary elements for the modal exist before trying to bind events
+    if (!deleteProfileBtn || !deleteConfirmationModal || !closeButton || !confirmDeleteBtn || !cancelDeleteBtn) {
+        console.error("One or more modal elements not found. Deletion functionality will not work.");
+        return; // Exit if essential elements are missing
+    }
+
+
+    // Function to show modal with animation
+    function showModal() {
+        deleteConfirmationModal.style.display = 'flex'; // Make it flex so justify/align work
+        // Force reflow to ensure transition plays from the start
+        deleteConfirmationModal.offsetWidth; // Trigger reflow
+        deleteConfirmationModal.classList.add('fade-in');
+    }
+
+    // Function to hide modal with animation
+    function hideModal() {
+        deleteConfirmationModal.classList.remove('fade-in');
+        deleteConfirmationModal.classList.add('fade-out');
+        setTimeout(() => {
+            deleteConfirmationModal.style.display = 'none'; // Hide it fully after animation
+            deleteConfirmationModal.classList.remove('fade-out'); // Clean up class
+        }, 300); // Match CSS transition duration
+    }
+
+    // Show the modal when delete button is clicked
+    deleteProfileBtn.addEventListener('click', showModal);
+
+    // Hide the modal when close button or cancel button is clicked
+    closeButton.addEventListener('click', hideModal);
+    cancelDeleteBtn.addEventListener('click', hideModal);
+
+    // Hide modal if clicked outside of modal content
+    deleteConfirmationModal.addEventListener('click', (event) => { // Bind directly to the modal overlay
+        if (event.target === deleteConfirmationModal) { // Use strict equality to check if click was on the overlay itself
+            hideModal();
+        }
+    });
+
+    // Handle the actual deletion via AJAX
+    // Handle the actual deletion via AJAX
 confirmDeleteBtn.addEventListener('click', () => {
-    // IMPORTANT:
-    // This is a client-side only redirection for demonstration.
-    // In a real application, you would send an AJAX request to a PHP script
-    // that securely deletes the user's account from the database.
-    //
-    // Example (pseudocode - replace with your actual fetch call):
-    /*
+    // Send an AJAX request to the PHP script that securely deletes the user's account from the database.
     fetch('../php/delete_account.php', { // Path to your PHP script
-        method: 'POST', // Or 'DELETE' depending on your API design
+        method: 'POST', // Use POST method for sensitive actions
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/x-www-form-urlencoded' // Or 'application/json' if sending JSON in body
         },
-        // body: JSON.stringify({ userId: <?php // echo $loggedInUserId; ?> }) // Pass user ID securely if not handled by session
+        body: 'confirm_delete=true' // A simple way to tell PHP this is a confirmed delete request
     })
-    .then(response => response.json())
+    .then(response => {
+        // Check if the network response was successful (e.g., status 200-299)
+        if (!response.ok) {
+            // If response is not OK, throw an error to be caught by .catch()
+            // This is crucial for catching 404s, 500s from delete_account.php
+            return response.text().then(text => { throw new Error('Network response was not ok: ' + response.status + ' ' + text); });
+        }
+        return response.json(); // Parse the JSON response from PHP
+    })
     .then(data => {
         if (data.success) {
-            alert("Account deleted successfully!");
-            window.location.href = 'logout.php'; // Redirect to logout or login page
+            // Account deleted successfully
+            alert(data.message || "Account deleted successfully!");
+            // Redirect to the login page on success
+            window.location.href = '../pages/login.php'; // Assuming login.php is in the same 'pages' directory
         } else {
-            alert("Error deleting account: " + (data.message || "Unknown error."));
+            // Error deleting account (message from PHP)
+            alert("Error deleting account: " + (data.message || "An unknown error occurred."));
+            hideModal(); // Hide the modal, but keep the user on the profile page
         }
     })
     .catch(error => {
-        console.error('Error during deletion:', error);
-        alert("An error occurred during deletion. Please try again.");
+        // Catch network errors (like 404 for delete_account.php) or errors thrown in the .then() block
+        console.error('Error during account deletion:', error);
+        alert("An error occurred during deletion. Please try again. Check console for details.");
+        hideModal();
     });
-    */
 
-    // --- TEMPORARY DEMO BEHAVIOR ---
-    alert("Account deletion initiated! (This is a client-side demo)");
-    // After successful deletion (simulated), redirect the user
-    window.location.href = 'logout.php'; // Or to login.php
+    // --- REMOVE OR COMMENT OUT THIS TEMPORARY DEMO BEHAVIOR ---
+    // alert("Account deletion initiated! (This is a client-side demo)");
+    // window.location.href = 'logout.php'; // Or to login.php
+    // --- END TEMPORARY DEMO BEHAVIOR ---
 });
 
-// --- New JavaScript for Input Animations ---
-document.addEventListener('DOMContentLoaded', () => {
+    // --- New JavaScript for Input Animations ---
+    // Ensure this runs after DOM is loaded. It's already inside DOMContentLoaded.
     const formInputs = document.querySelectorAll('.form-row input, .form-row select');
 
     formInputs.forEach(input => {

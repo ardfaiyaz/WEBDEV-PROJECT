@@ -1,69 +1,69 @@
 <?php
-// get_clearance_requests.php
 
-session_start(); // Ensure session is started for session variables if you decide to use them here later
+require_once 'database.php';
 
-// --- TEMPORARY DEBUGGING LINES START ---
-// KEEP these for now until everything is working, then REMOVE them in production!
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-// --- TEMPORARY DEBUGGING LINES END ---
+header('Content-Type: application/json');
 
-require_once 'api_config.php';
-require_once 'database.php'; // This file provides the $pdo object
+session_start();
 
-// Check if office_code is provided in the GET request
-if (!isset($_GET['office_code'])) {
-    echo json_encode(["success" => false, "message" => "Office code not provided."]);
-    // With PDO, you don't explicitly close the connection like $conn->close().
-    // The connection will close automatically when the script ends.
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['office_code'])) {
+    echo json_encode(['error' => 'Unauthorized access or office not assigned.']);
     exit();
 }
 
-// Get the officeCode from the GET parameters.
-// With PDO prepared statements, you do NOT need real_escape_string().
-$officeCode = $_GET['office_code'];
+$office_code = $_SESSION['office_code'];
+
+// --- TEMPORARY DEBUGGING LINES START ---
+error_log("Debugging get_clearance_requests.php (PDO version):");
+error_log("Session office_code: " . $office_code);
+// --- TEMPORARY DEBUGGING LINES END ---
 
 $sql = "SELECT
-            cs.req_id,
-            si.student_no AS student_id,
-            CONCAT(si.firstname, ' ', si.middlename, ' ', si.lastname) AS student_name,
-            si.course AS program,
+            cr.req_id,
+            cr.req_date,
+            cr.claim_stub,
+            u.firstname,
+            u.lastname,
+            si.student_no,
+            si.program,
             cs.status_code,
-            cr.req_date AS date_submitted,
             cs.office_remarks
         FROM
-            clearance_status cs
+            clearance_request cr
         JOIN
-            clearance_request cr ON cs.req_id = cr.req_id
-        JOIN
-            student_info si ON cs.user_id = si.user_id
-        WHERE
-            cs.office_code = :office_code"; // Use a named placeholder for PDO
-
-$requests = []; // Initialize an empty array to hold the fetched requests
+            users u ON cr.user_id = u.user_id
+        LEFT JOIN
+            student_info si ON u.user_id = si.user_id
+        LEFT JOIN
+            clearance_status cs ON cr.req_id = cs.req_id AND cs.office_code = :office_code -- Use named placeholder
+        ORDER BY
+            cr.req_date DESC";
 
 try {
-    // Prepare the SQL statement using the $pdo object
+    // Use $pdo for prepare
     $stmt = $pdo->prepare($sql);
-
-    // Execute the prepared statement, binding the :office_code placeholder to the actual $officeCode value.
-    $stmt->execute([':office_code' => $officeCode]);
-
-    // Fetch all results as associative arrays.
-    // fetchAll(PDO::FETCH_ASSOC) is typically more efficient than a while loop for multiple rows.
+    
+    // Bind the parameter using PDO's bindParam
+    $stmt->bindParam(':office_code', $office_code, PDO::PARAM_STR);
+    
+    $stmt->execute();
+    
+    // Fetch all results as an associative array
     $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Send a successful JSON response with the fetched requests
-    echo json_encode(["success" => true, "requests" => $requests]);
+    // --- TEMPORARY DEBUGGING LINES START ---
+    error_log("SQL executed. Number of rows found by PHP: " . count($requests));
+    // --- TEMPORARY DEBUGGING LINES END ---
+
+    echo json_encode($requests);
+
+    // With PDO, you don't explicitly close statements or connections in this manner.
+    // They are typically closed automatically when the script finishes or objects go out of scope.
 
 } catch (PDOException $e) {
-    // Catch any PDO-specific exceptions (database errors)
+    // Catch PDO-specific exceptions for database errors
     error_log("Database error in get_clearance_requests.php: " . $e->getMessage());
-    echo json_encode(["success" => false, "message" => "Database query error: " . $e->getMessage()]); // Include message for debugging
+    echo json_encode(['error' => 'Database error occurred.']);
+    exit();
 }
-
-// Remove $conn->close(); as it's for MySQLi and not needed for PDO.
-// $conn->close(); // This line is removed
 ?>

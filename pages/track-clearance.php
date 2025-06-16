@@ -49,7 +49,7 @@ try {
 
     if ($latestReqId) {
         $stmtStatuses = $pdo->prepare("
-            SELECT cs.office_code, o.description AS office_description, cs.status_code, rs.description AS status_description
+            SELECT cs.office_code, o.description AS office_description, cs.status_code, rs.description AS status_description, cs.office_remarks
             FROM clearance_status cs
             JOIN office o ON cs.office_code = o.office_code
             JOIN request_status rs ON cs.status_code = rs.status_code
@@ -64,7 +64,8 @@ try {
             $clearanceStatuses[$row['office_code']] = [
                 'status_code' => $row['status_code'],
                 'status_description' => $row['status_description'],
-                'office_description' => $row['office_description']
+                'office_description' => $row['office_description'],
+                'office_remarks' => htmlspecialchars($row['office_remarks'] ?? 'No remarks provided.'),
             ];
         }
     }
@@ -103,8 +104,27 @@ function getStatusClass($statusCode) {
     <link rel="stylesheet" href="../assets/css/track-clearance.css" />
     <link rel="icon" type="image/png" href="../assets/images/school-logo.png" />
     <title>Track My Clearance</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/track-clearance.css" />
+    <link rel="icon" type="image/png" href="../assets/images/school-logo.png" />
+    <title>Track My Clearance</title>
 </head>
 <body>
+    <header class="topbar">
+        <a href="index.php" class="logo-link">
+            <div class="logo-section">
+                <img src="../assets/images/school-logo.png" alt="Logo">
+                <span class="school-name">NATIONAL<br/>UNIVERSITY</span>
+            </div>
+        </a>
+        <div class="user-section">
+            <i class='bx bxs-bell'></i>
+            <span class="username">Hi, <?php echo $displayFirstName; ?></span>
+            <i class='bx bxs-user-circle'></i>
+        </div>
+    </header>
     <header class="topbar">
         <a href="index.php" class="logo-link">
             <div class="logo-section">
@@ -122,7 +142,19 @@ function getStatusClass($statusCode) {
     <div class="yellow-wrap">
         <div class="yellow">Track your Clearance</div>
     </div>
+    <div class="yellow-wrap">
+        <div class="yellow">Track your Clearance</div>
+    </div>
 
+    <div class="content-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <ul class="icon-menu">
+                <li><a href="index.php"><i class='bx bxs-home'></i><span class="label">Home</span></a></li>
+                <li><a href="user-profile.php"><i class='bx bxs-user'></i><span class="label">Profile</span></a></li>
+                <li><a href="track-clearance.php"><i class='bx bxs-file'></i><span class="label">My Clearances</span></a></li>
+                <li><a href="../php/logout.php"><i class='bx bxs-log-out'></i><span class="label">Logout</span></a></li>
+            </ul>
+        </aside>
     <div class="content-wrapper">
         <aside class="sidebar" id="sidebar">
             <ul class="icon-menu">
@@ -142,6 +174,11 @@ function getStatusClass($statusCode) {
                     echo '</div>';
                 }
 
+                if (empty($latestReqId)) {
+                    echo '<div class="no-request-message">You have no pending clearance requests. Apply for a new clearance to start tracking!</div>';
+                }
+                ?>
+                <h2 class="section-header">SECURE CLEARANCE / SIGNATURES FROM THE OFFICERS INDICATED</h2>
                 if (empty($latestReqId)) {
                     echo '<div class="no-request-message">You have no pending clearance requests. Apply for a new clearance to start tracking!</div>';
                 }
@@ -174,7 +211,18 @@ function getStatusClass($statusCode) {
         </main>
     </div>
 
-<script src="../assets/js/track-clearance.js"></script>
+    <div id="statusModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h3 id="modalOfficeName"></h3>
+            <p><strong>Status:</strong> <span id="modalStatus"></span></p>
+            <p><strong>Remarks:</strong> <span id="modalRemarksDisplay"></span></p>
+            <p><strong>Action:</strong> <span id="modalActionDisplay"></span></p>
+        </div>
+    </div>
+
+
+<script src="../js/track-clearance.js"></script>
 
 </body>
 </html>
