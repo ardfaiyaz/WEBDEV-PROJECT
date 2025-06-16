@@ -1,14 +1,12 @@
 <?php
-session_start(); // IMPORTANT: Start the session at the very beginning of the file
-
-// Include the database connection file
-require_once '../php/database.php'; // Adjust path if 'database.php' is in a different directory
+session_start();
+require_once '../php/database.php';
 
 // 2. Handle Form Submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = trim($_POST['email']); // Trim whitespace
+    $email = trim($_POST['email']);
     $password = $_POST['password'];
-    $accountType = $_POST['accountType']; // 'student' or 'admin' from your HTML form
+    $accountType = $_POST['accountType'];
 
     // Map the HTML form's accountType to the database's role_code
     $roleCode = '';
@@ -26,8 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     try {
-        // REVISED PART 1: Add 'firstname' to your SELECT query
-        $stmt = $pdo->prepare("SELECT user_id, user_password, role_code, firstname FROM users WHERE email = :email AND role_code = :role_code");
+        // --- CRITICAL CHANGE HERE: Add 'office_code' to your SELECT query ---
+        $stmt = $pdo->prepare("SELECT user_id, user_password, role_code, firstname, office_code FROM users WHERE email = :email AND role_code = :role_code");
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->bindParam(':role_code', $roleCode, PDO::PARAM_STR);
         $stmt->execute();
@@ -40,21 +38,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['user_id'] = $user['user_id'];
                 $_SESSION['user_email'] = $email;
                 $_SESSION['account_type'] = $user['role_code']; // Store 'STUD' or 'ADMIN'
-                
-                // REVISED PART 2: Store the fetched firstname in the session
-                $_SESSION['firstname'] = $user['firstname']; 
+                $_SESSION['firstname'] = $user['firstname'];
+
+                // --- CRITICAL ADDITION HERE: Store office_code in session for SUB_ADMINs AND ADMINs ---
+                // Only set office_code if the role is ADMIN or SUB_ADMIN
+                if ($user['role_code'] === 'ADMIN' || $user['role_code'] === 'SUB_ADMIN') {
+                    $_SESSION['office_code'] = $user['office_code'];
+                } else {
+                    // For students or other roles that don't need an office_code,
+                    // ensure it's not set or explicitly unset if it was set previously.
+                    unset($_SESSION['office_code']);
+                }
+                // --- END CRITICAL ADDITION ---
 
                 // IMPORTANT SECURITY STEP: Regenerate session ID to prevent session fixation
-                session_regenerate_id(true); 
-                
+                session_regenerate_id(true);
+
 
                 // Redirect based on role code
                 if ($user['role_code'] === 'STUD') {
                     header("Location: index.php"); // Redirect students to index.php
                 } elseif ($user['role_code'] === 'ADMIN') {
-                    header("Location: admin-index.php"); // Keep admin redirect as is
+                    header("Location: admin-index.php"); // Redirect admins
                 } elseif ($user['role_code'] === 'SUB_ADMIN') {
-                    header("Location: clearance-request.html"); // Keep sub-admin redirect as is
+                    header("Location: clearance-request.html"); // Redirect sub-admins
                 }
 
                 exit(); // Always exit after a header redirect
