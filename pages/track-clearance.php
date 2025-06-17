@@ -1,10 +1,6 @@
 <?php
-<<<<<<< HEAD
-session_start(); // Start the session at the very beginning <pushing again>
-=======
 // track clearance page
 session_start();
->>>>>>> f8994bb331c118b28cf78e9f978f53d3b6488a2b
 
 require_once __DIR__ . '/../php/database.php';
 
@@ -108,12 +104,6 @@ function getStatusClass($statusCode) {
     <link rel="stylesheet" href="../assets/css/track-clearance.css" />
     <link rel="icon" type="image/png" href="../assets/images/school-logo.png" />
     <title>Track My Clearance</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../assets/css/track-clearance.css" />
-    <link rel="icon" type="image/png" href="../assets/images/school-logo.png" />
-    <title>Track My Clearance</title>
 </head>
 <body>
     <header class="topbar">
@@ -129,23 +119,7 @@ function getStatusClass($statusCode) {
             <i class='bx bxs-user-circle'></i>
         </div>
     </header>
-    <header class="topbar">
-        <a href="index.php" class="logo-link">
-            <div class="logo-section">
-                <img src="../assets/images/school-logo.png" alt="Logo">
-                <span class="school-name">NATIONAL<br/>UNIVERSITY</span>
-            </div>
-        </a>
-        <div class="user-section">
-            <i class='bx bxs-bell'></i>
-            <span class="username">Hi, <?php echo $displayFirstName; ?></span>
-            <i class='bx bxs-user-circle'></i>
-        </div>
-    </header>
 
-    <div class="yellow-wrap">
-        <div class="yellow">Track your Clearance</div>
-    </div>
     <div class="yellow-wrap">
         <div class="yellow">Track your Clearance</div>
     </div>
@@ -159,15 +133,7 @@ function getStatusClass($statusCode) {
                 <li><a href="../php/logout.php"><i class='bx bxs-log-out'></i><span class="label">Logout</span></a></li>
             </ul>
         </aside>
-    <div class="content-wrapper">
-        <aside class="sidebar" id="sidebar">
-            <ul class="icon-menu">
-                <li><a href="index.php"><i class='bx bxs-home'></i><span class="label">Home</span></a></li>
-                <li><a href="user-profile.php"><i class='bx bxs-user'></i><span class="label">Profile</span></a></li>
-                <li><a href="track-clearance.php"><i class='bx bxs-file'></i><span class="label">My Clearances</span></a></li>
-                <li><a href="../php/logout.php"><i class='bx bxs-log-out'></i><span class="label">Logout</span></a></li>
-            </ul>
-        </aside>
+
 
         <main class="main-content" id="mainContent">
             <section class="success-alert">
@@ -183,12 +149,7 @@ function getStatusClass($statusCode) {
                 }
                 ?>
                 <h2 class="section-header">SECURE CLEARANCE / SIGNATURES FROM THE OFFICERS INDICATED</h2>
-                if (empty($latestReqId)) {
-                    echo '<div class="no-request-message">You have no pending clearance requests. Apply for a new clearance to start tracking!</div>';
-                }
-                ?>
-                <h2 class="section-header">SECURE CLEARANCE / SIGNATURES FROM THE OFFICERS INDICATED</h2>
-
+               
                 <div class="cards">
                         <?php foreach ($officeDisplayMap as $officeCode => $officeInfo):
                             $officeName = $officeInfo[0];

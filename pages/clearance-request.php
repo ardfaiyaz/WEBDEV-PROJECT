@@ -1,22 +1,3 @@
-<?php
-session_start();
-// Include database connection (adjust path as needed, assuming database.php is in ../php)
-require_once __DIR__ . '/../php/database.php';
-
-// Check if the user is logged in and is an admin/office user
-// You might want more specific role checks here, e.g., $_SESSION['account_type'] == 'ADMIN' || $_SESSION['account_type'] == 'SUB_ADMIN'
-if (!isset($_SESSION['user_id']) || !isset($_SESSION['account_type'])) {
-    // Redirect to login page if not logged in
-    header('Location: login.php');
-    exit();
-}
-
-// Fetch current user's name and office code from session if available,
-// otherwise, the JS will fetch it via AJAX. This provides initial load data.
-$currentUsername = htmlspecialchars($_SESSION['firstname'] ?? '');
-$currentUserOfficeCode = htmlspecialchars($_SESSION['office_code'] ?? '');
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,17 +22,18 @@ $currentUserOfficeCode = htmlspecialchars($_SESSION['office_code'] ?? '');
                 <li class="menu-item"><a href="UserPOV.html"><i class='bx bxs-home icon-sidebar'></i> Home</a></li>
                 <li class="menu-item"><a href="#"><i class='bx bxs-user icon-sidebar'></i> Profile</a></li>
                 <li class="menu-item"><a href="About-us.html"><i class='bx bxs-file icon-sidebar'></i> About Us</a></li>
-                <li class="menu-item"><a href="../php/logout.php"><i class='bx bxs-log-out icon-sidebar'></i> Logout</a></li> </ul>
+                <li class="menu-item"><a href="#"><i class='bx bxs-log-out icon-sidebar'></i> Logout</a></li>
+            </ul>
         </nav>
 
         <div class="header-right-section">
             <div class="search-bar">
-                <input type="text" placeholder="Search...">
+                <input type="text" id="searchInput" placeholder="Search by Student ID or Name...">
                 <i class='bx bx-search icon-search'></i>
             </div>
             <div class="user-section">
                 <i class='bx bxs-bell'></i>
-                <span class="username">Hi, <span id="current-username"><?php echo $currentUsername; ?></span></span>
+                <span class="username">Hi, <span id="current-username">user_name</span></span>
                 <i class='bx bxs-user-circle'></i>
             </div>
         </div>
@@ -60,7 +42,7 @@ $currentUserOfficeCode = htmlspecialchars($_SESSION['office_code'] ?? '');
     <div class="main-container">
         <main class="content-area">
             <div class="clearance-requests-header">
-                <h2>CLEARANCE REQUESTS (<span id="user-office-code"><?php echo $currentUserOfficeCode; ?></span>)</h2>
+                <h2>CLEARANCE REQUESTS (<span id="user-office-code"></span>)</h2>
             </div>
             <div class="Status-Request">
                 <div class="status-box">
@@ -95,10 +77,8 @@ $currentUserOfficeCode = htmlspecialchars($_SESSION['office_code'] ?? '');
                         <div>STUDENT ID</div>
                         <div>STUDENT NAME</div>
                         <div>PROGRAM</div>
-                        <div id="statusOrRemarkHeader">STATUS</div>
-                        <div>DATE SUBMITTED</div>
-                        <div id="actionsHeader">ACTIONS</div>
-                    </div>
+                        <div id="statusOrRemarkHeader">STATUS</div> <div>DATE SUBMITTED</div>
+                        <div id="actionsHeader">ACTIONS</div> </div>
                     <div id="requests-container"></div>
                 </div>
             </div>
@@ -120,11 +100,11 @@ $currentUserOfficeCode = htmlspecialchars($_SESSION['office_code'] ?? '');
 
                 <div class="status-offices-section">
                     <h4>STATUS</h4>
-                    </div>
+                </div>
 
                 <div class="requested-documents-section">
                     <h4>REQUESTED DOCUMENTS</h4>
-                    </div>
+                </div>
 
                 <div class="remarks-section">
                     <h4>OTHER REMARKS</h4>
@@ -149,8 +129,347 @@ $currentUserOfficeCode = htmlspecialchars($_SESSION['office_code'] ?? '');
         </div>
     </div>
 
-    <div id="customMessageBoxContainer"></div>
+    <script>
+        // --- Configuration ---
+const API_BASE_URL = 'http://localhost/WEBDEV/WEBDEV-PROJECT/php/';
+let currentUserOfficeCode = '';
+let allRequests = []; // Stores all fetched requests for the current office
 
-    <script src="../js/clearance-requests.js"></script>
+const REMARKS_MAPPING = {
+    "ACC": ["Balance Issues", "Unpaid Fees", "Scholarship Concerns"],
+    "DN_PC_PR": ["Grade/Subject Issues", "Missing Grades", "Incomplete Coursework"],
+    "GO": ["Office Record", "Missing Documents", "Incorrect Information"],
+    "ITSO": ["Unreturned Item", "Damaged Equipment", "Software License Issues"],
+    "LIB": ["Unreturned Book/Material", "Overdue Fines", "Damaged Materials"],
+    "REG": ["Incomplete Grade/Documents", "Enrollment Discrepancies", "Missing Prerequisites"],
+    "SDAO": ["Unsettled Issue", "Disciplinary Action", "Conduct Violation"],
+    "SDO": ["Violation/Offense", "Academic Dishonesty", "Attendance Issues"]
+};
+
+// --- DOM Elements ---
+const navItems = document.querySelectorAll('.Nav-item');
+const requestsContainer = document.getElementById('requests-container');
+const statusHeader = document.querySelector('.Status-header');
+const statusOrRemarkHeader = document.getElementById('statusOrRemarkHeader');
+const actionsHeader = document.getElementById('actionsHeader');
+const confirmationModal = document.getElementById('confirmationModal');
+const confirmClearBtn = document.getElementById('confirmClearBtn');
+const cancelClearBtn = document.getElementById('cancelClearBtn');
+let currentRowToClear = null;
+
+const totalRequestsSpan = document.getElementById('total-requests');
+const pendingRequestsSpan = document.getElementById('pending-requests');
+const ongoingRequestsSpan = document.getElementById('ongoing-requests');
+const completedRequestsSpan = document.getElementById('completed-requests');
+const currentUsernameSpan = document.getElementById('current-username');
+const userOfficeCodeSpan = document.getElementById('user-office-code');
+
+// --- NEW: Search Bar Elements ---
+const searchInput = document.getElementById('searchInput');
+
+
+// --- Functions ---
+
+function showMessageBox(message) {
+    const messageBox = document.createElement('div');
+    messageBox.classList.add('custom-message-box');
+    messageBox.innerHTML = `<p>${message}</p><button class="custom-message-box-close">OK</button>`;
+    document.body.appendChild(messageBox);
+    messageBox.querySelector('.custom-message-box-close').addEventListener('click', () => {
+        messageBox.remove();
+    });
+}
+
+async function fetchUserInfo() {
+    try {
+        const response = await fetch(`${API_BASE_URL}get_officeuser_info.php`);
+        const data = await response.json();
+        if (data.success) {
+            currentUsernameSpan.textContent = data.user.user_name;
+            userOfficeCodeSpan.textContent = data.user.office_code;
+            currentUserOfficeCode = data.user.office_code;
+            fetchClearanceRequests(currentUserOfficeCode);
+        } else {
+            console.error("Failed to fetch user info:", data.message);
+            showMessageBox("Error: Could not fetch user information. " + data.message);
+        }
+    } catch (error) {
+        console.error("Error fetching user info:", error);
+        showMessageBox("Error connecting to server for user info.");
+    }
+}
+
+async function fetchClearanceRequests(officeCode) {
+    try {
+        const response = await fetch(`${API_BASE_URL}get_clearance_requests.php?office_code=${officeCode}`);
+        const data = await response.json();
+        if (data.success) {
+            allRequests = data.requests;
+            updateStatusCounts();
+            // Instead of directly rendering based on active tab, call filterAndRenderRequests
+            filterAndRenderRequests();
+        } else {
+            console.error("Failed to fetch requests:", data.message);
+            showMessageBox("Error: Could not fetch clearance requests.");
+        }
+    } catch (error) {
+        console.error("Error fetching clearance requests:", error);
+        showMessageBox("Error connecting to server for requests.");
+    }
+}
+
+function updateStatusCounts() {
+    const total = allRequests.length;
+    const pending = allRequests.filter(req => req.status_code === 'PEND').length;
+    const ongoing = allRequests.filter(req => req.status_code === 'ON').length;
+    const completed = allRequests.filter(req => req.status_code === 'COMP').length;
+
+    totalRequestsSpan.textContent = total;
+    pendingRequestsSpan.textContent = pending;
+    ongoingRequestsSpan.textContent = ongoing;
+    completedRequestsSpan.textContent = completed;
+}
+
+
+// --- MODIFIED: Create Request Row ---
+function createRequestRow(request, filterStatusFrontend) {
+    const row = document.createElement('div');
+    row.classList.add('Status-row');
+    row.dataset.statusFrontend = getFrontendStatus(request.status_code);
+    row.dataset.statusDb = request.status_code;
+    row.dataset.requestId = request.req_id;
+
+    let statusDisplay = getFrontendStatus(request.status_code);
+    let fifthColumnContent = '';
+    let actionsContent = '';
+
+    if (filterStatusFrontend === 'ON-GOING') {
+        fifthColumnContent = `<div class="remark-column"><span class="remark-text">${request.office_remarks || 'N/A'}</span></div>`;
+    } else {
+        fifthColumnContent = `<div>${statusDisplay}</div>`;
+    }
+
+    if (filterStatusFrontend !== 'ALL') {
+        if (request.status_code === 'PEND') {
+            const customRemarks = REMARKS_MAPPING[currentUserOfficeCode] || [];
+            const dropdownItems = customRemarks.map(remark =>
+                `<a href="#" data-remark="${remark}">${remark}</a>`
+            ).join('');
+
+            actionsContent = `
+                <div class="dropdown-wrapper">
+                    <button class="add-remark-button dropdown-toggle">ADD REMARK <i class='bx bx-chevron-down'></i></button>
+                    <div class="dropdown-menu">
+                        ${dropdownItems}
+                    </div>
+                </div>
+                <button class="clear-button">CLEAR</button>
+            `;
+        } else if (request.status_code === 'ON') {
+            actionsContent = `<button class="clear-button">CLEAR</button>`;
+        } else if (request.status_code === 'COMP') {
+            actionsContent = `<div class="actions-placeholder"></div>`;
+        }
+    } else {
+        actionsContent = `<div class="actions-placeholder"></div>`;
+    }
+
+
+    row.innerHTML = `
+        <div>${request.req_id}</div>
+        <div>${request.student_id}</div>
+        <div>${request.student_name}</div>
+        <div>${request.program}</div>
+        ${fifthColumnContent} <div>${request.date_submitted}</div>
+        <div class="actions">${actionsContent}</div> `;
+
+    return row;
+}
+
+function getFrontendStatus(dbStatusCode) {
+    switch (dbStatusCode) {
+        case 'PEND': return 'PENDING';
+        case 'ON': return 'ON-GOING';
+        case 'COMP': return 'COMPLETED';
+        default: return dbStatusCode;
+    }
+}
+
+// --- MODIFIED: Render Requests (now called by filterAndRenderRequests) ---
+function renderRequests(requestsToDisplay, filterStatusFrontend) {
+    requestsContainer.innerHTML = '';
+
+    if (requestsToDisplay.length === 0) {
+        requestsContainer.innerHTML = '<div class="no-results">No requests found matching your criteria.</div>';
+        return;
+    }
+
+    requestsToDisplay.forEach(request => {
+        const row = createRequestRow(request, filterStatusFrontend);
+        requestsContainer.appendChild(row);
+    });
+
+    attachEventListenersToRows();
+}
+
+// --- NEW: filterAndRenderRequests function ---
+function filterAndRenderRequests() {
+    // 1. Get the currently active tab's status filter
+    const activeTab = document.querySelector('.Nav-item.active');
+    const selectedStatusFrontend = activeTab ? activeTab.dataset.statusFrontend.toUpperCase() : 'ALL';
+    updateTableHeaders(selectedStatusFrontend); // Update headers based on active tab
+
+    // 2. Get the search term and normalize it
+    const searchTerm = searchInput.value.toLowerCase().trim();
+
+    // 3. Apply tab filtering first
+    let filteredByTab = allRequests;
+    if (selectedStatusFrontend !== 'ALL') {
+        filteredByTab = allRequests.filter(req => getFrontendStatus(req.status_code) === selectedStatusFrontend);
+    }
+
+    // 4. Apply search filtering to the tab-filtered results
+    const finalFilteredRequests = filteredByTab.filter(req => {
+        // Search by request ID, student ID, or student name
+        const requestIdMatch = req.req_id.toString().toLowerCase().includes(searchTerm);
+        const studentIdMatch = req.student_id.toLowerCase().includes(searchTerm);
+        const studentNameMatch = req.student_name.toLowerCase().includes(searchTerm);
+        const programMatch = req.program.toLowerCase().includes(searchTerm); // Also search by program
+
+        return requestIdMatch || studentIdMatch || studentNameMatch || programMatch;
+    });
+
+    // 5. Render the final filtered requests
+    renderRequests(finalFilteredRequests, selectedStatusFrontend);
+}
+
+
+// --- MODIFIED: Update Table Headers ---
+function updateTableHeaders(selectedStatusFrontend) {
+    statusOrRemarkHeader.textContent = 'STATUS';
+    statusOrRemarkHeader.style.display = 'block';
+    actionsHeader.style.display = 'block';
+
+    if (selectedStatusFrontend === 'ON-GOING') {
+        statusOrRemarkHeader.textContent = 'REMARK';
+    } else if (selectedStatusFrontend === 'COMPLETED' || selectedStatusFrontend === 'ALL') {
+        actionsHeader.style.display = 'none';
+    }
+}
+
+function attachEventListenersToRows() {
+    document.querySelectorAll('.dropdown-toggle').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.stopPropagation();
+            const dropdownMenu = this.nextElementSibling;
+            document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+                if (menu !== dropdownMenu) {
+                    menu.classList.remove('show');
+                }
+            });
+            dropdownMenu.classList.toggle('show');
+        });
+    });
+
+    document.querySelectorAll('.dropdown-menu a').forEach(link => {
+        link.addEventListener('click', async function(event) {
+            event.preventDefault();
+            const remark = this.dataset.remark;
+            const requestId = this.closest('.Status-row').dataset.requestId;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}update_office_remark.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ request_id: requestId, remark: remark })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    showMessageBox("Remark added and status updated to ON-GOING!");
+                    // Re-fetch and re-render everything to update UI correctly
+                    await fetchClearanceRequests(currentUserOfficeCode);
+                } else {
+                    console.error("Failed to add remark:", data.message);
+                    showMessageBox("Error: Could not add remark. " + data.message);
+                }
+            } catch (error) {
+                console.error("Error adding remark:", error);
+                showMessageBox("Error connecting to server for remark update.");
+            }
+            this.closest('.dropdown-menu').classList.remove('show');
+        });
+    });
+
+    document.querySelectorAll('.clear-button').forEach(button => {
+        button.addEventListener('click', function(event) {
+            currentRowToClear = this.closest('.Status-row').dataset.requestId;
+            confirmationModal.classList.add('show-modal');
+            document.body.classList.add('modal-open');
+        });
+    });
+}
+
+// --- Event Listeners ---
+
+navItems.forEach(tab => {
+    tab.addEventListener('click', () => {
+        navItems.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        // Call filterAndRenderRequests instead of direct renderRequests
+        filterAndRenderRequests();
+    });
+});
+
+window.addEventListener('click', function(event) {
+    document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+        if (!menu.contains(event.target) && !event.target.classList.contains('dropdown-toggle')) {
+            menu.classList.remove('show');
+        }
+    });
+});
+
+confirmClearBtn.addEventListener('click', async function() {
+    if (currentRowToClear) {
+        try {
+            const response = await fetch(`${API_BASE_URL}update_request_status.php`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ request_id: currentRowToClear })
+            });
+            const data = await response.json();
+            if (data.success) {
+                showMessageBox("Request cleared successfully!");
+                // Re-fetch and re-render everything to update UI correctly
+                await fetchClearanceRequests(currentUserOfficeCode);
+            } else {
+                console.error("Failed to clear request:", data.message);
+                showMessageBox("Error: Could not clear request.");
+            }
+        } catch (error) {
+            console.error("Error clearing request:", error);
+            showMessageBox("Error connecting to server for clearance.");
+        }
+    }
+    confirmationModal.classList.remove('show-modal');
+    document.body.classList.remove('modal-open');
+    currentRowToClear = null;
+});
+
+cancelClearBtn.addEventListener('click', function() {
+    showMessageBox("Clearance cancelled.");
+    confirmationModal.classList.remove('show-modal');
+    document.body.classList.remove('modal-open');
+    currentRowToClear = null;
+});
+
+// --- NEW: Search Input Event Listener ---
+searchInput.addEventListener('keyup', filterAndRenderRequests);
+
+
+// --- Initial Load ---
+document.addEventListener('DOMContentLoaded', () => {
+    fetchUserInfo();
+});
+    </script>
 </body>
 </html>
