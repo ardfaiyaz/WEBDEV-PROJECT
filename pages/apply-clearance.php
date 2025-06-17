@@ -116,6 +116,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['applyclr_submitbtn']))
     // Other Request Details
     $enrollmentPurpose = trim($_POST['Enrollment_Purpose'] ?? '');
     $studentRemarks = trim($_POST['REMARKS'] ?? '');
+    if (empty($studentRemarks)) {
+    $studentRemarks = 'No remark';
+    } // Default remark if none provided
 
     // --- 2. Server-side Validation ---
     if (empty($firstName)) $errors[] = "First name is required.";

@@ -214,9 +214,9 @@ $js_version = time(); // Using timestamp to ensure a unique version on every loa
 
         <nav class="top-navbar">
             <ul class="navbar-menu">
-                <li class="menu-item"><a href="UserPOV.html"><i class='bx bxs-home icon-sidebar'></i> Home</a></li>
-                <li class="menu-item"><a href="#"><i class='bx bxs-user icon-sidebar'></i> Profile</a></li>
-                <li class="menu-item"><a href="About-us.html"><i class='bx bxs-file icon-sidebar'></i> About Us</a></li>
+                <li class="menu-item"><a href="admin-index.php"><i class='bx bxs-home icon-sidebar'></i> Home</a></li>
+                <li class="menu-item"><a href="clearance-request.php"><i class='bx bxs-file-export icon-sidebar'></i> Requests</a></li>
+                <li class="menu-item"><a href="about-us.html"><i class='bx bxs-file icon-sidebar'></i> About Us</a></li>
                 <li class="menu-item"><a href="../php/logout.php"><i class='bx bxs-log-out icon-sidebar'></i> Logout</a></li>
             </ul>
         </nav>
@@ -241,7 +241,7 @@ $js_version = time(); // Using timestamp to ensure a unique version on every loa
                     <h2>View Requests</h2>
                 </div>
                 <div class="header-actions">
-                    <a href="admin-dashboard.php" class="back-link">Back to Dashboard</a>
+                    <a href="clearance-request.php" class="back-link">Back to Dashboard</a>
                 </div>
             </div>
 
