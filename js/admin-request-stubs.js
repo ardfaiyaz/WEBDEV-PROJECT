@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentRequestId = null; // To store the ID of the request being processed for claim stub
 
     // --- Add a unique identifier to this JS file for verification ---
-    console.log("admin-request-stubs.js version: 202506171815"); // Updated version number
+    console.log("admin-request-stubs.js version: 202506180930"); // Updated version number
 
 
     // --- Modal Functions (for View Status Modal) ---
@@ -174,11 +174,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 viewConsentFileButton.style.display = ''; // Show button
                 viewConsentFileButton.classList.remove('disabled');
                 viewConsentFileButton.removeAttribute('disabled');
+                // Open in a new tab when clicked
+                viewConsentFileButton.onclick = (e) => {
+                    e.preventDefault(); // Prevent default link behavior if href is used
+                    console.log('Attempting to open consent file:', consentFileUrl); // DEBUG: Log the URL
+                    window.open(consentFileUrl, '_blank');
+                };
             } else {
                 viewConsentFileButton.href = '#';
                 viewConsentFileButton.style.display = 'none'; // Hide button if no file
                 viewConsentFileButton.classList.add('disabled');
                 viewConsentFileButton.setAttribute('disabled', 'true');
+                viewConsentFileButton.onclick = null; // Remove click handler if disabled
             }
 
             openViewModal();
