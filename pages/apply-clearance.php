@@ -2,7 +2,7 @@
 session_start(); // Start the session at the very beginning
 
 // Include the database connection file
-// Adjust this path based on where your 'database.php' is located relative to 'apply-clearance.php'
+// Adjust this path based on where your 'database.php' is located relative to this file
 require_once __DIR__ . '/../php/database.php';
 
 // Check if the user is logged in
@@ -18,6 +18,7 @@ $user_id = $_SESSION['user_id']; // Get the user_id from the session
 $displayFirstName = "User"; // Default fallback name
 
 // Initialize variables to store submitted data or pre-fill from student_info
+// These will hold the values for the form fields
 $firstName = '';
 $middleName = '';
 $lastName = '';
@@ -43,7 +44,7 @@ $studentRemarks = '';
 
 // Initialize arrays for errors and messages
 $errors = []; // For validation errors
-$successMessage = ''; // For success message
+$successMessage = ''; // For success message that persists after redirect
 $generalErrorHeading = ''; // To display a heading for errors
 
 $formSubmitted = false; // Flag to indicate if the form was submitted
@@ -66,6 +67,20 @@ foreach ($documentsMap as $doc_code => $doc_label) {
     ${$doc_code . '_checked'} = false; // Boolean for checkbox
     ${$doc_code . '_copies_value'} = ''; // Value for select
 }
+
+// --- Check for and display any session-based messages (from a previous redirect) ---
+if (isset($_SESSION['success_message'])) {
+    $successMessage = $_SESSION['success_message'];
+    unset($_SESSION['success_message']); // Clear the message after displaying
+}
+if (isset($_SESSION['error_message'])) {
+    // If there's a general error message from a redirect, add it to errors array
+    // This allows the error display logic below to handle it.
+    $errors[] = $_SESSION['error_message'];
+    $generalErrorHeading = "Submission Failed:";
+    unset($_SESSION['error_message']); // Clear the message
+}
+
 
 // --- HANDLE FORM SUBMISSION (PHP Processing Logic) ---
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['applyclr_submitbtn'])) {
@@ -156,13 +171,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['applyclr_submitbtn']))
     }
 
     // Consent file validation
+    // Only proceed with file validation if no general file upload error occurred or if a file was selected
     if (isset($_FILES['CONSENT_FILE']) && $_FILES['CONSENT_FILE']['error'] !== UPLOAD_ERR_NO_FILE) {
         if ($_FILES['CONSENT_FILE']['error'] !== UPLOAD_ERR_OK) {
             $upload_errors = [
                 UPLOAD_ERR_INI_SIZE   => 'The uploaded file exceeds the upload_max_filesize directive in php.ini.',
                 UPLOAD_ERR_FORM_SIZE  => 'The uploaded file exceeds the MAX_FILE_SIZE directive specified in the form.',
                 UPLOAD_ERR_PARTIAL    => 'The uploaded file was only partially uploaded.',
-                UPLOAD_ERR_NO_FILE    => 'No file was uploaded.', // This case is already handled by !UPLOAD_ERR_NO_FILE
+                UPLOAD_ERR_NO_FILE    => 'No file was uploaded.',
                 UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder.',
                 UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.',
                 UPLOAD_ERR_EXTENSION  => 'A PHP extension stopped the file upload.'
@@ -179,11 +195,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['applyclr_submitbtn']))
                 $errors[] = "Invalid consent file type. Only PDF, JPG, and PNG are allowed.";
             }
         }
-    } else {
-        // Only require if no file was uploaded OR if an error occurred during upload (excluding NO_FILE)
-        if ($_FILES['CONSENT_FILE']['error'] === UPLOAD_ERR_NO_FILE) {
-            $errors[] = "Consent file is required.";
-        }
+    } else if (!isset($_FILES['CONSENT_FILE']) || $_FILES['CONSENT_FILE']['error'] === UPLOAD_ERR_NO_FILE) {
+        $errors[] = "Consent file is required.";
     }
 
 
@@ -277,8 +290,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['applyclr_submitbtn']))
                 INSERT INTO clearance_status (req_id, user_id, office_code, status_code, office_remarks)
                 VALUES (?, ?, ?, ?, ?)
             ");
-            $initial_status_code = 'PEND'; // Always 'PEND' for initial status
-            $initial_remarks = 'Request submitted for initial review.';
+            $initial_status_code = 'ON'; // Set initial status to 'ON' (Ongoing)
+            $initial_remarks = 'Request submitted. Currently under initial review by office.';
 
             foreach ($offices as $office_code) {
                 $stmt_initial_status->execute([$req_id, $user_id, $office_code, $initial_status_code, $initial_remarks]);
@@ -287,10 +300,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['applyclr_submitbtn']))
             // If all operations are successful, commit the transaction
             $pdo->commit();
 
-            // Set success message for display on this page and redirect
-            $_SESSION['success_message'] = "Your clearance request has been submitted successfully!";
+            // Set success message for display on the track-clearance page and redirect
+            $_SESSION['success_message'] = "Your clearance request has been submitted successfully and is now ON-GOING!";
             header("Location: track-clearance.php"); // Redirect to tracking page
             exit;
+
         } catch (PDOException $e) {
             // Rollback the transaction on database error
             $pdo->rollBack();
@@ -304,15 +318,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['applyclr_submitbtn']))
             $errors[] = "An unexpected error occurred: " . $e->getMessage();
             $generalErrorHeading = "Submission Failed:";
         }
-    } else {
-        // If there are initial validation errors (before database interaction)
-        $generalErrorHeading = "Please correct the following issues:";
-        // Errors are already populated in the $errors array
     }
 }
 
 // --- INITIAL DATA LOADING FOR FORM (if not submitted or on error) ---
-// If the form was NOT submitted (first load) or if it was submitted but had errors,
+// If the form was NOT submitted (first load) OR if it was submitted but had errors,
 // attempt to pre-fill from student_info or user data.
 if (!$formSubmitted || !empty($errors)) {
     try {
@@ -339,7 +349,7 @@ if (!$formSubmitted || !empty($errors)) {
         $studentInfoData = $stmt_student_info->fetch(PDO::FETCH_ASSOC);
 
         if ($studentInfoData) {
-            // Only pre-fill if the form hasn't been submitted or the field was empty in the submission
+            // Only pre-fill if the form hasn't been submitted OR if the field was empty in the *current* submission
             $firstName = $formSubmitted && !empty($firstName) ? $firstName : htmlspecialchars($studentInfoData['firstname'] ?? '');
             $middleName = $formSubmitted && !empty($middleName) ? $middleName : htmlspecialchars($studentInfoData['middlename'] ?? '');
             $lastName = $formSubmitted && !empty($lastName) ? $lastName : htmlspecialchars($studentInfoData['lastname'] ?? '');
@@ -352,7 +362,7 @@ if (!$formSubmitted || !empty($errors)) {
 
             $telNo = $formSubmitted && !empty($telNo) ? $telNo : htmlspecialchars($studentInfoData['tel_num'] ?? '');
             $mobileNo = $formSubmitted && !empty($mobileNo) ? $mobileNo : htmlspecialchars($studentInfoData['mobile_num'] ?? '');
-            // Email is already handled by user data fetch, or from post if submitted
+            // Email is handled above
             $sex = $formSubmitted && !empty($sex) ? $sex : htmlspecialchars($studentInfoData['gender'] ?? '');
             $birthdate = $formSubmitted && !empty($birthdate) ? $birthdate : htmlspecialchars($studentInfoData['birthdate'] ?? '');
             $birthplace = $formSubmitted && !empty($birthplace) ? $birthplace : htmlspecialchars($studentInfoData['birthplace'] ?? '');
@@ -366,17 +376,13 @@ if (!$formSubmitted || !empty($errors)) {
         }
     } catch (PDOException $e) {
         error_log("Error fetching user or student_info data: " . $e->getMessage());
-        // Handle gracefully, perhaps add a user-friendly message
+        $errors[] = "Error loading your profile data. Please try again later.";
+        $generalErrorHeading = "Data Load Error:";
     }
 }
-
-// Display success message from session if redirected from a successful submission
-if (isset($_SESSION['success_message'])) {
-    $successMessage = $_SESSION['success_message'];
-    unset($_SESSION['success_message']); // Clear the message after displaying
-}
-
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
