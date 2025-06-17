@@ -171,6 +171,9 @@ function getOverallStatusClass($overallStatus) {
         default: return '';
     }
 }
+
+// Generate a unique version string for cache busting
+$js_version = time(); // Using timestamp to ensure a unique version on every load
 ?>
 
 <!DOCTYPE html>
@@ -277,7 +280,6 @@ function getOverallStatusClass($overallStatus) {
                                 data-other-remarks="<?php echo htmlspecialchars($request['other_remarks'] ?? 'No other remarks.'); ?>"
                                 data-consent-file-url="<?php echo htmlspecialchars($request['consent_file_url']); ?>"
                                 data-has-consent-file="<?php echo !empty($request['consent_letter']) ? 'true' : 'false'; ?>"
-                                data-can-release-claim-stub="<?php echo $request['can_release_claim_stub'] ? 'true' : 'false'; ?>"
                                 >
                                 <div><?php echo htmlspecialchars($request['req_id']); ?></div>
                                 <div><?php echo htmlspecialchars($request['formatted_date']); ?></div>
@@ -289,7 +291,8 @@ function getOverallStatusClass($overallStatus) {
                                     <button class="action-button secondary-button view-status-detail-button">View Status Detail</button>
                                     <button class="action-button primary-button release-claim-stub-button"
                                         <?php echo ($request['can_release_claim_stub'] ? '' : 'disabled'); ?>
-                                        <?php echo ($request['claim_stub'] == 1 ? 'data-released="true"' : ''); ?>
+                                        data-can-release-claim-stub="<?php echo $request['can_release_claim_stub'] ? 'true' : 'false'; ?>"
+                                        data-released="<?php echo ($request['claim_stub'] == 1 ? 'true' : 'false'); ?>"
                                     >
                                         <?php echo ($request['claim_stub'] == 1 ? 'Claim Stub Released' : 'Release Claim Stub'); ?>
                                     </button>
@@ -354,6 +357,6 @@ function getOverallStatusClass($overallStatus) {
         </div>
     </div>
 
-    <script src="../js/admin-request-stubs.js"></script>
+    <script src="../js/admin-request-stubs.js?v=<?php echo $js_version; ?>"></script>
 </body>
 </html>

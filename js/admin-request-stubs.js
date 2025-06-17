@@ -24,6 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentRequestId = null; // To store the ID of the request being processed for claim stub
 
+    // --- Add a unique identifier to this JS file for verification ---
+    console.log("admin-request-stubs.js version: 202506171815"); // Updated version number
+
 
     // --- Modal Functions (for View Status Modal) ---
     function openViewModal() {
@@ -45,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function closeConfirmationModal() {
         confirmationModal.style.display = 'none';
         document.body.classList.remove('modal-open'); // Re-enable scrolling
-        currentRequestId = null; // Clear the stored request ID
+        // currentRequestId is now reset in the fetch's finally block
     }
 
 
@@ -210,13 +213,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const row = clickedButton.closest('.data-row');
             currentRequestId = row.dataset.reqId; // Store for confirmation
 
-            const canRelease = clickedButton.dataset.canReleaseClaimStub === 'true'; // Convert string 'true'/'false' to boolean
-            const isReleased = clickedButton.dataset.released === 'true'; // Convert string 'true'/'false' to boolean
+            // Change: Use getAttribute instead of dataset for these two
+            const canRelease = clickedButton.getAttribute('data-can-release-claim-stub') === 'true';
+            const isReleased = clickedButton.getAttribute('data-released') === 'true';
 
             console.log(`Release Claim Stub clicked for Req ID: ${currentRequestId}`); // DEBUG
-            console.log(`  data-can-release-claim-stub (raw): ${clickedButton.dataset.canReleaseClaimStub}`); // DEBUG
+            console.log(`  data-can-release-claim-stub (raw - getAttribute): ${clickedButton.getAttribute('data-can-release-claim-stub')}`); // DEBUG
             console.log(`  canRelease (JS boolean): ${canRelease}`); // DEBUG
-            console.log(`  data-released (raw): ${clickedButton.dataset.released}`); // DEBUG
+            console.log(`  data-released (raw - getAttribute): ${clickedButton.getAttribute('data-released')}`); // DEBUG
             console.log(`  isReleased (JS boolean): ${isReleased}`); // DEBUG
 
 
@@ -242,9 +246,15 @@ document.addEventListener('DOMContentLoaded', () => {
         closeConfirmationModal(); // Hide confirmation modal immediately
 
         if (currentRequestId) {
+            console.log(`Attempting to release claim stub for Req ID: ${currentRequestId}`); // DEBUG
             try {
+                // Add a cache-busting timestamp to the fetch URL
+                const cacheBuster = new Date().getTime();
+                const fetchUrl = `../php/update_claim_stub.php?_=${cacheBuster}`;
+                console.log(`Fetching URL: ${fetchUrl}`); // DEBUG
+
                 // Send AJAX request to update the database
-                const response = await fetch('../php/update_claim_stub.php', {
+                const response = await fetch(fetchUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -252,28 +262,42 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ req_id: currentRequestId })
                 });
 
-                const result = await response.json();
+                console.log(`Fetch response received. Status: ${response.status}, OK: ${response.ok}`); // DEBUG
 
-                if (result.success) {
-                    // Update the UI: change button text and disable it
-                    const releasedButton = document.querySelector(`.data-row[data-req-id="${currentRequestId}"] .release-claim-stub-button`);
-                    if (releasedButton) {
-                        releasedButton.textContent = 'Claim Stub Released';
-                        releasedButton.setAttribute('disabled', 'true');
-                        releasedButton.classList.add('disabled');
-                        releasedButton.dataset.released = 'true'; // Mark as released in dataset
-                        releasedButton.dataset.canReleaseClaimStub = 'false'; // Prevent further clicks
+                // Check if the response is actually JSON before parsing
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    const result = await response.json(); // Attempt to parse JSON
+                    console.log('Server response (JSON):', result); // DEBUG
+
+                    if (result.success) {
+                        // Update the UI: change button text and disable it
+                        const releasedButton = document.querySelector(`.data-row[data-req-id="${currentRequestId}"] .release-claim-stub-button`);
+                        if (releasedButton) {
+                            releasedButton.textContent = 'Claim Stub Released';
+                            releasedButton.setAttribute('disabled', 'true');
+                            releasedButton.classList.add('disabled');
+                            releasedButton.dataset.released = 'true'; // Mark as released in dataset
+                            releasedButton.dataset.canReleaseClaimStub = 'false'; // Prevent further clicks
+                        }
+                        alert('Claim stub successfully released!');
+                    } else {
+                        alert(`Failed to release claim stub: ${result.message || 'Unknown error'}`);
                     }
-                    alert('Claim stub successfully released!');
                 } else {
-                    alert(`Failed to release claim stub: ${result.message || 'Unknown error'}`);
+                    const textResponse = await response.text();
+                    console.error('Server response was not JSON:', textResponse);
+                    alert('Server returned an unexpected response. Please check server logs.');
                 }
             } catch (error) {
-                console.error('Error releasing claim stub:', error);
-                alert('An error occurred while communicating with the server.');
+                console.error('Error in AJAX request or parsing JSON:', error); // More specific error logging
+                alert('An error occurred while communicating with the server or processing its response.');
             } finally {
-                currentRequestId = null; // Reset
+                // Ensure currentRequestId is reset ONLY after the fetch process completes
+                currentRequestId = null;
             }
+        } else {
+            console.warn("currentRequestId was null when confirmYesButton was clicked. This should not happen.");
         }
     });
 
