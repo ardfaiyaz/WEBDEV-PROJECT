@@ -1,43 +1,118 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Consolidated variable declarations
     const viewStatusDetailButtons = document.querySelectorAll('.view-status-detail-button');
-    const viewStatusModal = document.getElementById('viewStatusModal');
-    const closeButton = viewStatusModal.querySelector('.close-button');
+    const tabItems = document.querySelectorAll('.tab-item');
+    const dataRows = document.querySelectorAll('.data-row'); // All request rows
 
-    // Get modal content elements
+    const viewStatusModal = document.getElementById('viewStatusModal');
+    const closeViewModalButton = viewStatusModal.querySelector('.close-button');
+
+    const confirmationModal = document.getElementById('confirmationModal');
+    const confirmYesButton = confirmationModal.querySelector('.confirm-yes');
+    const confirmNoButton = confirmationModal.querySelector('.confirm-no');
+    const releaseClaimStubButtons = document.querySelectorAll('.release-claim-stub-button');
+
+    // Get view modal content elements
     const modalStudentAvatar = viewStatusModal.querySelector('.student-avatar-img');
     const modalStudentName = viewStatusModal.querySelector('.modal-student-name');
     const modalStudentId = viewStatusModal.querySelector('.modal-student-id');
     const modalStudentEmail = viewStatusModal.querySelector('.modal-student-email');
-    const statusOfficesSection = viewStatusModal.querySelector('.status-offices-section');
-    const requestedDocumentsSection = viewStatusModal.querySelector('.requested-documents-section');
-    const modalRemarks = viewStatusModal.querySelector('.modal-remarks');
+    const officeStatusesListContainer = viewStatusModal.querySelector('.office-statuses-list'); // Direct container for office statuses
+    const requestedDocumentsListContainer = viewStatusModal.querySelector('.requested-documents-list'); // Direct container for requested documents
+    const modalRemarks = viewStatusModal.querySelector('.modal-remarks'); // Element for "OTHER REMARKS"
+    const viewConsentFileButton = viewStatusModal.querySelector('.view-consent-file-button');
 
-    // Function to open the modal
-    function openModal() {
+    let currentRequestId = null; // To store the ID of the request being processed for claim stub
+
+
+    // --- Modal Functions (for View Status Modal) ---
+    function openViewModal() {
         viewStatusModal.style.display = 'flex'; // Use flex to center the modal
         document.body.classList.add('modal-open'); // Prevent scrolling
     }
 
-    // Function to close the modal
-    function closeModal() {
+    function closeViewModal() {
         viewStatusModal.style.display = 'none';
         document.body.classList.remove('modal-open'); // Re-enable scrolling
     }
 
-    // Event listeners for opening the modal
+    // --- Modal Functions (for Confirmation Modal) ---
+    function openConfirmationModal() {
+        confirmationModal.style.display = 'flex'; // Use flex to center the modal
+        document.body.classList.add('modal-open'); // Prevent scrolling
+    }
+
+    function closeConfirmationModal() {
+        confirmationModal.style.display = 'none';
+        document.body.classList.remove('modal-open'); // Re-enable scrolling
+        currentRequestId = null; // Clear the stored request ID
+    }
+
+
+    // --- Tab Switching Logic ---
+    tabItems.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Remove 'active' class from all tabs
+            tabItems.forEach(item => item.classList.remove('active'));
+            // Add 'active' class to the clicked tab
+            tab.classList.add('active');
+
+            const selectedType = tab.dataset.type;
+
+            // Show/hide rows based on the selected tab type
+            dataRows.forEach(row => {
+                const rowType = row.dataset.type;
+                if (rowType === selectedType) {
+                    row.style.display = 'grid'; // Ensure it displays as grid as per CSS
+                } else {
+                    row.style.display = 'none'; // Hide row
+                }
+            });
+        });
+    });
+
+    // Initial display for LOCAL tab (trigger its click to show content on load)
+    // Ensures only 'LOCAL' requests are shown initially.
+    document.querySelector('.tab-item[data-type="LOCAL"]').click();
+
+
+    // --- View Status Detail Modal Logic ---
     viewStatusDetailButtons.forEach(button => {
         button.addEventListener('click', function(event) {
             event.preventDefault(); // Prevent default link behavior if applicable
 
             const dataRow = this.closest('.data-row'); // Get the parent data-row
+            console.log("Clicked View Status Detail button. Data Row:", dataRow); // DEBUG: Log the clicked row
 
             // Retrieve data from data attributes
             const studentName = dataRow.dataset.studentName;
             const studentId = dataRow.dataset.studentId;
             const studentEmail = dataRow.dataset.studentEmail;
             const studentAvatar = dataRow.dataset.studentAvatar;
-            const officeStatuses = JSON.parse(dataRow.dataset.officeStatuses);
-            const requestedDocuments = JSON.parse(dataRow.dataset.requestedDocuments);
+            let officeStatuses = [];
+            try {
+                officeStatuses = JSON.parse(dataRow.dataset.officeStatuses);
+            } catch (e) {
+                console.error("Error parsing officeStatuses JSON:", e, dataRow.dataset.officeStatuses);
+                officeStatuses = []; // Fallback if parsing fails
+            }
+
+            let requestedDocuments = [];
+            try {
+                requestedDocuments = JSON.parse(dataRow.dataset.requestedDocuments);
+            } catch (e) {
+                console.error("Error parsing requestedDocuments JSON:", e, dataRow.dataset.requestedDocuments);
+                requestedDocuments = []; // Fallback if parsing fails
+            }
+
+            const otherRemarks = dataRow.dataset.otherRemarks; // Retrieve otherRemarks
+            const consentFileUrl = dataRow.dataset.consentFileUrl;
+            const hasConsentFile = dataRow.dataset.hasConsentFile === 'true';
+
+            console.log("Parsed officeStatuses:", officeStatuses); // DEBUG: Log parsed data
+            console.log("Parsed requestedDocuments:", requestedDocuments); // DEBUG: Log parsed data
+            console.log("Other Remarks:", otherRemarks); // DEBUG: Log other remarks
+
 
             // Populate the modal with data
             modalStudentAvatar.src = studentAvatar;
@@ -45,35 +120,31 @@ document.addEventListener('DOMContentLoaded', () => {
             modalStudentId.textContent = `Student ID: ${studentId}`;
             modalStudentEmail.textContent = `Email: ${studentEmail}`;
 
-            // Clear previous content
-            // Select by class within the specific section to avoid clearing other potential elements
-            statusOfficesSection.querySelectorAll('.office-status-item').forEach(item => item.remove());
-            requestedDocumentsSection.querySelectorAll('.document-item').forEach(item => item.remove());
-
 
             // Populate office statuses
-            const officeStatusList = document.createElement('ul');
-            officeStatusList.classList.add('office-status-list');
-            officeStatuses.forEach(office => {
-                const statusItem = document.createElement('li');
-                statusItem.classList.add('office-status-item');
-                statusItem.innerHTML = `
-                    <div class="office-name">${office.office}:</div>
-                    <div class="status-badge status-${office.status.toLowerCase().replace(' ', '-')}">${office.status}</div>
-                `;
-                officeStatusList.appendChild(statusItem);
-            });
-            // Clear previous status list and append new one
-            const oldStatusList = statusOfficesSection.querySelector('.office-status-list');
-            if (oldStatusList) {
-                oldStatusList.remove();
+            // Clear previous content by clearing the innerHTML of the dedicated container
+            officeStatusesListContainer.innerHTML = '';
+
+            if (officeStatuses.length > 0) {
+                officeStatuses.forEach(office => {
+                    const statusItem = document.createElement('div'); // Using div for each item
+                    statusItem.classList.add('office-status-item');
+                    statusItem.innerHTML = `
+                        <strong>${office.office}:</strong>
+                        <span class="status-badge status-${office.status.toLowerCase().replace(' ', '-')}">${office.status}</span>
+                        <!-- Individual office remarks are removed as requested -->
+                    `;
+                    officeStatusesListContainer.appendChild(statusItem);
+                });
+            } else {
+                officeStatusesListContainer.innerHTML = '<p>No office statuses found.</p>';
             }
-            statusOfficesSection.appendChild(officeStatusList);
 
 
             // Populate requested documents
-            const documentList = document.createElement('ul');
-            documentList.classList.add('document-list');
+            // Clear previous content by clearing the innerHTML of the dedicated container
+            requestedDocumentsListContainer.innerHTML = '';
+
             if (requestedDocuments && requestedDocuments.length > 0) {
                 requestedDocuments.forEach(doc => {
                     const documentItem = document.createElement('li');
@@ -82,113 +153,137 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="document-name">${doc.name}</div>
                         <div class="document-copies">${doc.copies}</div>
                     `;
-                    documentList.appendChild(documentItem);
+                    requestedDocumentsListContainer.appendChild(documentItem);
                 });
             } else {
                 const noDocuments = document.createElement('p');
                 noDocuments.textContent = "No documents requested.";
-                documentList.appendChild(noDocuments); // Append to list for consistency
+                requestedDocumentsListContainer.appendChild(noDocuments);
             }
-            // Clear previous document list and append new one
-            const oldDocumentList = requestedDocumentsSection.querySelector('.document-list');
-            if (oldDocumentList) {
-                oldDocumentList.remove();
-            }
-            requestedDocumentsSection.appendChild(documentList);
 
 
-            // Set remarks (you'll need to decide how to derive a general remark,
-            // or if you want to show remarks per office - current HTML assumes one general remark)
-            let generalRemark = "No Remarks";
-            const issueFoundOffice = officeStatuses.find(office => office.status === "Issue Found" && office.remarks);
-            if (issueFoundOffice) {
-                generalRemark = issueFoundOffice.remarks;
+            // Set "OTHER REMARKS" at the bottom
+            modalRemarks.textContent = otherRemarks || 'No other remarks.';
+
+            // Consent file button
+            if (hasConsentFile) {
+                viewConsentFileButton.href = consentFileUrl;
+                viewConsentFileButton.style.display = ''; // Show button
+                viewConsentFileButton.classList.remove('disabled');
+                viewConsentFileButton.removeAttribute('disabled');
             } else {
-                const pendingOffice = officeStatuses.find(office => office.status === "Pending" && office.remarks);
-                if (pendingOffice) {
-                    generalRemark = pendingOffice.remarks;
-                }
+                viewConsentFileButton.href = '#';
+                viewConsentFileButton.style.display = 'none'; // Hide button if no file
+                viewConsentFileButton.classList.add('disabled');
+                viewConsentFileButton.setAttribute('disabled', 'true');
             }
-            modalRemarks.textContent = generalRemark;
 
-            openModal();
+            openViewModal();
+            console.log("openViewModal() called."); // DEBUG: Confirm modal function call
         });
     });
 
-    // Event listener for closing the modal
-    closeButton.addEventListener('click', closeModal);
+    // Event listener for closing the view modal
+    closeViewModalButton.addEventListener('click', closeViewModal);
 
-    // Close modal if clicking outside the modal content
+    // Close modals if clicking outside the modal content or overlay
     window.addEventListener('click', (event) => {
         if (event.target === viewStatusModal) {
-            closeModal();
+            closeViewModal();
         }
-    });
-
-    // Handle tab switching (Local/Abroad)
-    const tabItems = document.querySelectorAll('.tab-item');
-    tabItems.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const type = tab.dataset.type;
-
-            // Remove active class from all tabs and add to clicked tab
-            tabItems.forEach(item => item.classList.remove('active'));
-            tab.classList.add('active');
-
-            // Show/hide data rows based on type
-            const dataRows = document.querySelectorAll('.view-request-data-row');
-            dataRows.forEach(row => {
-                if (row.dataset.type === type) {
-                    row.style.display = 'grid'; // Or 'table-row-group' if using tbody
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
-    });
-
-    // Initial display for LOCAL tab
-    document.querySelector('.tab-item[data-type="LOCAL"]').click();
-
-
-    // New Confirmation Pop-up Logic
-    const releaseStubButtons = document.querySelectorAll('.release-claim-stub-button');
-    const confirmationModal = document.getElementById('confirmationModal');
-    const confirmYesButton = confirmationModal.querySelector('.confirm-yes');
-    const confirmNoButton = confirmationModal.querySelector('.confirm-no');
-    let currentButton = null; // To store the button that was clicked
-
-    releaseStubButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            currentButton = button; // Store the clicked button
-            confirmationModal.classList.add('show-modal'); // Show the confirmation modal
-            document.body.classList.add('modal-open'); // Prevent scrolling
-        });
-    });
-
-    confirmYesButton.addEventListener('click', () => {
-        if (currentButton) {
-            currentButton.textContent = 'Claim Stub Released';
-            currentButton.classList.add('claim-stub-released');
-            currentButton.classList.remove('primary-button');
-            currentButton.disabled = true; // Disable the button after click
-        }
-        confirmationModal.classList.remove('show-modal'); // Hide the confirmation modal
-        document.body.classList.remove('modal-open'); // Re-enable scrolling
-    });
-
-    confirmNoButton.addEventListener('click', () => {
-        confirmationModal.classList.remove('show-modal'); // Hide the confirmation modal
-        document.body.classList.remove('modal-open'); // Re-enable scrolling
-        currentButton = null; // Clear the stored button
-    });
-
-    // Close confirmation modal if clicking outside (optional, based on modal-overlay behavior)
-    confirmationModal.addEventListener('click', (event) => {
         if (event.target === confirmationModal) {
-            confirmationModal.classList.remove('show-modal');
-            document.body.classList.remove('modal-open');
-            currentButton = null;
+            closeConfirmationModal();
         }
     });
+
+
+    // --- Release Claim Stub Logic (Integrated with AJAX) ---
+    releaseClaimStubButtons.forEach(button => {
+        // Initial state is set by PHP through `disabled` and `data-released` attributes
+        // Add disabled class if the button is initially disabled by PHP
+        if (button.hasAttribute('disabled')) {
+            button.classList.add('disabled');
+        }
+
+        button.addEventListener('click', (event) => {
+            const clickedButton = event.target;
+            const row = clickedButton.closest('.data-row');
+            currentRequestId = row.dataset.reqId; // Store for confirmation
+
+            const canRelease = clickedButton.dataset.canReleaseClaimStub === 'true'; // Convert string 'true'/'false' to boolean
+            const isReleased = clickedButton.dataset.released === 'true'; // Convert string 'true'/'false' to boolean
+
+            console.log(`Release Claim Stub clicked for Req ID: ${currentRequestId}`); // DEBUG
+            console.log(`  data-can-release-claim-stub (raw): ${clickedButton.dataset.canReleaseClaimStub}`); // DEBUG
+            console.log(`  canRelease (JS boolean): ${canRelease}`); // DEBUG
+            console.log(`  data-released (raw): ${clickedButton.dataset.released}`); // DEBUG
+            console.log(`  isReleased (JS boolean): ${isReleased}`); // DEBUG
+
+
+            if (!canRelease && !isReleased) {
+                // This state should ideally be prevented by PHP's disabled attribute.
+                // If it's not releasable and not already released, simply alert.
+                alert('Claim stub cannot be released unless all offices have completed the clearance and it has not been released yet.');
+                return;
+            }
+
+            if (isReleased) {
+                alert('Claim stub has already been released for this request.');
+                return;
+            }
+
+            // If we reach here, it means canRelease is true and isReleased is false
+            openConfirmationModal(); // Show confirmation modal
+        });
+    });
+
+    // --- Confirmation for Release Claim Stub ---
+    confirmYesButton.addEventListener('click', async () => {
+        closeConfirmationModal(); // Hide confirmation modal immediately
+
+        if (currentRequestId) {
+            try {
+                // Send AJAX request to update the database
+                const response = await fetch('../php/update_claim_stub.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ req_id: currentRequestId })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Update the UI: change button text and disable it
+                    const releasedButton = document.querySelector(`.data-row[data-req-id="${currentRequestId}"] .release-claim-stub-button`);
+                    if (releasedButton) {
+                        releasedButton.textContent = 'Claim Stub Released';
+                        releasedButton.setAttribute('disabled', 'true');
+                        releasedButton.classList.add('disabled');
+                        releasedButton.dataset.released = 'true'; // Mark as released in dataset
+                        releasedButton.dataset.canReleaseClaimStub = 'false'; // Prevent further clicks
+                    }
+                    alert('Claim stub successfully released!');
+                } else {
+                    alert(`Failed to release claim stub: ${result.message || 'Unknown error'}`);
+                }
+            } catch (error) {
+                console.error('Error releasing claim stub:', error);
+                alert('An error occurred while communicating with the server.');
+            } finally {
+                currentRequestId = null; // Reset
+            }
+        }
+    });
+
+    // Event listener for closing the confirmation modal (No button)
+    confirmNoButton.addEventListener('click', closeConfirmationModal);
+
+
+    // Helper function to show alerts (using native alert for now)
+    function alert(message) {
+        console.log("Alert:", message);
+        window.alert(message);
+    }
 });

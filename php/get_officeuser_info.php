@@ -1,47 +1,39 @@
 <?php
+// get_useroffice_info.php
+session_start();
+require_once 'api_config.php';
 require_once 'database.php';
 
-header('Content-Type: application/json');
-
-session_start();
-
+// Check if the user is logged in by verifying the 'user_id' in the session.
 if (!isset($_SESSION['user_id'])) {
-    echo json_encode(['error' => 'User not logged in']);
-    exit();
+    echo json_encode(["success" => false, "message" => "User not logged in."]);
+    exit(); // Terminate script execution immediately.
 }
 
-$user_id = $_SESSION['user_id'];
+$userId = $_SESSION['user_id'];
 
-$sql = "SELECT u.firstname, u.lastname, u.email, u.office_code, o.description AS office_name -- Changed to o.description
+
+$sql = "SELECT u.firstname, u.middlename, u.lastname, u.office_code
         FROM users u
-        LEFT JOIN office o ON u.office_code = o.office_code
-        WHERE u.user_id = :user_id"; // Use named placeholder for PDO
+        WHERE u.user_id = :user_id"; // Using a named placeholder for security.
 
 try {
-    // Use $pdo for prepare
     $stmt = $pdo->prepare($sql);
-    
-    if ($stmt === false) {
-        echo json_encode(['error' => 'Failed to prepare statement.']);
-        exit();
-    }
+    $stmt->execute([':user_id' => $userId]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT); // Bind as integer
+    if ($user) {
+        // Construct the user's full name.
+        $user_name = trim($user['firstname']);
 
-    $stmt->execute();
-    
-    // PDO fetches results directly from the statement
-    $user_info = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($user_info) {
-        echo json_encode($user_info);
+        // Send a successful JSON response.
+        echo json_encode(["success" => true, "user" => ["user_name" => $user_name, "office_code" => $user['office_code']]]);
     } else {
-        echo json_encode(['error' => 'User not found']);
+        error_log("Session user_id " . $userId . " not found in database.");
+        echo json_encode(["success" => false, "message" => "Logged in user data not found."]);
     }
-
 } catch (PDOException $e) {
-    // Catch PDO-specific exceptions
-    error_log("Database error in get_officeuser_info.php: " . $e->getMessage());
-    echo json_encode(['error' => 'Database error occurred.']);
-    exit();
+    error_log("Database error in get_useroffice_info.php: " . $e->getMessage());
+    echo json_encode(["success" => false, "message" => "Database query error."]);
 }
+?>

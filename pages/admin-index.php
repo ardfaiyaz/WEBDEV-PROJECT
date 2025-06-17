@@ -3,8 +3,9 @@ session_start(); // IMPORTANT: Start the session at the very beginning of the fi
 
 // Check if the user is logged in. If not, redirect to the login page.
 // We use 'user_id' from the session variables set in login.php
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php"); // Adjust path if your login page is elsewhere
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['account_type'])) {
+    // Redirect to login page if not logged in
+    header('Location: login.php');
     exit();
 }
 
@@ -59,7 +60,7 @@ $displayFirstName = $_SESSION['firstname'] ?? 'User'; // Default to 'User' if no
           </a>
 
 
-          <a href="admin-request-stubs.html" class="card">
+          <a href="admin-request-stubs.php" class="card">
             <i class='bx bx-task icon'></i> <!-- Changed icon class here -->
             <h3>Process Requests</h3>
             <p>Approve, decline, or forward student requests with notes and file attachments.</p>
