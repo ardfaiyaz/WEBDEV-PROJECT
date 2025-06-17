@@ -321,7 +321,7 @@ body.modal-open {
     z-index: 10;
     padding-bottom: 10px;
     white-space: nowrap;
-    overflow-x: auto;
+    overflow-x: auto; /* Keep this here for the tabs to scroll if too many */
     -webkit-overflow-scrolling: touch;
 }
 
@@ -358,38 +358,20 @@ body.modal-open {
 .Status-table {
     margin-top: 20px;
     width: 100%;
-    overflow-x: auto;
+    overflow-x: auto; /* This makes the entire table scrollable horizontally */
     -webkit-overflow-scrolling: touch;
 }
 
-.Status-header {
-    display: grid;
-    grid-template-columns: repeat(6, minmax(120px, 1fr)) minmax(150px, 1fr);
-    padding: 14px 0;
-    align-items: center;
-    text-align: center;
-    min-width: 900px;
-    gap: 10px;
-}
-
+.Status-header,
 .Status-row {
     display: grid;
-    grid-template-columns: repeat(6, minmax(120px, 1fr)) minmax(150px, 1fr);
-    padding: 14px;
+    /* Adjusted grid-template-columns for better alignment, ensuring all cells are equally proportioned after minwidth */
+    grid-template-columns: minmax(80px, 0.5fr) minmax(120px, 1fr) minmax(180px, 1.5fr) minmax(120px, 1fr) minmax(100px, 0.8fr) minmax(130px, 1fr) minmax(160px, 1.2fr);
+    padding: 14px 0;
     align-items: center;
-    text-align: center;
-    min-width: 900px;
+    text-align: center; /* Center align all grid items by default */
+    /* Removed min-width from here to let grid sizing handle it, overflow-x on parent will scroll */
     gap: 10px;
-}
-
-.reqid,
-.studid,
-.studname,
-.program,
-.date-completed-column,
-.datesub,
-.remark-text {
-    text-align: center;
 }
 
 .Status-header {
@@ -397,14 +379,8 @@ body.modal-open {
     background-color: #f8f8f8;
     border-bottom: 2px solid #ddd;
     color: #333;
-    /* Removed redundant text-align: left here */
     border-radius: 6px 6px 0 0;
 }
-
-/* This rule was redundant and has been removed, as the general .Status-header div rule covers it */
-/* .Status-header div:last-child {
-    text-align: center;
-} */
 
 .Status-header div {
     font-weight: 600;
@@ -415,7 +391,7 @@ body.modal-open {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    text-align: center; /* <--- This centers all header texts */
+    text-align: center; /* Ensure all header texts are centered */
 }
 
 .Status-row {
@@ -425,8 +401,17 @@ body.modal-open {
     margin-bottom: 10px;
     transition: all 0.3s ease;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    text-align: left;
+    /* Removed text-align: left; to allow individual div rules or inherited center */
 }
+
+.Status-row div { /* Apply to all data cells */
+    text-align: center; /* Ensure all data cells are centered */
+    padding: 5px 10px; /* Add some padding for better visual */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 
 .Status-row:hover {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -434,17 +419,17 @@ body.modal-open {
 }
 
 .Status-row .actions {
-    padding: 0; /* Remove the default cell padding */
+    padding: 0; /* Keep padding for the cell itself, not for content inside */
 }
 
 .actions {
-    text-align: center;
+    text-align: center; /* Already centered due to main .Status-row div */
     display: flex;
     flex-direction: column;
     gap: 8px;
     align-items: center; /* Centered all items in the actions column */
     justify-content: center;
-    padding: 5px 10px 5px 10px;
+    padding: 5px 10px; /* Adjusted padding here for the column content */
 }
 
 .actions-placeholder {
@@ -468,10 +453,19 @@ body.modal-open {
     font-weight: 600;
     transition: background-color 0.3s ease;
     white-space: nowrap;
-    width: 80%;
+    width: 80%; /* Adjust width for better fit if needed */
     text-align: center;
     font-family: 'Montserrat', sans-serif;
 }
+/* New style for 'Cleared' text */
+.clear-button-text {
+    color: #28a745; /* Green color for cleared text */
+    font-weight: 600;
+    padding: 8px 15px; /* Match button padding for alignment */
+    display: inline-block; /* Ensure it respects padding/margin */
+    white-space: nowrap;
+}
+
 
 .clear-button:hover {
     background-color: #218838;
@@ -550,7 +544,7 @@ body.modal-open {
 
 /* Modal CSS */
 .modal-overlay {
-    display: none;
+    display: flex; /* Changed from none to flex by default, hidden by opacity and pointer-events */
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -559,17 +553,16 @@ body.modal-open {
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.6);
-    display: flex;
     justify-content: center;
     align-items: center;
     transition: opacity 0.3s ease;
     opacity: 0;
-    pointer-events: none;
+    pointer-events: none; /* Allows clicks to pass through when hidden */
 }
 
 .modal-overlay.show-modal {
     opacity: 1;
-    pointer-events: auto;
+    pointer-events: auto; /* Enables clicks when shown */
 }
 
 .modal-content {
@@ -593,33 +586,33 @@ body.modal-open {
     opacity: 1;
 }
 
-.modal-icon {
-    font-size: 60px;
-    color: #6a5acd;
+/* Confirmation and Add Remark Modal adjustments for consistency */
+.confirmation-modal-content,
+.add-remark-modal-content {
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+}
+
+.confirmation-modal-title,
+.add-remark-modal-content h4 {
+    font-size: 1.4em;
+    color: #2c2273;
     margin-bottom: 15px;
-    border: 3px solid #6a5acd;
-    border-radius: 50%;
-    padding: 10px;
-    display: inline-block;
+    font-weight: 700;
 }
 
-.modal-content h2 {
-    margin-top: 0;
-    color: #333;
-    font-size: 24px;
-    margin-bottom: 10px;
-}
-
-.modal-content p {
-    font-size: 16px;
+.confirmation-modal-message {
+    font-size: 1.1em;
     color: #555;
     margin-bottom: 25px;
+    line-height: 1.5;
 }
 
-.modal-buttons {
+.confirmation-buttons {
     display: flex;
     justify-content: center;
     gap: 15px;
+    width: 100%;
 }
 
 .modal-button {
@@ -630,9 +623,13 @@ body.modal-open {
     font-size: 16px;
     font-weight: 600;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    font-family: 'Montserrat', sans-serif; /* Ensure font is applied to modal buttons */
+    flex: 1; /* Allow buttons to grow */
+    max-width: 150px; /* Limit button width */
 }
 
 .modal-button.confirm {
+    font-family: 'Montserrat', sans-serif;
     background-color: #28a745;
     color: white;
 }
@@ -643,6 +640,7 @@ body.modal-open {
 }
 
 .modal-button.cancel {
+    font-family: 'Montserrat', sans-serif;
     background-color: #dc3545;
     color: white;
 }
@@ -651,6 +649,34 @@ body.modal-open {
     background-color: #c82333;
     transform: translateY(-2px);
 }
+
+.close-button { /* For Add Remark Modal */
+
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2em;
+    cursor: pointer;
+    color: #777;
+    transition: color 0.2s ease;
+}
+
+.close-button:hover {
+    color: #333;
+}
+
+#remarkTextarea {
+    width: calc(100% - 20px); /* Adjust for padding */
+    min-height: 100px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95em;
+    resize: vertical; /* Allow vertical resizing */
+}
+
 
 /* Custom Message Box (for alerts) */
 .custom-message-box {
@@ -664,6 +690,9 @@ body.modal-open {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     z-index: 1002;
     text-align: center;
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    align-items: center;
 }
 
 .custom-message-box p {
@@ -681,12 +710,19 @@ body.modal-open {
     cursor: pointer;
     font-weight: 600;
     transition: background-color 0.3s ease;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .custom-message-box-close:hover {
     background-color: #1f1850;
 }
 
+.no-requests-message {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-style: italic;
+}
 
 /* Responsive Adjustments */
 @media (max-width: 1200px) {
@@ -721,8 +757,9 @@ body.modal-open {
 
     .Status-header,
     .Status-row {
-        grid-template-columns: repeat(6, minmax(100px, 1fr)) minmax(150px, 1fr);
-        min-width: unset;
+        /* Adjusted grid to be more flexible, still 7 columns */
+        grid-template-columns: repeat(7, minmax(80px, 1fr));
+        min-width: 700px; /* Allow content to overflow for smaller screens, table will scroll */
         gap: 5px;
     }
 }
@@ -822,24 +859,37 @@ body.modal-open {
         font-size: 12px;
         padding: 8px 0;
         gap: 5px;
-        grid-template-columns: repeat(7, minmax(80px, 1fr));
-        min-width: 600px;
+        grid-template-columns: repeat(7, minmax(60px, 1fr)); /* Further reduced min width for very small screens */
+        min-width: 500px; /* Allow content to overflow for smaller screens */
     }
 
     .actions {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center; /* Keep centered in column for small screens */
         gap: 5px;
+        width: 100%; /* Take full width of cell */
     }
 
     .add-remark-button,
     .clear-button {
-        width: 100%;
-        text-align: left;
+        width: 90%; /* Buttons take most of the width */
+        text-align: center;
+        padding: 6px 10px; /* Smaller padding */
+        font-size: 0.8em;
+    }
+    .clear-button-text {
+         width: 90%;
+         text-align: center;
+         font-size: 0.8em;
+         padding: 6px 10px;
     }
 
+
     .dropdown-menu {
-        min-width: 100%;
+        min-width: unset; /* Remove min-width to prevent overflow */
+        width: 100%;
+        left: 0;
+        right: auto;
     }
 
     /* Modal responsive */
@@ -857,6 +907,11 @@ body.modal-open {
     .status-badge {
         width: 100%;
         min-width: unset;
+    }
+
+    .modal-button {
+        padding: 10px 15px;
+        font-size: 0.9em;
     }
 }
 
@@ -886,12 +941,12 @@ body.modal-open {
         padding: 10px 20px;
     }
 
-            .status-box p {
-                font-size: 24px;
-            }
-            .Status-header,
-            .Status-row {
-                grid-template-columns: repeat(7, minmax(60px, 1fr));
-                min-width: 450px;
-            }
-        }
+    .status-box p {
+        font-size: 24px;
+    }
+    .Status-header,
+    .Status-row {
+        grid-template-columns: repeat(7, minmax(50px, 1fr)); /* Even smaller min-width for very small devices */
+        min-width: 400px; /* Further reduced min-width */
+    }
+}

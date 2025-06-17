@@ -73,12 +73,14 @@
 
                 <div class="Status-table">
                     <div class="Status-header">
-                        <div>REQUEST ID</div>
-                        <div>STUDENT ID</div>
-                        <div>STUDENT NAME</div>
-                        <div>PROGRAM</div>
-                        <div id="statusOrRemarkHeader">STATUS</div> <div>DATE SUBMITTED</div>
-                        <div id="actionsHeader">ACTIONS</div> </div>
+                        <div class="reqid">REQUEST ID</div>
+                        <div class="studid">STUDENT ID</div>
+                        <div class="studname">STUDENT NAME</div>
+                        <div class="program">PROGRAM</div>
+                        <div id="statusOrRemarkHeader" class="status-cell">STATUS</div>
+                        <div class="datesub">DATE SUBMITTED</div>
+                        <div id="actionsHeader" class="actions">ACTIONS</div>
+                    </div>
                     <div id="requests-container"></div>
                 </div>
             </div>
@@ -246,7 +248,7 @@ function createRequestRow(request, filterStatusFrontend) {
     if (filterStatusFrontend === 'ON-GOING') {
         fifthColumnContent = `<div class="remark-column"><span class="remark-text">${request.office_remarks || 'N/A'}</span></div>`;
     } else {
-        fifthColumnContent = `<div>${statusDisplay}</div>`;
+        fifthColumnContent = `<div class="status-cell">${statusDisplay}</div>`;
     }
 
     if (filterStatusFrontend !== 'ALL') {
@@ -276,11 +278,12 @@ function createRequestRow(request, filterStatusFrontend) {
 
 
     row.innerHTML = `
-        <div>${request.req_id}</div>
-        <div>${request.student_id}</div>
-        <div>${request.student_name}</div>
-        <div>${request.program}</div>
-        ${fifthColumnContent} <div>${request.date_submitted}</div>
+        <div class="reqid">${request.req_id}</div>
+        <div class="studid">${request.student_id}</div>
+        <div class="studname">${request.student_name}</div>
+        <div class="program">${request.program}</div>
+        ${fifthColumnContent}
+        <div class="datesub">${request.date_submitted}</div>
         <div class="actions">${actionsContent}</div> `;
 
     return row;
