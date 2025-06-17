@@ -26,7 +26,7 @@ $displayFirstName = $_SESSION['firstname'] ?? 'User'; // Default to 'User' if no
 <body>
   <header class="topbar">
         <div class="logo-section">
-            <a href="index.html" class="logo-link">
+            <a href="admin-index.php" class="logo-link">
                 <img src="../assets/icons/NU_shield.svg.png" alt="School Logo">
                 <span class="school-name">NATIONAL<br/>UNIVERSITY</span>
             </a>
