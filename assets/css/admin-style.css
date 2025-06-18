@@ -20,7 +20,7 @@ body {
   color: #2c2c2c;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh; /* Ensure body takes at least full viewport height */
 }
 
 /* Header Topbar */
@@ -214,6 +214,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: auto; /* This will center the main-content */
+  width: 100%; /* Ensure it takes full width to allow for horizontal centering */
 }
 
 .main-content.shifted {
