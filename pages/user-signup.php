@@ -39,6 +39,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
         $errors[] = "School Email is required.";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = "Invalid school email format.";
+    } elseif (!str_ends_with($email, "@students.nu-dasma.edu.ph")) {
+        $errors[] = "School Email must end with '@students.nu-dasma.edu.ph'.";
     }
 
     // Validate student ID as a positive integer

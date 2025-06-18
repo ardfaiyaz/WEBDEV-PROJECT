@@ -185,6 +185,116 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
     <?php endif; ?>
 
 </head>
+
+<style>
+    #notification-container {
+    position: fixed; /* Stays in place when scrolling */
+    bottom: 20px;    /* 20px from bottom */
+    right: 20px;     /* 20px from right */
+    z-index: 1000;   /* Ensure it's above other content */
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between multiple notifications */
+    max-width: 350px; /* Limit width */
+}
+
+.notification {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 15px 20px;
+    color: #333;
+    font-size: 14px;
+    line-height: 1.4;
+    opacity: 0; /* Start hidden for animation */
+    transform: translateX(100%); /* Start off-screen to the right */
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out; /* Smooth slide and fade */
+    position: relative; /* For close button positioning */
+    display: flex;
+    flex-direction: column;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateX(0); /* Slide in */
+}
+
+.notification.hide {
+    opacity: 0;
+    transform: translateX(100%); /* Slide out */
+}
+
+.notification-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    padding-right: 25px; /* Space for close button */
+}
+
+.notification-header i {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+.notification-body ul {
+    margin: 5px 0 0 0;
+    padding-left: 20px;
+    list-style-type: disc;
+}
+
+.notification-body ul li {
+    margin-bottom: 2px;
+}
+
+
+/* Specific styles for different notification types */
+.notification-danger {
+    border-left: 5px solid #dc3545; /* Red border */
+    color: #721c24; /* Dark red text */
+    background-color: #f8d7da; /* Light red background */
+}
+.notification-danger .notification-header i {
+    color: #dc3545; /* Red icon */
+}
+.notification-danger strong {
+    color: #dc3545; /* Red heading text */
+}
+
+.notification-success {
+    border-left: 5px solid #28a745; /* Green border */
+    color: #155724; /* Dark green text */
+    background-color: #d4edda; /* Light green background */
+}
+.notification-success .notification-header i {
+    color: #28a745; /* Green icon */
+}
+.notification-success strong {
+    color: #28a745; /* Green heading text */
+}
+
+.notification .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    line-height: 1;
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.notification .close-btn:hover {
+    color: #666;
+}
+
+/* Old alert styles removed */
+.alert, .alert-danger, .alert-success {
+    display: none; /* Hide the old static alert boxes */
+}
+</style>
+
 <body>
     <div class="signup-wrapper">
         <div class="signup-container">
@@ -309,7 +419,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
     </div>
 
     <div id="notification-container">
-    </div>
+    </div>  
 
     <script>
         // Define an object to hold our PHP data for client-side JS
