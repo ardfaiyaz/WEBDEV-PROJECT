@@ -256,6 +256,14 @@ body {
     box-sizing: border-box; /* Include padding in width/height */
 }
 
+.icon {
+    font-size: 40px;
+    color: green; /* Or any color you want */
+    display: block;
+    margin-bottom: 10px;
+}
+
+
 .claim-notification h2 {
     font-size: 1.8em; /* Adjusted based on previous suggestion for larger heading */
     color: #333; /* Darker color for better contrast */
