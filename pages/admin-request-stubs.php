@@ -142,8 +142,9 @@ try {
         $request['avatar_url_display'] = 'https://placehold.co/80x80/cccccc/333333?text=User';
 
 
+        // IMPORTANT: Changed 'req_id' to 'request_id' to match get_consent_file.php
         $request['consent_file_url'] = !empty($request['consent_letter']) ?
-                                      '../php/serve_consent_file.php?req_id=' . $request['req_id'] :
+                                      '../php/get_consent_file.php?request_id=' . $request['req_id'] :
                                       '#';
 
         $request['clearance_type_display'] = htmlspecialchars(strtoupper($request['enrollment_purpose']));
@@ -214,7 +215,7 @@ $js_version = time(); // Using timestamp to ensure a unique version on every loa
 
         <nav class="top-navbar">
             <ul class="navbar-menu">
-                <li class="menu-item"><a href="UserPOV.html"><i class='bx bxs-home icon-sidebar'></i> Home</a></li>
+                <li class="menu-item"><a href="admin-index.php"><i class='bx bxs-home icon-sidebar'></i> Home</a></li>
                 <li class="menu-item"><a href="#"><i class='bx bxs-user icon-sidebar'></i> Profile</a></li>
                 <li class="menu-item"><a href="About-us.html"><i class='bx bxs-file icon-sidebar'></i> About Us</a></li>
                 <li class="menu-item"><a href="../php/logout.php"><i class='bx bxs-log-out icon-sidebar'></i> Logout</a></li>
@@ -241,7 +242,7 @@ $js_version = time(); // Using timestamp to ensure a unique version on every loa
                     <h2>View Requests</h2>
                 </div>
                 <div class="header-actions">
-                    <a href="admin-dashboard.php" class="back-link">Back to Dashboard</a>
+                    <a href="admin-index.php" class="back-link">Back to Dashboard</a>
                 </div>
             </div>
 

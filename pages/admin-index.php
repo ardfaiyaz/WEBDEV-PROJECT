@@ -1,6 +1,7 @@
 <?php
 session_start(); // IMPORTANT: Start the session at the very beginning of the file
 
+$loggedInAdminName = $_SESSION['username'] ?? 'Admin';
 // Check if the user is logged in. If not, redirect to the login page.
 // We use 'user_id' from the session variables set in login.php
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['account_type'])) {
@@ -24,29 +25,32 @@ $displayFirstName = $_SESSION['firstname'] ?? 'User'; // Default to 'User' if no
 </head>
 <body>
   <header class="topbar">
-    <a href="index.html" class="logo-link">
-      <div class="logo-section">
-        <img src="../assets/images/school-logo.png" alt="Logo">
-        <span class="school-name">NATIONAL<br/>UNIVERSITY</span>
-      </div>
-    </a>
-    <div class="user-section">
-      <i class='bx bxs-bell'></i>
-      <span class="username">Hi, Admin</span>
-      <i class='bx bxs-user-circle'></i>
-    </div>
-  </header>
+        <div class="logo-section">
+            <a href="admin-index.php" class="logo-link">
+                <img src="../assets/icons/NU_shield.svg.png" alt="School Logo">
+                <span class="school-name">NATIONAL<br/>UNIVERSITY</span>
+            </a>
+        </div>
+
+        <nav class="top-navbar">
+            <ul class="navbar-menu">
+                <li class="menu-item"><a href="admin-index.php"><i class='bx bxs-home icon-sidebar'></i> Home</a></li>
+                <li class="menu-item"><a href="clearance-request.php"><i class='bx bxs-file-export icon-sidebar'></i> Requests</a></li>
+                <li class="menu-item"><a href="about-us.html"><i class='bx bxs-file icon-sidebar'></i> About Us</a></li>
+                <li class="menu-item"><a href="../php/logout.php"><i class='bx bxs-log-out icon-sidebar'></i> Logout</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-right-section">
+            <div class="user-section">
+                <i class='bx bxs-bell'></i>
+                <span class="username">Hi, <?php echo htmlspecialchars($loggedInAdminName); ?></span>
+                <i class='bx bxs-user-circle'></i>
+            </div>
+        </div>
+    </header>
 
   <div class="content-wrapper">
-    <aside class="sidebar" id="sidebar">
-      <ul class="icon-menu">
-        <li><a href="#"><i class='bx bxs-home'></i><span class="label">Home</span></a></li>
-        <li><a href="#"><i class='bx bxs-user'></i><span class="label">Profile</span></a></li>
-        <li><a href="#"><i class='bx bxs-bell'></i><span class="label">Announcements</span></a></li>
-        <li><a href="#"><i class='bx bxs-log-out'></i><span class="label">Logout</span></a></li>
-      </ul>
-    </aside>
-
     <main class="main-content" id="mainContent">
       <section>
         <h2>STUDENT CLEARANCE SYSTEM</h2>

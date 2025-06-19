@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once '../php/database.php'; // Ensure this path is correct for your admin structure
+require_once '../php/database.php';
 
 // Define the office mappings with associated office_code and role_code
 $officeMappings = [
@@ -21,13 +21,16 @@ $middleName = '';
 $lastName = '';
 $email = '';
 $employeeId = '';
-$office = '';      // New variable for admin signup (holds the key from $officeMappings)
-$errors = [];      // For validation errors that keep the user on the same page
-$generalErrorHeading = ''; // For the heading of the validation errors
+$office = '';      // Variable for admin signup (holds the key from $officeMappings)
+$errors = [];
+$generalErrorHeading = '';
 
 // Variable for success message (will be displayed inline)
 $successMessage = '';
-$redirectNow = false; // Flag to trigger immediate redirect after success
+$redirectNow = false;
+
+// Define the required email domain for admins
+$requiredAdminEmailDomain = '@admin.nu-dasma.edu.ph';
 
 // --- HANDLE FORM SUBMISSION (PHP Processing Logic) ---
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
@@ -36,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
     $firstName = trim($_POST['firstName'] ?? '');
     $middleName = trim($_POST['middleName'] ?? '');
     $lastName = trim($_POST['lastName'] ?? '');
-    $email = trim($_POST['email'] ?? '');
+    $email = trim($_POST['email'] ?? ''); // This will be the full email including the domain
     $employeeId = trim($_POST['employeeId'] ?? '');
     $office = trim($_POST['office'] ?? ''); // This will be the key from $officeMappings
     $password = $_POST['password'] ?? '';
@@ -49,10 +52,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
     if (empty($lastName)) {
         $errors[] = "Last name is required.";
     }
+
     if (empty($email)) {
         $errors[] = "School Email is required.";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Invalid school email format.";
+        $errors[] = "Invalid school email format. It should look like 'username" . htmlspecialchars($requiredAdminEmailDomain) . "'.";
+    } elseif (!str_ends_with($email, $requiredAdminEmailDomain)) {
+        $errors[] = "School Email must end with " . htmlspecialchars($requiredAdminEmailDomain) . ".";
     }
 
     // Validate Employee ID as a positive integer
@@ -179,6 +185,116 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
     <?php endif; ?>
 
 </head>
+
+<style>
+    #notification-container {
+    position: fixed; /* Stays in place when scrolling */
+    bottom: 20px;    /* 20px from bottom */
+    right: 20px;     /* 20px from right */
+    z-index: 1000;   /* Ensure it's above other content */
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between multiple notifications */
+    max-width: 350px; /* Limit width */
+}
+
+.notification {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 15px 20px;
+    color: #333;
+    font-size: 14px;
+    line-height: 1.4;
+    opacity: 0; /* Start hidden for animation */
+    transform: translateX(100%); /* Start off-screen to the right */
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out; /* Smooth slide and fade */
+    position: relative; /* For close button positioning */
+    display: flex;
+    flex-direction: column;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateX(0); /* Slide in */
+}
+
+.notification.hide {
+    opacity: 0;
+    transform: translateX(100%); /* Slide out */
+}
+
+.notification-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    padding-right: 25px; /* Space for close button */
+}
+
+.notification-header i {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+.notification-body ul {
+    margin: 5px 0 0 0;
+    padding-left: 20px;
+    list-style-type: disc;
+}
+
+.notification-body ul li {
+    margin-bottom: 2px;
+}
+
+
+/* Specific styles for different notification types */
+.notification-danger {
+    border-left: 5px solid #dc3545; /* Red border */
+    color: #721c24; /* Dark red text */
+    background-color: #f8d7da; /* Light red background */
+}
+.notification-danger .notification-header i {
+    color: #dc3545; /* Red icon */
+}
+.notification-danger strong {
+    color: #dc3545; /* Red heading text */
+}
+
+.notification-success {
+    border-left: 5px solid #28a745; /* Green border */
+    color: #155724; /* Dark green text */
+    background-color: #d4edda; /* Light green background */
+}
+.notification-success .notification-header i {
+    color: #28a745; /* Green icon */
+}
+.notification-success strong {
+    color: #28a745; /* Green heading text */
+}
+
+.notification .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    line-height: 1;
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.notification .close-btn:hover {
+    color: #666;
+}
+
+/* Old alert styles removed */
+.alert, .alert-danger, .alert-success {
+    display: none; /* Hide the old static alert boxes */
+}
+</style>
+
 <body>
     <div class="signup-wrapper">
         <div class="signup-container">
@@ -191,11 +307,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
                 <?php
                 // Display validation errors or success message using the new notification classes
                 if (!empty($errors)) {
-                    // Start the notification container outside the notification div
                     echo '<div id="notification-container">';
-                    echo '<div class="notification notification-danger show">'; // Ensure 'show' class is present to trigger animation
+                    echo '<div class="notification notification-danger show">';
                     echo '<div class="notification-header">';
-                    echo '<i class="fas fa-times-circle"></i>'; // Error icon
+                    echo '<i class="fas fa-times-circle"></i>';
                     echo '<strong>' . htmlspecialchars($generalErrorHeading) . '</strong>';
                     echo '<button class="close-btn">&times;</button>';
                     echo '</div>';
@@ -207,13 +322,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
                     echo '</ul>';
                     echo '</div>';
                     echo '</div>';
-                    echo '</div>'; // Close the notification container
-                } elseif (!empty($successMessage)) { // Display success message
-                    // Start the notification container outside the notification div
+                    echo '</div>';
+                } elseif (!empty($successMessage)) {
                     echo '<div id="notification-container">';
-                    echo '<div class="notification notification-success show">'; // Ensure 'show' class is present to trigger animation
+                    echo '<div class="notification notification-success show">';
                     echo '<div class="notification-header">';
-                    echo '<i class="fas fa-check-circle"></i>'; // Success icon
+                    echo '<i class="fas fa-check-circle"></i>';
                     echo '<strong>Success!</strong>';
                     echo '<button class="close-btn">&times;</button>';
                     echo '</div>';
@@ -221,7 +335,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
                     echo '<p>' . htmlspecialchars($successMessage) . '</p>';
                     echo '</div>';
                     echo '</div>';
-                    echo '</div>'; // Close the notification container
+                    echo '</div>';
                 }
                 ?>
 
@@ -247,13 +361,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
                             </div>
 
                             <div class="form-item">
-                                <input type="email" id="email" name="email" placeholder=" " required
-                                        value="<?php echo htmlspecialchars($email); ?>" />
+                                <input type="email" id="email" name="email"
+                                       placeholder="username@admin.nu-dasma.edu.ph" required
+                                       value="<?php
+                                           echo empty($email) ? '@admin.nu-dasma.edu.ph' : htmlspecialchars($email);
+                                       ?>" />
                                 <label for="email">School Email:</label>
                             </div>
                             <div class="form-item">
-                                <input type="number" id="employeeId" name="employeeId" placeholder=" " required
-                                        value="<?php echo htmlspecialchars($employeeId); ?>" />
+                                <input type="number" id="employeeId" name="employeeId" placeholder=" " required value="<?php echo htmlspecialchars($employeeId); ?>" />
                                 <label for="employeeId">Employee ID:</label>
                             </div>
 
@@ -262,17 +378,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
                                 <select id="office" name="office" required>
                                     <option value="" disabled selected>Select Office</option>
                                     <?php
-                                    // Dynamically populate options from the $officeMappings array
                                     foreach ($officeMappings as $key => $values) {
-                                        // $key is 'registrar-office', 'dean-program-chair-principal', etc.
-                                        // $values['office_code'] is 'REG', 'DN_PC_PR', etc.
-                                        // $values['role_code'] is 'ADMIN', 'SUB_ADMIN', etc.
-
-                                        // Convert the key to a more readable format for the display text
                                         $displayOfficeName = ucwords(str_replace('-', ' ', $key));
 
                                         echo '<option value="' . htmlspecialchars($key) . '"';
-                                        // Retain selected option on form submission if validation fails
                                         if ($office === $key) {
                                             echo ' selected';
                                         }
@@ -309,108 +418,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
         </div>
     </div>
 
+    <div id="notification-container">
+    </div>  
+
+    <script>
+        // Define an object to hold our PHP data for client-side JS
+        window.phpData = {
+            hasErrors: <?php echo json_encode(!empty($errors)); ?>,
+            errorMessageHtml: <?php echo json_encode(!empty($errors) ? (
+                (!empty($generalErrorHeading) ? '<strong>' . htmlspecialchars($generalErrorHeading) . '</strong>' : '') .
+                '<ul>' . implode('', array_map(function($e) { return '<li>' . htmlspecialchars($e) . '</li>'; }, $errors)) . '</ul>'
+            ) : null); ?>,
+            successMessage: <?php echo json_encode($successMessage); ?>,
+            redirectNow: <?php echo json_encode($redirectNow); ?>
+        };
+    </script>
     <script src="../js/admin-signup.js"></script>
-    <style>
-        #notification-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            left: auto;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-width: 350px;
-        }
-
-        .notification {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            padding: 15px 20px;
-            color: #333;
-            font-size: 14px;
-            line-height: 1.4;
-            opacity: 0;
-            transform: translateX(100%);
-            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .notification.show {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .notification.hide {
-            opacity: 0;
-            transform: translateX(100%);
-        }
-
-        .notification-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
-            padding-right: 25px;
-        }
-
-        .notification-header i {
-            margin-right: 8px;
-            font-size: 18px;
-        }
-
-        .notification-body ul {
-            margin: 5px 0 0 0;
-            padding-left: 20px;
-            list-style-type: disc;
-        }
-
-        .notification-body ul li {
-            margin-bottom: 2px;
-        }
-
-        .notification-danger {
-            border-left: 5px solid #dc3545;
-            color: #721c24;
-            background-color: #f8d7da;
-        }
-        .notification-danger .notification-header i {
-            color: #dc3545;
-        }
-        .notification-danger strong {
-            color: #dc3545;
-        }
-
-        .notification-success {
-            border-left: 5px solid #28a745;
-            color: #155724;
-            background-color: #d4edda;
-        }
-        .notification-success .notification-header i {
-            color: #28a745;
-        }
-        .notification-success strong {
-            color: #28a745;
-        }
-
-        .notification .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            line-height: 1;
-            color: #aaa;
-            cursor: pointer;
-            transition: color 0.2s ease;
-        }
-
-        .notification .close-btn:hover {
-            color: #666;
-        }
-    </style>
 </body>
 </html>
