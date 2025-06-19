@@ -243,11 +243,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
                                         value="<?php echo htmlspecialchars($middleName); ?>" />
                                     <label for="middleName">Middle Name</label>
                                 </div>
-                                <div class="form-item">
-                                    <input type="text" id="lastName" name="lastName" placeholder=" " required
-                                        value="<?php echo htmlspecialchars($lastName); ?>" />
-                                    <label for="lastName">Last Name</label>
-                                </div>
+                            </div>
+                            <div class="form-item">
+                                <input type="text" id="lastName" name="lastName" placeholder=" " required
+                                    value="<?php echo htmlspecialchars($lastName); ?>" />
+                                <label for="lastName">Last Name</label>
                             </div>
 
                             <div class="form-item">

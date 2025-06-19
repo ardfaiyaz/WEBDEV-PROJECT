@@ -391,7 +391,6 @@ if ($studentInfoData) {
                 </div>
                 <div class="form-row">
                     <label>Province: <input type="text" value="<?php echo $displayProvince; ?>" readonly /></label>
-                    <label>Postal Code: <input type="text" value="<?php echo empty($displayPostalCode) ? 'N/A' : $displayPostalCode; ?>" readonly /></label>
                 </div>
             </div>
         </main>
