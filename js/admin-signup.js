@@ -5,20 +5,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const header = document.querySelector('.header');
     const formItems = document.querySelectorAll('.form-item');
     const submitButton = document.getElementById('adminSubmitButton');
-    const notificationContainer = document.getElementById('notification-container'); // Ensure this ID exists in your HTML
+    const notificationContainer = document.getElementById('notification-container');
 
     // --- Function to display notification ---
     function showNotification(message, type, heading = '') {
-        // Clear any existing notifications before showing a new one
         if (notificationContainer) {
-            notificationContainer.innerHTML = ''; //
+            notificationContainer.innerHTML = ''; // Clear existing notifications
         }
 
         const notification = document.createElement('div');
         notification.classList.add('notification', `notification-${type}`);
         notification.innerHTML = `
             <div class="notification-header">
-                ${type === 'danger' ? '<i class="fas fa-exclamation-circle"></i>' : '<i class="fas fa-check-circle"></i>'}
+                ${type === 'danger' ? '<i class="fas fa-times-circle"></i>' : '<i class="fas fa-check-circle"></i>'}
                 <strong>${heading || (type === 'danger' ? 'Error!' : 'Success!')}</strong>
                 <button class="close-btn">&times;</button>
             </div>
@@ -26,59 +25,50 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
 
         if (notificationContainer) {
-            notificationContainer.appendChild(notification); //
+            notificationContainer.appendChild(notification);
+            void notification.offsetWidth; // Force reflow
+            notification.classList.add('show');
 
-            // Force reflow to ensure animation plays
-            void notification.offsetWidth; //
-
-            notification.classList.add('show'); // Trigger slide-in animation
-
-            // Close button functionality
             notification.querySelector('.close-btn').addEventListener('click', function() {
-                hideNotification(notification); //
+                hideNotification(notification);
             });
 
-            // Auto-hide logic
             setTimeout(() => {
-                if (notification.parentNode) { // Check if notification is still in the DOM
-                    hideNotification(notification); //
+                if (notification.parentNode) {
+                    hideNotification(notification);
                 }
-            }, type === 'success' ? 3000 : 5000); // 3 seconds for success, 5 for errors
+            }, type === 'success' ? 3000 : 5000);
         } else {
             console.error("Notification container not found. Cannot display notification.");
-            // Fallback to alert if container is missing (less ideal, but better than nothing)
             alert(`${heading || (type === 'danger' ? 'Error!' : 'Success!')}\n\n${message}`);
         }
     }
 
     // --- Function to hide notification ---
     function hideNotification(notificationElement) {
-        notificationElement.classList.remove('show'); //
-        notificationElement.classList.add('hide'); // Trigger slide-out animation
+        notificationElement.classList.remove('show');
+        notificationElement.classList.add('hide');
         notificationElement.addEventListener('animationend', () => {
-            notificationElement.remove(); //
-        }, { once: true }); // Remove after animation ends
+            notificationElement.remove();
+        }, { once: true });
     }
 
     // --- Password Toggle Animation ---
     passwordToggles.forEach(toggle => {
         toggle.addEventListener('click', function() {
-            // Find the input element within the same password-input-container
             const passwordInput = this.closest('.password-input-container').querySelector('input');
 
             if (passwordInput) {
                 const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                 passwordInput.setAttribute('type', type);
 
-                // Toggle the eye icon
                 this.querySelector('i').classList.toggle('fa-eye');
                 this.querySelector('i').classList.toggle('fa-eye-slash');
 
-                // Add pop animation
                 this.classList.add('icon-pop');
                 setTimeout(() => {
                     this.classList.remove('icon-pop');
-                }, 200); // Matches CSS transition duration
+                }, 200);
             }
         });
     });
@@ -90,14 +80,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const confirmPassword = document.getElementById('confirmPassword').value;
 
             if (password !== confirmPassword) {
-                // Prevent form submission if passwords don't match
                 event.preventDefault();
-                // Display a specific notification for this client-side error
                 showNotification('Your passwords do not match. Please try again.', 'danger', 'Password Mismatch');
             }
-            // If passwords match, the form will submit normally to the PHP script.
-            // The PHP script will then handle server-side validation and display
-            // success/error messages via the meta refresh or the PHP block in HTML.
         });
     }
 
@@ -132,17 +117,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Initial check for PHP-generated notifications on page load
-    // The PHP code already adds the 'show' class, so the CSS animation will trigger.
-    // We just need to attach the close button listener and auto-hide.
     if (notificationContainer) {
         const initialNotification = notificationContainer.querySelector('.notification.show');
         if (initialNotification) {
-            // Attach close button listener
             initialNotification.querySelector('.close-btn').addEventListener('click', function() {
                 hideNotification(initialNotification);
             });
 
-            // Determine type for auto-hide duration
             const isSuccess = initialNotification.classList.contains('notification-success');
             setTimeout(() => {
                 if (initialNotification.parentNode) {
@@ -151,4 +132,31 @@ document.addEventListener('DOMContentLoaded', function() {
             }, isSuccess ? 3000 : 5000);
         }
     }
+    
+    // Handle initial state of floating labels for pre-filled values (from PHP)
+    formItems.forEach(item => {
+        const input = item.querySelector('input, select');
+        const label = item.querySelector('label');
+        if (input && label) {
+            // For text inputs and email inputs
+            if (input.tagName === 'INPUT' && input.value.length > 0) {
+                label.style.top = '0px';
+                label.style.fontSize = '12px';
+                label.style.color = '#29227c';
+                label.style.transform = 'translateY(-50%) scale(0.9)';
+                label.style.backgroundColor = 'white';
+                label.style.padding = '0 5px';
+            }
+            // For select elements
+            else if (input.tagName === 'SELECT' && input.value !== "") {
+                label.style.top = '0px';
+                label.style.fontSize = '12px';
+                label.style.color = '#29227c';
+                label.style.transform = 'translateY(-50%) scale(0.9)';
+                label.style.backgroundColor = 'white';
+                label.style.padding = '0 5px';
+            }
+        }
+    });
+
 });
