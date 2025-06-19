@@ -1,15 +1,59 @@
 <?php
-session_start(); // IMPORTANT: Start the session at the very beginning of the file
+session_start();
 
-// Check if the user is logged in. If not, redirect to the login page.
-// We use 'user_id' from the session variables set in login.php
+require_once __DIR__ . '/../php/database.php';
+
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php"); // Adjust path if your login page is elsewhere
+    header("Location: login.php");
     exit();
 }
 
+$loggedInUserId = $_SESSION['user_id'];
+$displayFirstName = $_SESSION['firstname'] ?? 'User';
 
-$displayFirstName = $_SESSION['firstname'] ?? 'User'; // Default to 'User' if not set
+$showClaimNotification = false;
+$claimNotificationData = [
+    'req_id' => '',
+    'documents' => []
+];
+
+try {
+    // 1. Find the latest clearance request for the user
+    $stmtLatestReq = $pdo->prepare("
+        SELECT req_id, claim_stub
+        FROM clearance_request
+        WHERE user_id = :user_id
+        ORDER BY req_date DESC, req_id DESC
+        LIMIT 1
+    ");
+    $stmtLatestReq->bindParam(':user_id', $loggedInUserId, PDO::PARAM_INT);
+    $stmtLatestReq->execute();
+    $latestRequest = $stmtLatestReq->fetch(PDO::FETCH_ASSOC);
+
+    if ($latestRequest && $latestRequest['claim_stub'] == 1) {
+        $showClaimNotification = true;
+        $claimNotificationData['req_id'] = $latestRequest['req_id'];
+
+        // 2. If claim stub is released, fetch the requested documents
+        $stmtDocuments = $pdo->prepare("
+            SELECT dr.doc_copies, d.description AS document_name
+            FROM document_request dr
+            JOIN document d ON dr.doc_code = d.doc_code
+            WHERE dr.req_id = :req_id
+        ");
+        $stmtDocuments->bindParam(':req_id', $latestRequest['req_id'], PDO::PARAM_INT);
+        $stmtDocuments->execute();
+        $claimNotificationData['documents'] = $stmtDocuments->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+} catch (PDOException $e) {
+    // In a production environment, you would log this error to a file
+    // and perhaps show a generic error message to the user, not the specific error.
+    error_log("Database Error fetching claim notification data: " . $e->getMessage());
+    // For now, we'll just ensure the notification isn't shown if there's a DB error.
+    $showClaimNotification = false;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,15 +67,15 @@ $displayFirstName = $_SESSION['firstname'] ?? 'User'; // Default to 'User' if no
 </head>
 <body>
     <header class="topbar">
-        <a href="index.php" class="logo-link"> 
+        <a href="index.php" class="logo-link">
             <div class="logo-section">
                 <img src="../assets/images/school-logo.png" alt="Logo">
                 <span class="school-name">NATIONAL<br/>UNIVERSITY</span>
             </div>
         </a>
         <div class="user-section">
-            <i class='bx bxs-bell' id="notification-bell"></i> 
-            <span class="username">Hi, <?= htmlspecialchars($displayFirstName); ?> </span> 
+            <i class='bx bxs-bell notification-bell-icon <?php echo $showClaimNotification ? "has-notification" : ""; ?>' id="notification-bell"></i>
+            <span class="username">Hi, <?= htmlspecialchars($displayFirstName); ?> </span>
             <i class='bx bxs-user-circle'></i>
         </div>
     </header>
@@ -39,10 +83,10 @@ $displayFirstName = $_SESSION['firstname'] ?? 'User'; // Default to 'User' if no
     <div class="content-wrapper">
         <aside class="sidebar" id="sidebar">
             <ul class="icon-menu">
-                <li><a href="index.php"><i class='bx bxs-home'></i><span class="label">Home</span></a></li> 
+                <li><a href="index.php"><i class='bx bxs-home'></i><span class="label">Home</span></a></li>
                 <li><a href="user-profile.php"><i class='bx bxs-user'></i><span class="label">Profile</span></a></li>
                 <li><a href="track-clearance.php"><i class='bx bxs-file'></i><span class="label">My Clearances</span></a></li>
-                <li><a href="../php/logout.php"><i class='bx bxs-log-out'></i><span class="label">Logout</span></a></li> 
+                <li><a href="../php/logout.php"><i class='bx bxs-log-out'></i><span class="label">Logout</span></a></li>
             </ul>
         </aside>
 
@@ -56,7 +100,7 @@ $displayFirstName = $_SESSION['firstname'] ?? 'User'; // Default to 'User' if no
                         <h3>Track my Clearance</h3>
                         <p>Visual tracker showing your current clearance status, pending steps, and completed stages.</p>
                     </a>
-                    
+
                     <a href="apply-clearance.php" class="card">
                         <i class='bx bx-file icon'></i>
                         <h3>Apply for Clearance</h3>
@@ -66,15 +110,30 @@ $displayFirstName = $_SESSION['firstname'] ?? 'User'; // Default to 'User' if no
             </section>
         </main>
 
-        
-        <div id="claim-notification" class="claim-notification">
-            <img src="" alt="Checkmark" class="check-icon">
+        <div id="claim-notification" class="claim-notification" style="display: <?php echo $showClaimNotification ? 'block' : 'none'; ?>">
+            <img src="../assets/images/checkmark.png" alt="Checkmark" class="check-icon">
             <h2><b>CLAIM STUB UPDATE</b> </h2>
-            <p>Hello, Pia! Your request is ready.</p>
-            <p>Request No. : <strong>#111</strong></p>
-            <p><strong>Transcript of Records</strong> (2 copies)<br>
-                <strong>Certificate of Enrollment</strong> (1 copy)</p>
-            <a href="#">You may now claim your documents at the Registrar's Office.</a>
+            <p>Hello, <?= htmlspecialchars($displayFirstName); ?>! Your request is ready.</p>
+            <p>Request No. : <strong>#<?= htmlspecialchars($claimNotificationData['req_id']); ?></strong></p>
+            <?php if (!empty($claimNotificationData['documents'])): ?>
+                <?php foreach ($claimNotificationData['documents'] as $doc): ?>
+                    <p>
+                        <strong><?= htmlspecialchars($doc['document_name']); ?></strong>
+                        (<?= htmlspecialchars($doc['doc_copies']); ?>
+                        <?php
+                            // Determine if "copy" or "copies" should be displayed
+                            if ($doc['doc_copies'] > 1) {
+                                echo 'copies';
+                            } else {
+                                echo 'copy';
+                            }
+                        ?>)
+                    </p>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>No specific documents listed for this request.</p>
+            <?php endif; ?>
+            <a href="track-clearance.php">You may now claim your documents at the Registrar's Office.</a>
             <div class="yellow-button">
                 <button id="close-notif-btn">I UNDERSTOOD</button>
             </div>
@@ -85,31 +144,30 @@ $displayFirstName = $_SESSION['firstname'] ?? 'User'; // Default to 'User' if no
     <script>
         const sidebar = document.getElementById('sidebar');
         const mainContent = document.getElementById('mainContent');
+        const notificationBell = document.getElementById('notification-bell');
+        const claimNotification = document.getElementById('claim-notification');
+        const closeNotifBtn = document.getElementById('close-notif-btn');
 
         sidebar.addEventListener('click', () => {
             sidebar.classList.toggle('active');
             mainContent.classList.toggle('shifted');
         });
 
-        // Get references to the elements
-        const notificationBell = document.getElementById('notification-bell');
-        const claimNotification = document.getElementById('claim-notification');
-        const closeNotifBtn = document.getElementById('close-notif-btn');
-
-        // Event listener to show/hide the notification when the bell is clicked
         notificationBell.addEventListener('click', function() {
             if (claimNotification.style.display === 'none' || claimNotification.style.display === '') {
-                claimNotification.style.display = 'block'; // Or 'flex' if you want to use flexbox for centering
+                claimNotification.style.display = 'block';
+                notificationBell.classList.remove('has-notification');
             } else {
                 claimNotification.style.display = 'none';
             }
         });
 
-        // Event listener to hide the notification when "I UNDERSTOOD" is clicked
         closeNotifBtn.addEventListener('click', function () {
             claimNotification.style.display = 'none';
+            // Optional: You can add AJAX here to mark the notification as read in the database
+            // so it doesn't reappear on subsequent page loads until a new claim stub is released.
+            // fetch('../php/mark_notification_read.php', { /* ... */ });
         });
-
     </script>
 
 </body>
