@@ -111,7 +111,7 @@ try {
         </main>
 
         <div id="claim-notification" class="claim-notification" style="display: <?php echo $showClaimNotification ? 'block' : 'none'; ?>">
-            <img src="../assets/images/checkmark.png" alt="Checkmark" class="check-icon">
+            <i class='bx bxs-check-circle icon'></i>
             <h2><b>CLAIM STUB UPDATE</b> </h2>
             <p>Hello, <?= htmlspecialchars($displayFirstName); ?>! Your request is ready.</p>
             <p>Request No. : <strong>#<?= htmlspecialchars($claimNotificationData['req_id']); ?></strong></p>
