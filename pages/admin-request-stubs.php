@@ -182,7 +182,7 @@ $js_version = time(); // Using timestamp to ensure a unique version on every loa
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Requests</title>
+    <title>Process Requests</title>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/admin-request-stubs.css">
     <link rel="icon" type="image/png" href="../assets/images/school-logo.png" />
@@ -239,7 +239,7 @@ $js_version = time(); // Using timestamp to ensure a unique version on every loa
         <main class="content-area">
             <div class="page-header-controls view-request-header">
                 <div class="page-title-container">
-                    <h2>View Requests</h2>
+                    <h2>Process Requests</h2>
                 </div>
                 <div class="header-actions">
                     <a href="admin-index.php" class="back-link">Back to Dashboard</a>
