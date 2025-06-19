@@ -26,7 +26,6 @@ body.modal-open {
     overflow: hidden;
 }
 
-/* Header */
 .topbar {
     background-color: #2c2273;
     color: white;
@@ -64,7 +63,6 @@ body.modal-open {
     line-height: 1.2;
 }
 
-/* Top Navigation Bar */
 .top-navbar {
     flex-grow: 1;
     display: flex;
@@ -125,14 +123,12 @@ body.modal-open {
     transform-origin: bottom left;
 }
 
-/* Header Right Section (for search and user) */
 .header-right-section {
     display: flex;
     align-items: center;
     gap: 25px;
 }
 
-/* Search Bar */
 .search-bar {
     margin-right: 10px;
     background-color: rgba(255, 255, 255, 0.15);
@@ -222,28 +218,21 @@ body.modal-open {
     gap: 30px;
 }
 
-/* View Request Header (admin-request-stubs.css) */
 .view-request-header {
-    /* Removed background-color and border */
-    padding: 0 20px; /* Keep some horizontal padding for the overall alignment */
-    /* border-radius: 8px; Not visible without background */
-    margin-bottom: 20px; /* Apply margin-bottom to the entire header container */
-
+    padding: 0 20px;
     display: flex;
-    justify-content: space-between; /* Pushes children to ends */
-    align-items: center; /* Vertically aligns children */
-    min-height: 70px; /* Ensures vertical alignment */
+    justify-content: space-between;
+    align-items: center;
+    min-height: 70px;
 }
 
-/* Page Title Container */
 .page-title-container {
     background-color: #f0f0f0;
     padding: 15px 40px;
     border-radius: 8px;
-    /* margin-bottom: 30px; Removed from here, moved to .view-request-header */
     width: fit-content;
     border-left: 5px solid #6a5acd;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Soft shadow */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .page-title-container h2 {
@@ -254,18 +243,14 @@ body.modal-open {
     padding: 0;
 }
 
-/* Back Link */
 .view-request-header .back-link {
     text-decoration: none;
     font-size: 1.1em;
     font-weight: 600;
     transition: all 0.3s ease-in-out;
     white-space: nowrap;
-
-    /* Removed background-color, padding, border-radius */
-    background-color: transparent; /* Explicitly set to transparent */
-    color: #6a5acd; /* Primary accent blue text color */
-    
+    background-color: transparent;
+    color: #6a5acd;
     display: flex;
     align-items: center;
     gap: 5px;
@@ -273,14 +258,14 @@ body.modal-open {
 
 .view-request-header .back-link i {
     font-size: 1.4em;
-    color: #6a5acd; /* Icon color matches text */
+    color: #6a5acd;
 }
 
 .view-request-header .back-link:hover {
     transition: all 0.3s ease-in-out;
-    background-color: transparent; /* No background on hover */
-    color: #5345b8; /* Darker blue on hover */
-    text-decoration: underline; /* Underline on hover */
+    background-color: transparent;
+    color: #5345b8;
+    text-decoration: underline;
 }
 
 .section-card {
@@ -355,7 +340,6 @@ body.modal-open {
     gap: 30px;
 }
 
-/* Tab Navigation Styles */
 .tab-navs {
     margin-bottom: 25px;
 }
@@ -396,7 +380,6 @@ body.modal-open {
     background-color: #2c2273;
 }
 
-/* Data Table Styles */
 .table-header-row,
 .data-row {
     display: grid;
@@ -431,7 +414,6 @@ body.modal-open {
     text-overflow: ellipsis;
 }
 
-/* Specific styling for the STATUS column */
 .data-row div:nth-child(6) {
     display: flex;
     flex-direction: column;
@@ -440,7 +422,6 @@ body.modal-open {
     white-space: normal;
 }
 
-/* Specific styling for elements within data rows */
 .data-row div .view-status-link {
     color: #6a5acd;
     text-decoration: none;
@@ -488,7 +469,6 @@ body.modal-open {
     background-color: #e0e0e0;
 }
 
-/* Dropdown Menu Styles */
 .dropdown-wrapper {
     position: relative;
     display: inline-block;
@@ -526,7 +506,6 @@ body.modal-open {
     background-color: #f1f1f1;
 }
 
-/* Modal specific styles */
 .modal-overlay {
     display: none;
     position: fixed;
@@ -555,10 +534,10 @@ body.modal-open {
 }
 
 .modal-content.view-status-modal-content {
-    max-height: 90vh; /* Set maximum height to 90% of viewport height */
-    overflow-y: auto; /* Enable vertical scrolling if content overflows */
-    display: flex; /* Maintain flex for internal layout */
-    flex-direction: column; /* Stack content vertically */
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 
@@ -584,7 +563,7 @@ body.modal-open {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    flex-grow: 1; /* Allow it to grow and fill available space within the flex column */
+    flex-grow: 1;
 }
 
 .student-info-section {
@@ -731,18 +710,15 @@ body.modal-open {
     background-color: #5a6268;
 }
 
-/* Modal animations */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-20px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Body class when modal is open to prevent scrolling */
 body.modal-open {
     overflow: hidden;
 }
 
-/* Custom Message Box (from clearance-request.js for alerts) */
 .custom-message-box {
     position: fixed;
     top: 50%;
@@ -813,7 +789,6 @@ body.modal-open {
     background-color: #e0e0e0;
 }
 
-/* Media Queries for Responsiveness */
 @media (max-width: 1024px) {
     .topbar {
         padding: 10px 30px;
@@ -895,22 +870,20 @@ body.modal-open {
     .view-request-header {
         flex-direction: column;
         align-items: flex-start;
-        padding: 15px 20px; /* Re-added padding for stack layout on small screens */
+        padding: 15px 20px;
         min-height: unset;
     }
-    /* Adjust page-title-container for smaller screens when stacked */
     .page-title-container {
-        width: 100%; /* Make it full width on small screens */
-        margin-bottom: 15px; /* Add some space when stacked */
-        padding: 10px 20px; /* Adjust padding for small screens */
+        width: 100%;
+        margin-bottom: 15px;
+        padding: 10px 20px;
     }
     .page-title-container h2 {
-        font-size: 1.6em; /* Adjust font size */
+        font-size: 1.6em;
     }
     .view-request-header .back-link {
-        margin-top: 5px; /* Add some space when stacked */
-        align-self: flex-start; /* Align to left when stacked */
-        /* Removed padding for back-link on smaller screens as it's not a box design anymore */
+        margin-top: 5px;
+        align-self: flex-start;
     }
 
     .table-header-row,
@@ -932,7 +905,6 @@ body.modal-open {
         min-width: 100%;
     }
 
-    /* Modal responsive */
     .view-status-modal-content {
         max-width: 90%;
         padding: 15px;

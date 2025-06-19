@@ -2,29 +2,25 @@
 session_start();
 require_once '../php/database.php';
 
-// 2. Handle Form Submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email']);
     $password = $_POST['password'];
     $accountType = $_POST['accountType'];
 
-    // Map the HTML form's accountType to the database's role_code
     $roleCode = '';
     if ($accountType === 'student') {
-        $roleCode = 'STUD'; // Matches the database role_code
+        $roleCode = 'STUD';
     } elseif ($accountType === 'admin') {
-        $roleCode = 'ADMIN'; // Matches the database role_code
+        $roleCode = 'ADMIN';
     } elseif ($accountType === 'sub_admin') {
-        $roleCode = 'SUB_ADMIN'; // Matches the database role_code
+        $roleCode = 'SUB_ADMIN';
     } else {
-        // Invalid account type selected
         $_SESSION['login_error'] = "Invalid account type selected.";
-        header("Location: ../pages/login.php"); // Redirect back to login page
+        header("Location: ../pages/login.php");
         exit();
     }
 
     try {
-        // --- CRITICAL CHANGE HERE: Add 'office_code' to your SELECT query ---
         $stmt = $pdo->prepare("SELECT user_id, user_password, role_code, firstname, office_code FROM users WHERE email = :email AND role_code = :role_code");
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->bindParam(':role_code', $roleCode, PDO::PARAM_STR);
@@ -32,49 +28,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
-            // 4. Verify Password
             if (password_verify($password, $user['user_password'])) {
-                // Password is correct, store user data in session
                 $_SESSION['user_id'] = $user['user_id'];
                 $_SESSION['user_email'] = $email;
-                $_SESSION['account_type'] = $user['role_code']; // Store 'STUD' or 'ADMIN'
+                $_SESSION['account_type'] = $user['role_code'];
                 $_SESSION['firstname'] = $user['firstname'];
 
-                // --- CRITICAL ADDITION HERE: Store office_code in session for SUB_ADMINs AND ADMINs ---
-                // Only set office_code if the role is ADMIN or SUB_ADMIN
                 if ($user['role_code'] === 'ADMIN' || $user['role_code'] === 'SUB_ADMIN') {
                     $_SESSION['office_code'] = $user['office_code'];
                 } else {
-                    // For students or other roles that don't need an office_code,
-                    // ensure it's not set or explicitly unset if it was set previously.
                     unset($_SESSION['office_code']);
                 }
-                // --- END CRITICAL ADDITION ---
 
-                // IMPORTANT SECURITY STEP: Regenerate session ID to prevent session fixation
                 session_regenerate_id(true);
 
-
-                // Redirect based on role code
                 if ($user['role_code'] === 'STUD') {
-                    header("Location: index.php"); // Redirect students to index.php
+                    header("Location: index.php");
                 } elseif ($user['role_code'] === 'ADMIN') {
-                    header("Location: admin-index.php"); // Redirect admins
+                    header("Location: admin-index.php");
                 } elseif ($user['role_code'] === 'SUB_ADMIN') {
-                    header("Location: clearance-request.php"); // Redirect sub-admins
+                    header("Location: clearance-request.php");
                 }
 
-                exit(); // Always exit after a header redirect
+                exit();
             } else {
-                // Incorrect password
                 $_SESSION['login_error'] = "Invalid email or password.";
-                header("Location: ../pages/login.php"); // Redirect back to login page
+                header("Location: ../pages/login.php");
                 exit();
             }
         } else {
-            // User not found for the given email and account type combination
             $_SESSION['login_error'] = "Invalid email or password.";
-            header("Location: ../pages/login.php"); // Redirect back to login page
+            header("Location: ../pages/login.php");
             exit();
         }
 
@@ -89,63 +73,63 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <link rel="stylesheet" href="../assets/css/login.css">
-  <link rel="icon" type="image/png" href="../assets/images/school-logo.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="../assets/css/login.css">
+    <link rel="icon" type="image/png" href="../assets/images/school-logo.png" />
 </head>
 <body>
-  <div class="container">
+    <div class="container">
 
-    <div class="left-panel">
-      <img src="../assets/icons/NU_shield.svg.png" alt="NU Logo" class="logo">
-      <h1>WELCOME TO <br> NU STUDENT CLEARANCE <br> SYSTEM</h1>
-      <p>The Office of the University Registrar maintains the <br> centralized student clearance system.</p>
+        <div class="left-panel">
+            <img src="../assets/icons/NU_shield.svg.png" alt="NU Logo" class="logo">
+            <h1>WELCOME TO <br> NU STUDENT CLEARANCE <br> SYSTEM</h1>
+            <p>The Office of the University Registrar maintains the <br> centralized student clearance system.</p>
+        </div>
+
+        <div class="right-panel">
+            <form id="loginForm" action="../pages/login.php" method="POST"> <div class="login-header">
+                    <h2>Log in</h2>
+                </div>
+
+                <div class="input-fields">
+                    <h4>Select Account Type</h4>
+                    <div class="input-group">
+                        <span class="iconType"><img src="../assets/icons/user-icon.png" alt="Human Icon"></span>
+                        <select id="accountType" name="accountType" required>
+                            <option value="" disabled selected>Choose Type</option>
+                            <option value="student">Student</option>
+                            <option value="admin">Admin</option>
+                            <option value="sub_admin">Sub-Admin</option>
+                        </select>
+                    </div>
+                    <h4>Log In Credentials</h4>
+                    <div class="input-group">
+                        <span class="icon"><img src="../assets/icons/at-sign.png" alt="Your Icon"></span>
+                        <input type="email" id="emailInput" name="email" placeholder="Enter your email here" required>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="iconlock"><img src="../assets/icons/lock-sign.png" alt="icon lock"></span>
+                        <input type="password" id="passwordInput" name="password" placeholder="Enter your password here" required>
+                    </div>
+                </div>
+
+                <div class="login-button-container">
+                    <button type="submit" class="login-button">Log in with NUSCS</button>
+                </div>
+
+                <div class="divider">or Sign Up as</div>
+
+                <div class="signup-links-container">
+                    <a href="user-signup.php" class="signup-link">Student</a>
+                    <span class="pipe-divider">|</span>
+                    <a href="admin-signup.php" class="signup-link">Admin</a>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <div class="right-panel">
-      <form id="loginForm" action="../pages/login.php" method="POST"> <div class="login-header">
-          <h2>Log in</h2>
-        </div>
-
-        <div class="input-fields">
-          <h4>Select Account Type</h4>
-          <div class="input-group">
-            <span class="iconType"><img src="../assets/icons/user-icon.png" alt="Human Icon"></span>
-            <select id="accountType" name="accountType" required>
-              <option value="" disabled selected>Choose Type</option>
-              <option value="student">Student</option>
-              <option value="admin">Admin</option>
-              <option value="sub_admin">Sub-Admin</option>
-            </select>
-          </div>
-          <h4>Log In Credentials</h4>
-          <div class="input-group">
-            <span class="icon"><img src="../assets/icons/at-sign.png" alt="Your Icon"></span>
-            <input type="email" id="emailInput" name="email" placeholder="Enter your email here" required>
-          </div>
-
-          <div class="input-group">
-            <span class="iconlock"><img src="../assets/icons/lock-sign.png" alt="icon lock"></span>
-            <input type="password" id="passwordInput" name="password" placeholder="Enter your password here" required>
-          </div>
-        </div>
-
-        <div class="login-button-container">
-          <button type="submit" class="login-button">Log in with NUSCS</button>
-        </div>
-
-        <div class="divider">or Sign Up as</div>
-
-        <div class="signup-links-container">
-          <a href="user-signup.php" class="signup-link">Student</a>
-          <span class="pipe-divider">|</span>
-          <a href="admin-signup.php" class="signup-link">Admin</a>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <script src="../js/login.js"></script> </body>
+    <script src="../js/login.js"></script> </body>
 </html>

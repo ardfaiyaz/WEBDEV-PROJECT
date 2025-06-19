@@ -16,14 +16,13 @@
 
 body {
   font-family: 'Montserrat', sans-serif;
-  background-color: #f5f5f5; /* This is the general background color */
+  background-color: #f5f5f5;
   color: #2c2c2c;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-/* Header */
 .topbar {
     background-color: #2c2273;
     color: white;
@@ -61,7 +60,6 @@ body {
     line-height: 1.2;
 }
 
-/* Top Navigation Bar */
 .top-navbar {
     flex-grow: 1;
     display: flex;
@@ -122,7 +120,6 @@ body {
     transform-origin: bottom left;
 }
 
-/* Header Right Section (for search and user) */
 .header-right-section {
     display: flex;
     align-items: center;
@@ -162,8 +159,6 @@ body {
     color: white;
 }
 
-
-/* Hero Banner Section */
 .hero-banner {
   background-image: url('../images/about-us-bg.png');
   background-size: cover;
@@ -201,23 +196,22 @@ body {
   animation: slideInLeft 1s ease-out 0.3s forwards;
 }
 
-/* About System Bar */
 .about-system-bar {
   color: black;
   font-family: 'Montserrat', sans-serif;
   width: 100%;
-  min-height: 40vh; /* Ensures the section has a minimum height */
-  display: flex; /* Use flexbox to arrange left and right sides */
-  align-items: stretch; /* Make children stretch to fill container height */
+  min-height: 40vh;
+  display: flex;
+  align-items: stretch;
 }
 
 .left-side {
-  background-color: #ffcf00; /* Yellow background for the left side */
-  width: 70%; /* Occupy 70% of the wrapper's width */
-  padding: 60px 40px 60px 120px; /* Top, Right spacing, Bottom, Left padding for content */
+  background-color: #ffcf00;
+  width: 70%;
+  padding: 60px 40px 60px 120px;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Vertically center content */
+  justify-content: center;
   animation: fadeInScale 1s ease-out forwards;
 }
 
@@ -240,27 +234,26 @@ body {
 }
 
 .right-side {
-  width: 30%; /* Occupy 30% of the wrapper's width */
-  background-color: transparent; /* No specific background, will show body background */
+  width: 30%;
+  background-color: transparent;
   display: flex;
-  justify-content: center; /* Horizontally center image, though it will cover fully */
-  align-items: center; /* Vertically center image, though it will cover fully */
-  padding: 0; /* Removed padding so image can truly cover the whole field */
-  overflow: hidden; /* Ensure the image doesn't overflow if it scales larger than needed */
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  overflow: hidden;
 }
 
 .right-side img {
-  width: 100%; /* Make image fill the entire width of its parent */
-  height: 100%; /* Make image fill the entire height of its parent */
-  object-fit: cover; /* Cover the area, cropping if necessary */
-  display: block; /* Remove any extra space below the image */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
   animation: slideInRight 1.2s ease-out forwards;
 }
 
-/* Team Info Section Styles */
 .team-info-section {
     background-color: #fff;
-    padding: 80px 90px; /* Consistent padding around text and overall section */
+    padding: 80px 90px;
     text-align: center;
     color: #2c2c2c;
 }
@@ -271,7 +264,6 @@ body {
     font-weight: 600;
     color: #888;
     margin-bottom: 10px;
-    /* Animations remain purely CSS for these text elements */
     animation: fadeInScale 1s ease-out forwards;
 }
 
@@ -294,56 +286,46 @@ body {
     animation: fadeInScale 1s ease-out 0.4s forwards;
 }
 
-/* Grid layout for team members */
 .team-members-grid {
     display: grid;
-    gap: 50px; /* Space between cards */
-    max-width: 90vw; /* Overall grid is 80% of the viewport width */
-    margin: 0 auto; /* Center the grid */
-    padding-bottom: 50px; /* Padding at the bottom of the section */
-    place-items: center; /* Centers content both horizontally and vertically within grid cells */
-
-    /* Default for smaller screens: allows wrapping, minimum 300px wide cards */
-    grid-template-columns: repeat(auto-fit, minmax(300px, auto)); /* height auto for content */
+    gap: 50px;
+    max-width: 90vw;
+    margin: 0 auto;
+    padding-bottom: 50px;
+    place-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(300px, auto));
 }
 
-/* Specific layout for larger screens: force 5 columns */
-@media (min-width: 1200px) { /* Adjust this breakpoint if 5 cards don't fit well */
+@media (min-width: 1200px) {
     .team-members-grid {
-        grid-template-columns: repeat(5, 1fr); /* Explicitly 5 columns for a single line */
-        justify-content: center; /* Center the whole row if space allows */
+        grid-template-columns: repeat(5, 1fr);
+        justify-content: center;
     }
-    /* Remove margin-bottom if all are in one row */
     .team-members-grid .team-member-card {
         margin-bottom: 0;
     }
 }
 
-
-/* Team member card styles */
 .team-member-card {
     background-color: #f9f9f9;
     border-radius: 8px;
-    padding: 0; /* NO PADDING HERE - content inside will manage its own padding */
+    padding: 0;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    width: 100%; /* Ensure it fills its grid column */
-    overflow: hidden; /* To contain the image and info card, and respect border-radius */
-
-    /* Initial state for JS animation */
+    width: 100%;
+    overflow: hidden;
     opacity: 0;
     transform: translateY(50px);
 }
 
-/* Class added by JavaScript to trigger the animation */
 .team-member-card.animate-in {
     opacity: 1;
     transform: translateY(0);
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Smooth transition for animation */
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 
 .team-member-card:hover {
@@ -353,24 +335,24 @@ body {
 }
 
 .team-member-card img {
-    width: 100%; /* Image takes 100% width of its card */
-    height: 300px; /* Added a fixed height to ensure consistent image display */
-    object-fit: cover; /* Ensures the image covers the area, cropping if needed */
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
     border-radius: 0;
-    margin-bottom: 0; /* IMPORTANT: Remove margin below the image */
-    padding: 0; /* IMPORTANT: Zero padding for the image itself */
+    margin-bottom: 0;
+    padding: 0;
     border: none;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.25); /* Shadow for the image */
-    display: block; /* Prevent extra space below image */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    display: block;
 }
 
 .member-info {
     background-color: #fff;
-    padding: 20px; /* Padding for the content inside this info box */
+    padding: 20px;
     text-align: center;
-    border-top: 1px solid #eee; /* Subtle separator */
-    border-radius: 0 0 8px 8px; /* Rounded bottom corners */
-    width: 100%; /* Ensure it takes full width of the parent card */
+    border-top: 1px solid #eee;
+    border-radius: 0 0 8px 8px;
+    width: 100%;
 }
 
 .member-info h3 {
@@ -384,35 +366,34 @@ body {
 .member-info p {
     margin-top: 10px;
     font-family: 'Montserrat', sans-serif;
-    font-size: 1em; 
+    font-size: 1em;
     color: #666;
     margin-bottom: 0;
 }
 
-/* Footer Styles */
 .footer {
-    background-color: #2c2273; /* Dark background similar to topbar */
+    background-color: #2c2273;
     color: white;
-    padding: 40px 90px 0; /* Top padding, left/right padding, no bottom padding for now */
+    padding: 40px 90px 0;
     font-family: 'Montserrat', sans-serif;
 }
 
 .footer-content {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start; /* Align items to the top of the flex container */
-    flex-wrap: wrap; /* Allow content to wrap on smaller screens */
-    padding-bottom: 40px; /* Padding above the copyright section */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator above copyright */
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .footer-logo-section {
     display: flex;
     align-items: center;
     gap: 15px;
-    margin-bottom: 20px; /* Space below logo on smaller screens */
-    flex-basis: 30%; /* Take up roughly 30% of space */
-    min-width: 250px; /* Ensure logo section doesn't get too small */
+    margin-bottom: 20px;
+    flex-basis: 30%;
+    min-width: 250px;
 }
 
 .footer-logo-link {
@@ -424,26 +405,26 @@ body {
 }
 
 .footer-logo-section img {
-    width: 60px; /* Slightly larger logo for footer */
+    width: 60px;
 }
 
 .footer-school-name {
     font-family: 'AkwePro', sans-serif;
-    font-size: 24px; /* Slightly larger text for footer logo */
+    font-size: 24px;
     line-height: 1.2;
 }
 
 .footer-links, .footer-contact {
-    flex-basis: 30%; /* Take up roughly 30% of space each */
-    min-width: 280px; /* Ensure these sections don't get too small */
-    margin-bottom: 20px; /* Space below sections on smaller screens */
+    flex-basis: 30%;
+    min-width: 280px;
+    margin-bottom: 20px;
 }
 
 .footer-links h4, .footer-contact h4 {
     font-size: 1.5em;
     margin-bottom: 20px;
     font-weight: bold;
-    color: #ffcf00; /* Yellow heading */
+    color: #ffcf00;
 }
 
 .footer-links ul {
@@ -462,7 +443,7 @@ body {
 }
 
 .footer-links ul li a:hover {
-    color: #ffcf00; /* Yellow on hover */
+    color: #ffcf00;
 }
 
 .footer-contact p {
@@ -475,8 +456,8 @@ body {
 
 .footer-contact p i {
     font-size: 1.4em;
-    color: #ffcf00; /* Yellow icon */
-    margin-top: 2px; /* Align icon better with text */
+    color: #ffcf00;
+    margin-top: 2px;
 }
 
 .footer-bottom {
@@ -486,7 +467,6 @@ body {
     color: rgba(255, 255, 255, 0.7);
 }
 
-/* Media Queries for Footer Responsiveness */
 @media (max-width: 1024px) {
     .footer-content {
         flex-direction: column;
@@ -497,8 +477,8 @@ body {
     .footer-logo-section,
     .footer-links,
     .footer-contact {
-        flex-basis: 100%; /* Stack elements vertically */
-        margin-bottom: 40px; /* More space between stacked sections */
+        flex-basis: 100%;
+        margin-bottom: 40px;
     }
 
     .footer-logo-section {
@@ -506,7 +486,7 @@ body {
     }
 
     .footer-contact p {
-        justify-content: center; /* Center icons and text */
+        justify-content: center;
     }
 }
 
@@ -515,9 +495,6 @@ body {
         padding: 30px 40px 0;
     }
 }
-
-
-/* --- ANIMATIONS KEYFRAMES --- */
 
 @keyframes slideInLeft {
   from {

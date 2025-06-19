@@ -125,10 +125,9 @@
             
             // Set initial state and add 'animate-in' class with staggered delay
             teamCards.forEach((card, index) => {
-                // Initial state handled by CSS default for .team-member-card
                 setTimeout(() => {
                     card.classList.add('animate-in');
-                }, index * 150); // Staggered delay: 150ms between each card
+                }, index * 150);
             });
         });
     </script>

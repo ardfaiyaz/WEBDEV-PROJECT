@@ -131,354 +131,306 @@
     </div>
 
     <script>
-        // --- Configuration ---
-const API_BASE_URL = 'http://localhost/WEBDEV/WEBDEV-PROJECT/php/';
-let currentUserOfficeCode = '';
-let allRequests = []; // Stores all fetched requests for the current office
+        const API_BASE_URL = 'http://localhost/WEBDEV/WEBDEV-PROJECT/php/';
+        let currentUserOfficeCode = '';
+        let allRequests = [];
 
-const REMARKS_MAPPING = {
-    "ACC": ["Balance Issues", "Unpaid Fees"],
-    "DN_PC_PR": ["Grade/Subject Issues", "Incomplete Coursework"],
-    "GO": ["Office Record", "Incorrect Information"],
-    "ITSO": ["Damaged Equipment", "Software License Issues"],
-    "LIB": ["Unreturned Book/Material", "Damaged Materials"],
-    "REG": ["Incomplete Grade/Documents", "Enrollment Discrepancies"],
-    "SDAO": ["Disciplinary Action", "Conduct Violation"],
-    "SDO": ["Violation/Offense", "Academic Dishonesty"]
-};
+        const REMARKS_MAPPING = {
+            "ACC": ["Balance Issues", "Unpaid Fees"],
+            "DN_PC_PR": ["Grade/Subject Issues", "Incomplete Coursework"],
+            "GO": ["Office Record", "Incorrect Information"],
+            "ITSO": ["Damaged Equipment", "Software License Issues"],
+            "LIB": ["Unreturned Book/Material", "Damaged Materials"],
+            "REG": ["Incomplete Grade/Documents", "Enrollment Discrepancies"],
+            "SDAO": ["Disciplinary Action", "Conduct Violation"],
+            "SDO": ["Violation/Offense", "Academic Dishonesty"]
+        };
 
-// --- DOM Elements ---
-const navItems = document.querySelectorAll('.Nav-item');
-const requestsContainer = document.getElementById('requests-container');
-const statusHeader = document.querySelector('.Status-header');
-const statusOrRemarkHeader = document.getElementById('statusOrRemarkHeader');
-const actionsHeader = document.getElementById('actionsHeader');
-const confirmationModal = document.getElementById('confirmationModal');
-const confirmClearBtn = document.getElementById('confirmClearBtn');
-const cancelClearBtn = document.getElementById('cancelClearBtn');
-let currentRowToClear = null;
+        const navItems = document.querySelectorAll('.Nav-item');
+        const requestsContainer = document.getElementById('requests-container');
+        const statusHeader = document.querySelector('.Status-header');
+        const statusOrRemarkHeader = document.getElementById('statusOrRemarkHeader');
+        const actionsHeader = document.getElementById('actionsHeader');
+        const confirmationModal = document.getElementById('confirmationModal');
+        const confirmClearBtn = document.getElementById('confirmClearBtn');
+        const cancelClearBtn = document.getElementById('cancelClearBtn');
+        let currentRowToClear = null;
 
-const totalRequestsSpan = document.getElementById('total-requests');
-const pendingRequestsSpan = document.getElementById('pending-requests');
-const ongoingRequestsSpan = document.getElementById('ongoing-requests');
-const completedRequestsSpan = document.getElementById('completed-requests');
-const currentUsernameSpan = document.getElementById('current-username');
-const userOfficeCodeSpan = document.getElementById('user-office-code');
+        const totalRequestsSpan = document.getElementById('total-requests');
+        const pendingRequestsSpan = document.getElementById('pending-requests');
+        const ongoingRequestsSpan = document.getElementById('ongoing-requests');
+        const completedRequestsSpan = document.getElementById('completed-requests');
+        const currentUsernameSpan = document.getElementById('current-username');
+        const userOfficeCodeSpan = document.getElementById('user-office-code');
 
-// --- NEW: Search Bar Elements ---
-const searchInput = document.getElementById('searchInput');
+        const searchInput = document.getElementById('searchInput');
 
-
-// --- Functions ---
-
-function showMessageBox(message) {
-    const messageBox = document.createElement('div');
-    messageBox.classList.add('custom-message-box');
-    messageBox.innerHTML = `<p>${message}</p><button class="custom-message-box-close">OK</button>`;
-    document.body.appendChild(messageBox);
-    messageBox.querySelector('.custom-message-box-close').addEventListener('click', () => {
-        messageBox.remove();
-    });
-}
-
-async function fetchUserInfo() {
-    try {
-        const response = await fetch(`${API_BASE_URL}get_officeuser_info.php`);
-        const data = await response.json();
-        if (data.success) {
-            currentUsernameSpan.textContent = data.user.user_name;
-            userOfficeCodeSpan.textContent = data.user.office_code;
-            currentUserOfficeCode = data.user.office_code;
-            fetchClearanceRequests(currentUserOfficeCode);
-        } else {
-            console.error("Failed to fetch user info:", data.message);
-            showMessageBox("Error: Could not fetch user information. " + data.message);
-        }
-    } catch (error) {
-        console.error("Error fetching user info:", error);
-        showMessageBox("Error connecting to server for user info.");
-    }
-}
-
-async function fetchClearanceRequests(officeCode) {
-    try {
-        const response = await fetch(`${API_BASE_URL}get_clearance_requests.php?office_code=${officeCode}`);
-        const data = await response.json();
-        if (data.success) {
-            allRequests = data.requests;
-            updateStatusCounts();
-            // Instead of directly rendering based on active tab, call filterAndRenderRequests
-            filterAndRenderRequests();
-        } else {
-            console.error("Failed to fetch requests:", data.message);
-            showMessageBox("Error: Could not fetch clearance requests.");
-        }
-    } catch (error) {
-        console.error("Error fetching clearance requests:", error);
-        showMessageBox("Error connecting to server for requests.");
-    }
-}
-
-function updateStatusCounts() {
-    const total = allRequests.length;
-    // 'PENDING' on frontend is DB 'ON'
-    const pending = allRequests.filter(req => req.status_code === 'ON').length;
-    // 'ON-GOING' on frontend is DB 'ISSUE'
-    const ongoing = allRequests.filter(req => req.status_code === 'ISSUE').length;
-    // 'COMPLETED' on frontend is DB 'COMP'
-    const completed = allRequests.filter(req => req.status_code === 'COMP').length;
-
-    totalRequestsSpan.textContent = total;
-    pendingRequestsSpan.textContent = pending;
-    ongoingRequestsSpan.textContent = ongoing;
-    completedRequestsSpan.textContent = completed;
-}
-
-
-// --- MODIFIED: Create Request Row ---
-function createRequestRow(request, filterStatusFrontend) {
-    const row = document.createElement('div');
-    row.classList.add('Status-row');
-    row.dataset.statusFrontend = getFrontendStatus(request.status_code);
-    row.dataset.statusDb = request.status_code;
-    row.dataset.requestId = request.req_id;
-
-    let statusDisplay = getFrontendStatus(request.status_code);
-    let fifthColumnContent = '';
-    let actionsContent = '';
-
-    if (filterStatusFrontend === 'ON-GOING') {
-        // Here, `request.office_remarks` should contain the remark for an 'ISSUE' status
-        fifthColumnContent = `<div class="remark-column"><span class="remark-text">${request.office_remarks || 'N/A'}</span></div>`;
-    } else {
-        fifthColumnContent = `<div class="status-cell">${statusDisplay}</div>`;
-    }
-
-    if (filterStatusFrontend !== 'ALL') {
-        if (request.status_code === 'ON') { // If DB status is 'ON' (frontend PENDING)
-            const customRemarks = REMARKS_MAPPING[currentUserOfficeCode] || [];
-            // Changed from custom dropdown to <select> element
-            const selectOptions = customRemarks.map(remark =>
-                `<option value="${remark}">${remark}</option>`
-            ).join('');
-
-            actionsContent = `
-                <select class="add-remark-select" data-request-id="${request.req_id}">
-                    <option value="">Select Remark</option>
-                    ${selectOptions}
-                </select>
-                <button class="clear-button">CLEAR</button>
-            `;
-        } else if (request.status_code === 'ISSUE') { // If DB status is 'ISSUE' (frontend ON-GOING)
-            actionsContent = `<button class="clear-button">CLEAR</button>`;
-        } else if (request.status_code === 'COMP') { // If DB status is 'COMP' (frontend COMPLETED)
-            actionsContent = `<div class="actions-placeholder"></div>`;
-        }
-    } else { // If filterStatusFrontend is 'ALL', no actions
-        actionsContent = `<div class="actions-placeholder"></div>`;
-    }
-
-
-    row.innerHTML = `
-        <div class="reqid">${request.req_id}</div>
-        <div class="studid">${request.student_id || 'N/A'}</div> <!-- Uses PHP alias 'student_id' -->
-        <div class="studname">${request.student_name || 'N/A'}</div> <!-- Uses PHP alias 'student_name' -->
-        <div class="program">${request.program || 'N/A'}</div> <!-- Uses PHP alias 'program' -->
-        ${fifthColumnContent}
-        <div class="datesub">${request.date_submitted || 'N/A'}</div> <!-- Uses PHP alias 'date_submitted' -->
-        <div class="actions">${actionsContent}</div> `;
-
-    return row;
-}
-
-function getFrontendStatus(dbStatusCode) {
-    switch (dbStatusCode) {
-        case 'ON': return 'PENDING';
-        case 'ISSUE': return 'ON-GOING';
-        case 'COMP': return 'COMPLETED';
-        // 'PEND' status exists in your DB, but based on your previous logic,
-        // it signifies a state before 'ON' (submitted request).
-        // If it means "not yet submitted" it typically won't appear in the office's view.
-        // If it means "submitted but not yet 'ON'", adjust filtering.
-        // For now, I'll provide a mapping.
-        case 'PEND': return 'INITIAL PENDING (DB: PEND)';
-        default: return dbStatusCode;
-    }
-}
-
-// --- MODIFIED: Render Requests (now called by filterAndRenderRequests) ---
-function renderRequests(requestsToDisplay, filterStatusFrontend) {
-    requestsContainer.innerHTML = '';
-
-    if (requestsToDisplay.length === 0) {
-        requestsContainer.innerHTML = '<div class="no-results">No requests found matching your criteria.</div>';
-        return;
-    }
-
-    requestsToDisplay.forEach(request => {
-        const row = createRequestRow(request, filterStatusFrontend);
-        requestsContainer.appendChild(row);
-    });
-
-    // Re-attach event listeners after new rows are added to the DOM
-    attachEventListenersToRows();
-}
-
-// --- NEW: filterAndRenderRequests function ---
-function filterAndRenderRequests() {
-    // 1. Get the currently active tab's status filter
-    const activeTab = document.querySelector('.Nav-item.active');
-    const selectedStatusFrontend = activeTab ? activeTab.dataset.statusFrontend.toUpperCase() : 'ALL';
-    // Get DB status directly from data-status-db for filtering
-    const selectedStatusDb = activeTab ? activeTab.dataset.statusDb.toUpperCase() : '';
-    updateTableHeaders(selectedStatusFrontend); // Update headers based on active tab
-
-    // 2. Get the search term and normalize it
-    const searchTerm = searchInput.value.toLowerCase().trim();
-
-    // 3. Apply tab filtering first
-    let filteredByTab = allRequests;
-    if (selectedStatusFrontend !== 'ALL') {
-        // Filter by the DB status code from the tab
-        filteredByTab = allRequests.filter(req => req.status_code === selectedStatusDb);
-    }
-
-    // 4. Apply search filtering to the tab-filtered results
-    const finalFilteredRequests = filteredByTab.filter(req => {
-        // Search by request ID, student ID, or student name
-        const requestIdMatch = req.req_id.toString().toLowerCase().includes(searchTerm);
-        const studentIdMatch = (req.student_id || '').toLowerCase().includes(searchTerm); // Uses PHP alias 'student_id'
-        const studentNameMatch = (req.student_name || '').toLowerCase().includes(searchTerm); // Uses PHP alias 'student_name'
-        const programMatch = (req.program || '').toLowerCase().includes(searchTerm); // Uses PHP alias 'program'
-
-        return requestIdMatch || studentIdMatch || studentNameMatch || programMatch;
-    });
-
-    // 5. Render the final filtered requests
-    renderRequests(finalFilteredRequests, selectedStatusFrontend);
-}
-
-
-// --- MODIFIED: Update Table Headers ---
-function updateTableHeaders(selectedStatusFrontend) {
-    statusOrRemarkHeader.textContent = 'STATUS';
-    statusOrRemarkHeader.style.display = 'block';
-    actionsHeader.style.display = 'block';
-
-    if (selectedStatusFrontend === 'ON-GOING') {
-        statusOrRemarkHeader.textContent = 'REMARK';
-    } else if (selectedStatusFrontend === 'COMPLETED' || selectedStatusFrontend === 'ALL') {
-        actionsHeader.style.display = 'none';
-    }
-}
-
-// --- MODIFIED: handleRemarkSelectChange to handle <select> change ---
-async function handleRemarkSelectChange(event) {
-    const selectElement = event.target;
-    const remark = selectElement.value;
-    const requestId = selectElement.dataset.requestId;
-
-    // Only proceed if a valid remark is selected (not the "Select Remark" default empty value)
-    if (remark) {
-        try {
-            const response = await fetch(`${API_BASE_URL}update_office_remark.php`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ request_id: requestId, office_code: currentUserOfficeCode, remark: remark, status_code: 'ISSUE' })
+        function showMessageBox(message) {
+            const messageBox = document.createElement('div');
+            messageBox.classList.add('custom-message-box');
+            messageBox.innerHTML = `<p>${message}</p><button class="custom-message-box-close">OK</button>`;
+            document.body.appendChild(messageBox);
+            messageBox.querySelector('.custom-message-box-close').addEventListener('click', () => {
+                messageBox.remove();
             });
-            const data = await response.json();
-            if (data.success) {
-                showMessageBox("Remark added and status updated to ON-GOING!");
-                await fetchClearanceRequests(currentUserOfficeCode); // Re-fetch and re-render
-            } else {
-                console.error("Failed to add remark:", data.message);
-                showMessageBox("Error: Could not add remark. " + data.message);
-            }
-        } catch (error) {
-            console.error("Error adding remark:", error);
-            showMessageBox("Error connecting to server for remark update.");
         }
-    }
-    // Reset the select to its default "Select Remark" after action
-    selectElement.value = "";
-}
 
-function showClearConfirmation(event) {
-    currentRowToClear = this.closest('.Status-row').dataset.requestId;
-    confirmationModal.classList.add('show-modal');
-    document.body.classList.add('modal-open');
-}
+        async function fetchUserInfo() {
+            try {
+                const response = await fetch(`${API_BASE_URL}get_officeuser_info.php`);
+                const data = await response.json();
+                if (data.success) {
+                    currentUsernameSpan.textContent = data.user.user_name;
+                    userOfficeCodeSpan.textContent = data.user.office_code;
+                    currentUserOfficeCode = data.user.office_code;
+                    fetchClearanceRequests(currentUserOfficeCode);
+                } else {
+                    console.error("Failed to fetch user info:", data.message);
+                    showMessageBox("Error: Could not fetch user information. " + data.message);
+                }
+            } catch (error) {
+                console.error("Error fetching user info:", error);
+                showMessageBox("Error connecting to server for user info.");
+            }
+        }
 
-// --- MODIFIED: attachEventListenersToRows to target <select> ---
-function attachEventListenersToRows() {
-    // Attach change listener to the new <select> elements for remarks
-    document.querySelectorAll('.add-remark-select').forEach(select => {
-        // Remove existing listener first to prevent duplicates on re-render
-        select.removeEventListener('change', handleRemarkSelectChange);
-        select.addEventListener('change', handleRemarkSelectChange);
-    });
+        async function fetchClearanceRequests(officeCode) {
+            try {
+                const response = await fetch(`${API_BASE_URL}get_clearance_requests.php?office_code=${officeCode}`);
+                const data = await response.json();
+                if (data.success) {
+                    allRequests = data.requests;
+                    updateStatusCounts();
+                    filterAndRenderRequests();
+                } else {
+                    console.error("Failed to fetch requests:", data.message);
+                    showMessageBox("Error: Could not fetch clearance requests.");
+                }
+            } catch (error) {
+                console.error("Error fetching clearance requests:", error);
+                showMessageBox("Error connecting to server for requests.");
+            }
+        }
 
-    // Attach click listener to clear buttons
-    document.querySelectorAll('.clear-button').forEach(button => {
-        button.removeEventListener('click', showClearConfirmation); // Remove old first
-        button.addEventListener('click', showClearConfirmation);
-    });
-}
+        function updateStatusCounts() {
+            const total = allRequests.length;
+            const pending = allRequests.filter(req => req.status_code === 'ON').length;
+            const ongoing = allRequests.filter(req => req.status_code === 'ISSUE').length;
+            const completed = allRequests.filter(req => req.status_code === 'COMP').length;
 
+            totalRequestsSpan.textContent = total;
+            pendingRequestsSpan.textContent = pending;
+            ongoingRequestsSpan.textContent = ongoing;
+            completedRequestsSpan.textContent = completed;
+        }
 
-// --- Main Event Listeners ---
+        function createRequestRow(request, filterStatusFrontend) {
+            const row = document.createElement('div');
+            row.classList.add('Status-row');
+            row.dataset.statusFrontend = getFrontendStatus(request.status_code);
+            row.dataset.statusDb = request.status_code;
+            row.dataset.requestId = request.req_id;
 
-navItems.forEach(tab => {
-    tab.addEventListener('click', () => {
-        navItems.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        filterAndRenderRequests();
-    });
-});
+            let statusDisplay = getFrontendStatus(request.status_code);
+            let fifthColumnContent = '';
+            let actionsContent = '';
 
+            if (filterStatusFrontend === 'ON-GOING') {
+                fifthColumnContent = `<div class="remark-column"><span class="remark-text">${request.office_remarks || 'N/A'}</span></div>`;
+            } else {
+                fifthColumnContent = `<div class="status-cell">${statusDisplay}</div>`;
+            }
 
+            if (filterStatusFrontend !== 'ALL') {
+                if (request.status_code === 'ON') {
+                    const customRemarks = REMARKS_MAPPING[currentUserOfficeCode] || [];
+                    const selectOptions = customRemarks.map(remark =>
+                        `<option value="${remark}">${remark}</option>`
+                    ).join('');
 
-confirmClearBtn.addEventListener('click', async function() {
-    if (currentRowToClear) {
-        try {
-            const response = await fetch(`${API_BASE_URL}update_request_status.php`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ request_id: currentRowToClear, office_code: currentUserOfficeCode, status_code: 'COMP' })
+                    actionsContent = `
+                        <select class="add-remark-select" data-request-id="${request.req_id}">
+                            <option value="">Select Remark</option>
+                            ${selectOptions}
+                        </select>
+                        <button class="clear-button">CLEAR</button>
+                    `;
+                } else if (request.status_code === 'ISSUE') {
+                    actionsContent = `<button class="clear-button">CLEAR</button>`;
+                } else if (request.status_code === 'COMP') {
+                    actionsContent = `<div class="actions-placeholder"></div>`;
+                }
+            } else {
+                actionsContent = `<div class="actions-placeholder"></div>`;
+            }
+
+            row.innerHTML = `
+                <div class="reqid">${request.req_id}</div>
+                <div class="studid">${request.student_id || 'N/A'}</div>
+                <div class="studname">${request.student_name || 'N/A'}</div>
+                <div class="program">${request.program || 'N/A'}</div>
+                ${fifthColumnContent}
+                <div class="datesub">${request.date_submitted || 'N/A'}</div>
+                <div class="actions">${actionsContent}</div>`;
+
+            return row;
+        }
+
+        function getFrontendStatus(dbStatusCode) {
+            switch (dbStatusCode) {
+                case 'ON': return 'PENDING';
+                case 'ISSUE': return 'ON-GOING';
+                case 'COMP': return 'COMPLETED';
+                case 'PEND': return 'INITIAL PENDING (DB: PEND)';
+                default: return dbStatusCode;
+            }
+        }
+
+        function renderRequests(requestsToDisplay, filterStatusFrontend) {
+            requestsContainer.innerHTML = '';
+
+            if (requestsToDisplay.length === 0) {
+                requestsContainer.innerHTML = '<div class="no-results">No requests found matching your criteria.</div>';
+                return;
+            }
+
+            requestsToDisplay.forEach(request => {
+                const row = createRequestRow(request, filterStatusFrontend);
+                requestsContainer.appendChild(row);
             });
-            const data = await response.json();
-            if (data.success) {
-                showMessageBox("Request cleared successfully!");
-                await fetchClearanceRequests(currentUserOfficeCode);
-            } else {
-                console.error("Failed to clear request:", data.message);
-                showMessageBox("Error: Could not clear request.");
-            }
-        } catch (error) {
-            console.error("Error clearing request:", error);
-            showMessageBox("Error connecting to server for clearance.");
+
+            attachEventListenersToRows();
         }
-    }
-    confirmationModal.classList.remove('show-modal');
-    document.body.classList.remove('modal-open');
-    currentRowToClear = null;
-});
 
-cancelClearBtn.addEventListener('click', function() {
-    showMessageBox("Clearance cancelled.");
-    confirmationModal.classList.remove('show-modal');
-    document.body.classList.remove('modal-open');
-    currentRowToClear = null;
-});
+        function filterAndRenderRequests() {
+            const activeTab = document.querySelector('.Nav-item.active');
+            const selectedStatusFrontend = activeTab ? activeTab.dataset.statusFrontend.toUpperCase() : 'ALL';
+            const selectedStatusDb = activeTab ? activeTab.dataset.statusDb.toUpperCase() : '';
+            updateTableHeaders(selectedStatusFrontend);
 
-// --- NEW: Search Input Event Listener ---
-searchInput.addEventListener('keyup', filterAndRenderRequests);
+            const searchTerm = searchInput.value.toLowerCase().trim();
 
+            let filteredByTab = allRequests;
+            if (selectedStatusFrontend !== 'ALL') {
+                filteredByTab = allRequests.filter(req => req.status_code === selectedStatusDb);
+            }
 
-// --- Initial Load ---
-document.addEventListener('DOMContentLoaded', () => {
-    fetchUserInfo();
-});
+            const finalFilteredRequests = filteredByTab.filter(req => {
+                const requestIdMatch = req.req_id.toString().toLowerCase().includes(searchTerm);
+                const studentIdMatch = (req.student_id || '').toLowerCase().includes(searchTerm);
+                const studentNameMatch = (req.student_name || '').toLowerCase().includes(searchTerm);
+                const programMatch = (req.program || '').toLowerCase().includes(searchTerm);
+
+                return requestIdMatch || studentIdMatch || studentNameMatch || programMatch;
+            });
+
+            renderRequests(finalFilteredRequests, selectedStatusFrontend);
+        }
+
+        function updateTableHeaders(selectedStatusFrontend) {
+            statusOrRemarkHeader.textContent = 'STATUS';
+            statusOrRemarkHeader.style.display = 'block';
+            actionsHeader.style.display = 'block';
+
+            if (selectedStatusFrontend === 'ON-GOING') {
+                statusOrRemarkHeader.textContent = 'REMARK';
+            } else if (selectedStatusFrontend === 'COMPLETED' || selectedStatusFrontend === 'ALL') {
+                actionsHeader.style.display = 'none';
+            }
+        }
+
+        async function handleRemarkSelectChange(event) {
+            const selectElement = event.target;
+            const remark = selectElement.value;
+            const requestId = selectElement.dataset.requestId;
+
+            if (remark) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}update_office_remark.php`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ request_id: requestId, office_code: currentUserOfficeCode, remark: remark, status_code: 'ISSUE' })
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        showMessageBox("Remark added and status updated to ON-GOING!");
+                        await fetchClearanceRequests(currentUserOfficeCode);
+                    } else {
+                        console.error("Failed to add remark:", data.message);
+                        showMessageBox("Error: Could not add remark. " + data.message);
+                    }
+                } catch (error) {
+                    console.error("Error adding remark:", error);
+                    showMessageBox("Error connecting to server for remark update.");
+                }
+            }
+            selectElement.value = "";
+        }
+
+        function showClearConfirmation(event) {
+            currentRowToClear = this.closest('.Status-row').dataset.requestId;
+            confirmationModal.classList.add('show-modal');
+            document.body.classList.add('modal-open');
+        }
+
+        function attachEventListenersToRows() {
+            document.querySelectorAll('.add-remark-select').forEach(select => {
+                select.removeEventListener('change', handleRemarkSelectChange);
+                select.addEventListener('change', handleRemarkSelectChange);
+            });
+
+            document.querySelectorAll('.clear-button').forEach(button => {
+                button.removeEventListener('click', showClearConfirmation);
+                button.addEventListener('click', showClearConfirmation);
+            });
+        }
+
+        navItems.forEach(tab => {
+            tab.addEventListener('click', () => {
+                navItems.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                filterAndRenderRequests();
+            });
+        });
+
+        confirmClearBtn.addEventListener('click', async function() {
+            if (currentRowToClear) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}update_request_status.php`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ request_id: currentRowToClear, office_code: currentUserOfficeCode, status_code: 'COMP' })
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        showMessageBox("Request cleared successfully!");
+                        await fetchClearanceRequests(currentUserOfficeCode);
+                    } else {
+                        console.error("Failed to clear request:", data.message);
+                        showMessageBox("Error: Could not clear request.");
+                    }
+                } catch (error) {
+                    console.error("Error clearing request:", error);
+                    showMessageBox("Error connecting to server for clearance.");
+                }
+            }
+            confirmationModal.classList.remove('show-modal');
+            document.body.classList.remove('modal-open');
+            currentRowToClear = null;
+        });
+
+        cancelClearBtn.addEventListener('click', function() {
+            showMessageBox("Clearance cancelled.");
+            confirmationModal.classList.remove('show-modal');
+            document.body.classList.remove('modal-open');
+            currentRowToClear = null;
+        });
+
+        searchInput.addEventListener('keyup', filterAndRenderRequests);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchUserInfo();
+        });
     </script>
 </body>
 </html>

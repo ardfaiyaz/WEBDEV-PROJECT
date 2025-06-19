@@ -2,231 +2,224 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
 
 @font-face {
-  font-family: 'AkwePro';
-  src: url('../fonts/akwe-pro-ext-sc-bold.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'AkwePro';
+    src: url('../fonts/akwe-pro-ext-sc-bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: 'Montserrat', sans-serif;
-  background-color: #f5f5f5;
-  color: #2c2c2c;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f5f5f5;
+    color: #2c2c2c;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
-/* Header Topbar */
 .topbar {
-  background-color: #2c2273;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  padding: 16px 50px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+    background-color: #2c2273;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 50px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .logo-link {
-  text-decoration: none;
-  color: inherit;
+    text-decoration: none;
+    color: inherit;
 }
 
 .logo-section {
-  display: flex;
-  align-items: center;
-  gap: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .logo-section img {
-  width: 50px;
+    width: 50px;
 }
 
 .school-name {
-  font-family: 'AkwePro', sans-serif;
-  font-size: 22px;
-  line-height: 1.2;
+    font-family: 'AkwePro', sans-serif;
+    font-size: 22px;
+    line-height: 1.2;
 }
 
 .user-section {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 16px;
 }
 
-.user-section span{
-  font-weight: 600;
-  color: white;
+.user-section span {
+    font-weight: 600;
+    color: white;
 }
 
 .user-section i {
-  font-size: 34px;
-  cursor: pointer;
+    font-size: 34px;
+    cursor: pointer;
 }
 
-/* Layout Wrapper */
 .content-wrapper {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-  position: relative;
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
 }
 
-/* Sidebar */
 .sidebar {
-  width: 60px;
-  background-color: #2c2273;
-  color: white;
-  transition: width 0.3s ease-in-out;
-  overflow: hidden;
-  padding: 20px 0;
-  position: relative;
-  z-index: 10;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-  height: auto;
-  top: 54%;
-  transform: translateY(-50%);
-  position: absolute;
+    width: 60px;
+    background-color: #2c2273;
+    color: white;
+    transition: width 0.3s ease-in-out;
+    overflow: hidden;
+    padding: 20px 0;
+    position: relative;
+    z-index: 10;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    height: auto;
+    top: 54%;
+    transform: translateY(-50%);
+    position: absolute;
 }
 
 .sidebar.active {
-  width: 200px;
+    width: 200px;
 }
 
 .icon-menu {
-  list-style: none;
+    list-style: none;
 }
 
 .icon-menu li {
-  margin: 20px 0;
-  text-align: center;
+    margin: 20px 0;
+    text-align: center;
 }
 
 .icon-menu a {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 15px;
-  color: white;
-  text-decoration: none;
-  padding: 10px 20px;
-  transition: background 0.3s ease, transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    transition: background 0.3s ease, transform 0.3s ease;
 }
 
 .icon-menu a:hover {
-  background: #443ba0;
-  transform: translateX(6px);
+    background: #443ba0;
+    transform: translateX(6px);
 }
 
 .icon-menu i {
-  font-size: 22px;
+    font-size: 22px;
 }
 
 .label {
-  opacity: 0;
-  white-space: nowrap;
-  transition: 0.3s ease-in-out;
+    opacity: 0;
+    white-space: nowrap;
+    transition: 0.3s ease-in-out;
 }
 
 .sidebar.active .label {
-  opacity: 1;
+    opacity: 1;
 }
 
-/* Main Content */
 .main-content {
-  flex: 1;
-  padding: 30px;
-  transition: 0.3s ease-in-out;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    flex: 1;
+    padding: 30px;
+    transition: 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .main-content.shifted {
-  margin-left: 300px;
+    margin-left: 300px;
 }
 
 .main-content section {
-  background-color: #ffffff;
-  padding: 60px;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-  width: 100%;
-  max-width: 1500px;
-  text-align: center;
+    background-color: #ffffff;
+    padding: 60px;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 1500px;
+    text-align: center;
 }
 
 .main-content h2 {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 38px;
-  color: #2b2c7e;
-  margin-bottom: 10px;
-  font-weight: 800;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 38px;
+    color: #2b2c7e;
+    margin-bottom: 10px;
+    font-weight: 800;
 }
 
 .description {
-  color: #555;
-  font-size: 18px;
-  margin-bottom: 40px;
+    color: #555;
+    font-size: 18px;
+    margin-bottom: 40px;
 }
 
-/* Cards Section */
 .cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 50px;
-  justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    justify-content: center;
 }
 
 .card {
-  text-decoration: none;
-  color: inherit;
-  background-color: #ffffff;
-  border-radius: 14px;
-  padding: 50px;
-  flex: 1 1 calc(33.333% - 40px);
-  min-width: 250px;
-  max-width: 100%;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-  transition: transform 0.2s ease;
-  text-align: center;
+    text-decoration: none;
+    color: inherit;
+    background-color: #ffffff;
+    border-radius: 14px;
+    padding: 50px;
+    flex: 1 1 calc(33.333% - 40px);
+    min-width: 250px;
+    max-width: 100%;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease;
+    text-align: center;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  cursor: pointer;
+    transform: translateY(-5px);
+    cursor: pointer;
 }
 
 .card .icon {
-  font-size: 54px;
-  color: #127e00;
-  margin-bottom: 15px;
+    font-size: 54px;
+    color: #127e00;
+    margin-bottom: 15px;
 }
 
 .card h3 {
-  font-size: 26px;
-  color: #2b2c7e;
-  font-weight: 00;
-  margin-bottom: 10px;
+    font-size: 26px;
+    color: #2b2c7e;
+    font-weight: 00;
+    margin-bottom: 10px;
 }
 
 .card p {
-  color: black;
-  font-size: 17px;
-  line-height: 1.5;
+    color: black;
+    font-size: 17px;
+    line-height: 1.5;
 }
-
-/* CLAIM STUB NOTIF */
 
 .claim-notification {
     position: fixed;
@@ -241,93 +234,90 @@ body {
     max-width: 400px;
     text-align: center;
     z-index: 9999;
-    border: 2px solid #f0b809; /* Added from previous suggestion for yellow border */
-    /* This ensures it's hidden when the page loads, unless PHP overrides it */
-    display: none; 
+    border: 2px solid #f0b809;
+    display: none;
 }
 
 .claim-notification .check-icon {
-    width: 80px; /* Adjusted based on previous suggestion for larger icon */
-    height: 80px; /* Adjusted based on previous suggestion for larger icon */
-    margin-bottom: 20px; /* Adjusted margin */
-    background-color: #f0b809; /* Yellow background for the circle */
-    border-radius: 50%; /* Make it a circle */
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+    background-color: #f0b809;
+    border-radius: 50%;
     padding: 10px;
-    box-sizing: border-box; /* Include padding in width/height */
+    box-sizing: border-box;
 }
 
 .icon {
     font-size: 40px;
-    color: green; /* Or any color you want */
+    color: green;
     display: block;
     margin-bottom: 10px;
 }
 
 
 .claim-notification h2 {
-    font-size: 1.8em; /* Adjusted based on previous suggestion for larger heading */
-    color: #333; /* Darker color for better contrast */
-    margin: 10px 0 15px; /* Adjusted margin */
+    font-size: 1.8em;
+    color: #333;
+    margin: 10px 0 15px;
     font-weight: bold;
 }
 
 .claim-notification p {
-    color: #555; /* Slightly lighter color for body text */
-    margin: 5px 0 10px; /* Adjusted margin */
-    line-height: 1.6; /* Improved readability */
+    color: #555;
+    margin: 5px 0 10px;
+    line-height: 1.6;
 }
 
 .claim-notification strong {
-    color: #000; /* Ensure strong text is very visible */
+    color: #000;
 }
 
 .claim-notification a {
-    color: #007bff; /* Blue for the link */
-    font-size: 1em; /* Adjusted to be consistent with body text */
-    text-decoration: underline; /* Emphasize it's a link */
+    color: #007bff;
+    font-size: 1em;
+    text-decoration: underline;
     display: block;
-    margin-top: 15px; /* Adjusted margin */
+    margin-top: 15px;
 }
 
-.claim-notification .yellow-button { /* Changed from just .yellow-button to be specific */
-    background-color: #f0b809; /* Consistent yellow */
+.claim-notification .yellow-button {
+    background-color: #f0b809;
     padding: 12px 0;
-    margin-top: 25px; /* Adjusted margin */
-    border-radius: 5px; /* So the button itself is rounded, not just the container */
+    margin-top: 25px;
+    border-radius: 5px;
 }
 
 .claim-notification .yellow-button button {
     background: none;
     border: none;
-    color: #fff; /* White text for button */
+    color: #fff;
     font-weight: bold;
-    font-size: 1em; /* Adjusted size */
+    font-size: 1em;
     cursor: pointer;
-    transition: background-color 0.3s ease; /* Smooth hover effect */
+    transition: background-color 0.3s ease;
 }
 
 .claim-notification .yellow-button button:hover {
-    background-color: #d1a007; /* Slightly darker yellow on hover */
+    background-color: #d1a007;
 }
 
 
-/* Notification Bell Icon Red Dot */
 .notification-bell-icon {
     position: relative;
-    /* Other styles for your bell icon */
-    font-size: 24px; /* Example size */
+    font-size: 24px;
     cursor: pointer;
-    color: #333; /* Example color */
+    color: #333;
 }
 
 .notification-bell-icon.has-notification::after {
     content: '';
     position: absolute;
-    top: -2px; /* Adjust as needed */
-    right: -2px; /* Adjust as needed */
-    width: 8px; /* Size of the red dot */
-    height: 8px; /* Size of the red dot */
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
     background-color: red;
     border-radius: 50%;
-    border: 1px solid white; /* Small white border to make it stand out */
+    border: 1px solid white;
 }

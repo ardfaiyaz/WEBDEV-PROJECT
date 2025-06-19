@@ -15,8 +15,8 @@
 }
 
 body {
-    font-family: 'Montserrat', sans-serif; /* Preferred font from previous code */
-    background-color: #f5f5f5; /* Light gray background */
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f5f5f5;
     color: #333;
     display: flex;
     flex-direction: column;
@@ -24,21 +24,20 @@ body {
 }
 
 body.modal-open {
-    overflow: hidden; /* Prevent scrolling when modal is open */
+    overflow: hidden;
 }
 
-/* Header */
 .topbar {
     background-color: #2c2273;
     color: white;
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Vertically align items */
+    align-items: center;
     padding: 16px 50px;
     position: sticky;
     top: 0;
     z-index: 100;
-    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+    flex-wrap: wrap;
 }
 
 .topbar .logo-section {
@@ -65,12 +64,11 @@ body.modal-open {
     line-height: 1.2;
 }
 
-/* New: Top Navigation Bar */
 .top-navbar {
-    flex-grow: 1; /* Allows the nav bar to take up available space */
+    flex-grow: 1;
     display: flex;
-    justify-content: center; /* Center the menu items */
-    margin: 0 20px; /* Add some horizontal margin */
+    justify-content: center;
+    margin: 0 20px;
 }
 
 .navbar-menu {
@@ -78,7 +76,7 @@ body.modal-open {
     padding: 0;
     margin: 0;
     display: flex;
-    gap: 30px; /* Space between menu items */
+    gap: 30px;
 }
 
 .navbar-menu .menu-item a {
@@ -95,11 +93,11 @@ body.modal-open {
 }
 
 .navbar-menu .menu-item a:hover {
-    color: #b0c4de; /* Subtle text color change on hover */
+    color: #b0c4de;
 }
 
 .navbar-menu .menu-item.active a {
-    background-color: #6a5acd; /* Active color for top nav */
+    background-color: #6a5acd;
 }
 
 .navbar-menu .icon-sidebar {
@@ -114,31 +112,29 @@ body.modal-open {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 2px; /* Thickness of the underline */
-    background-color: #6a5acd; /* Color of the underline */
-    transform: scaleX(0); /* Start hidden (no width) */
-    transform-origin: bottom right; /* Animate from right to left */
-    transition: transform 0.3s ease-out; /* Animation speed and easing */
+    height: 2px;
+    background-color: #6a5acd;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease-out;
 }
 
 .navbar-menu .menu-item a:hover::after {
-    transform: scaleX(1); /* Expand to full width on hover */
-    transform-origin: bottom left; /* Animate from left to right on hover */
+    transform: scaleX(1);
+    transform-origin: bottom left;
 }
 
-/* Header Right Section (for search and user) */
 .header-right-section {
     display: flex;
     align-items: center;
-    gap: 25px; /* Space between search and user section */
+    gap: 25px;
 }
 
-/* Search Bar */
 .search-bar {
     margin-right: 10px;
     background-color: rgba(255, 255, 255, 0.15);
     border-radius: 25px;
-    display: flex; /* Keep flex for alignment, but icon will be absolute */
+    display: flex;
     align-items: center;
     width: 220px;
     transition: all 0.6s ease;
@@ -153,7 +149,7 @@ body.modal-open {
 }
 
 .search-bar input {
-    font-family: 'Montserrat', sans-serif; /* Use Montserrat for input text */
+    font-family: 'Montserrat', sans-serif;
     border: none;
     background: transparent;
     outline: none;
@@ -161,21 +157,21 @@ body.modal-open {
     font-size: 0.95em;
     flex-grow: 1;
     width: 100%;
-    padding: 8px 40px 8px 18px; /* (top, right, bottom, left) */
+    padding: 8px 40px 8px 18px;
     height: 100%;
     box-sizing: border-box;
 }
 
 .search-bar:focus-within input {
-    color: #333; /* Dark text on focus */
+    color: #333;
 }
 
 .search-bar input::placeholder {
-    color: rgba(255, 255, 255, 0.7); /* Lighter placeholder text */
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .search-bar:focus-within input::placeholder {
-    color: #777; /* Darker placeholder on focus */
+    color: #777;
 }
 
 .icon-search {
@@ -186,11 +182,11 @@ body.modal-open {
     right: 15px;
     top: 50%;
     transform: translateY(-50%);
-    pointer-events: none; /* So clicks go through to input */
+    pointer-events: none;
 }
 
 .search-bar:focus-within .icon-search {
-    color: #6a5acd; /* Purple icon on focus */
+    color: #6a5acd;
 }
 
 .user-section {
@@ -208,26 +204,23 @@ body.modal-open {
 .user-section i {
     font-size: 34px;
     cursor: pointer;
-    color: white; /* Ensure icons are white */
+    color: white;
 }
 
-/* Main Container */
 .main-container {
     display: flex;
-    flex-direction: column; /* Changed to column since sidebar is gone */
+    flex-direction: column;
     flex: 1;
 }
 
-/* Main Content Area */
 .content-area {
     flex: 1;
     padding: 30px;
     display: flex;
     flex-direction: column;
-    gap: 30px; /* Space between sections */
+    gap: 30px;
 }
 
-/* Clearance Requests Header */
 .clearance-requests-header {
     background-color: #f0f0f0;
     padding: 15px 40px;
@@ -235,7 +228,7 @@ body.modal-open {
     margin-bottom: 30px;
     width: fit-content;
     border-left: 5px solid #6a5acd;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Soft shadow */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .clearance-requests-header h2 {
@@ -246,7 +239,6 @@ body.modal-open {
     padding: 0;
 }
 
-/* Status Request Summary Boxes */
 .Status-Request {
     display: flex;
     justify-content: space-between;
@@ -293,7 +285,6 @@ body.modal-open {
     color: #2c2273;
 }
 
-/* Main Status Table Section */
 .Status {
     display: flex;
     flex-direction: column;
@@ -321,7 +312,7 @@ body.modal-open {
     z-index: 10;
     padding-bottom: 10px;
     white-space: nowrap;
-    overflow-x: auto; /* Keep this here for the tabs to scroll if too many */
+    overflow-x: auto;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -358,19 +349,17 @@ body.modal-open {
 .Status-table {
     margin-top: 20px;
     width: 100%;
-    overflow-x: auto; /* This makes the entire table scrollable horizontally */
+    overflow-x: auto;
     -webkit-overflow-scrolling: touch;
 }
 
 .Status-header,
 .Status-row {
     display: grid;
-    /* Adjusted grid-template-columns for better alignment, ensuring all cells are equally proportioned after minwidth */
     grid-template-columns: minmax(80px, 0.5fr) minmax(120px, 1fr) minmax(180px, 1.5fr) minmax(120px, 1fr) minmax(100px, 0.8fr) minmax(130px, 1fr) minmax(160px, 1.2fr);
     padding: 14px 0;
     align-items: center;
-    text-align: center; /* Center align all grid items by default */
-    /* Removed min-width from here to let grid sizing handle it, overflow-x on parent will scroll */
+    text-align: center;
     gap: 10px;
 }
 
@@ -391,7 +380,7 @@ body.modal-open {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    text-align: center; /* Ensure all header texts are centered */
+    text-align: center;
 }
 
 .Status-row {
@@ -401,12 +390,11 @@ body.modal-open {
     margin-bottom: 10px;
     transition: all 0.3s ease;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    /* Removed text-align: left; to allow individual div rules or inherited center */
 }
 
-.Status-row div { /* Apply to all data cells */
-    text-align: center; /* Ensure all data cells are centered */
-    padding: 5px 10px; /* Add some padding for better visual */
+.Status-row div {
+    text-align: center;
+    padding: 5px 10px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -419,17 +407,17 @@ body.modal-open {
 }
 
 .Status-row .actions {
-    padding: 0; /* Keep padding for the cell itself, not for content inside */
+    padding: 0;
 }
 
 .actions {
-    text-align: center; /* Already centered due to main .Status-row div */
+    text-align: center;
     display: flex;
     flex-direction: column;
     gap: 8px;
-    align-items: center; /* Centered all items in the actions column */
+    align-items: center;
     justify-content: center;
-    padding: 5px 10px; /* Adjusted padding here for the column content */
+    padding: 5px 10px;
 }
 
 .actions-placeholder {
@@ -453,16 +441,16 @@ body.modal-open {
     font-weight: 600;
     transition: background-color 0.3s ease;
     white-space: nowrap;
-    width: 80%; /* Adjust width for better fit if needed */
+    width: 80%;
     text-align: center;
     font-family: 'Montserrat', sans-serif;
 }
-/* New style for 'Cleared' text */
+
 .clear-button-text {
-    color: #28a745; /* Green color for cleared text */
+    color: #28a745;
     font-weight: 600;
-    padding: 8px 15px; /* Match button padding for alignment */
-    display: inline-block; /* Ensure it respects padding/margin */
+    padding: 8px 15px;
+    display: inline-block;
     white-space: nowrap;
 }
 
@@ -482,7 +470,7 @@ body.modal-open {
     transition: background-color 0.3s ease;
     display: flex;
     align-items: center;
-    justify-content: center; /* Centered text and icon within the button */
+    justify-content: center;
     gap: 5px;
     white-space: nowrap;
     width: 100%;
@@ -542,9 +530,8 @@ body.modal-open {
     color: #555;
 }
 
-/* Modal CSS */
 .modal-overlay {
-    display: flex; /* Changed from none to flex by default, hidden by opacity and pointer-events */
+    display: flex;
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -557,12 +544,12 @@ body.modal-open {
     align-items: center;
     transition: opacity 0.3s ease;
     opacity: 0;
-    pointer-events: none; /* Allows clicks to pass through when hidden */
+    pointer-events: none;
 }
 
 .modal-overlay.show-modal {
     opacity: 1;
-    pointer-events: auto; /* Enables clicks when shown */
+    pointer-events: auto;
 }
 
 .modal-content {
@@ -586,7 +573,6 @@ body.modal-open {
     opacity: 1;
 }
 
-/* Confirmation and Add Remark Modal adjustments for consistency */
 .confirmation-modal-content,
 .add-remark-modal-content {
     font-family: 'Montserrat', sans-serif;
@@ -623,9 +609,9 @@ body.modal-open {
     font-size: 16px;
     font-weight: 600;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    font-family: 'Montserrat', sans-serif; /* Ensure font is applied to modal buttons */
-    flex: 1; /* Allow buttons to grow */
-    max-width: 150px; /* Limit button width */
+    font-family: 'Montserrat', sans-serif;
+    flex: 1;
+    max-width: 150px;
 }
 
 .modal-button.confirm {
@@ -650,8 +636,7 @@ body.modal-open {
     transform: translateY(-2px);
 }
 
-.close-button { /* For Add Remark Modal */
-
+.close-button {
     position: absolute;
     top: 15px;
     right: 20px;
@@ -666,7 +651,7 @@ body.modal-open {
 }
 
 #remarkTextarea {
-    width: calc(100% - 20px); /* Adjust for padding */
+    width: calc(100% - 20px);
     min-height: 100px;
     padding: 10px;
     margin-bottom: 20px;
@@ -674,11 +659,10 @@ body.modal-open {
     border-radius: 5px;
     font-family: 'Montserrat', sans-serif;
     font-size: 0.95em;
-    resize: vertical; /* Allow vertical resizing */
+    resize: vertical;
 }
 
 
-/* Custom Message Box (for alerts) */
 .custom-message-box {
     position: fixed;
     top: 50%;
@@ -690,7 +674,7 @@ body.modal-open {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     z-index: 1002;
     text-align: center;
-    display: none; /* Hidden by default */
+    display: none;
     flex-direction: column;
     align-items: center;
 }
@@ -724,7 +708,6 @@ body.modal-open {
     font-style: italic;
 }
 
-/* Responsive Adjustments */
 @media (max-width: 1200px) {
     .topbar {
         padding: 16px 30px;
@@ -757,36 +740,35 @@ body.modal-open {
 
     .Status-header,
     .Status-row {
-        /* Adjusted grid to be more flexible, still 7 columns */
         grid-template-columns: repeat(7, minmax(80px, 1fr));
-        min-width: 700px; /* Allow content to overflow for smaller screens, table will scroll */
+        min-width: 700px;
         gap: 5px;
     }
 }
 
 @media (max-width: 768px) {
     .topbar {
-        flex-direction: column; /* Stack logo, nav, and right section */
+        flex-direction: column;
         align-items: flex-start;
         gap: 15px;
         padding: 15px 20px;
     }
 
     .logo-section {
-        width: 100%; /* Take full width */
-        justify-content: center; /* Center logo on smaller screens */
+        width: 100%;
+        justify-content: center;
     }
 
     .top-navbar {
         width: 100%;
-        justify-content: center; /* Center menu items in the nav bar */
-        margin: 0; /* Remove horizontal margin */
+        justify-content: center;
+        margin: 0;
     }
 
     .navbar-menu {
-        flex-wrap: wrap; /* Allow menu items to wrap */
-        justify-content: center; /* Center wrapped items */
-        gap: 10px; /* Adjust gap for wrapped items */
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
     }
 
     .navbar-menu .menu-item a {
@@ -799,20 +781,20 @@ body.modal-open {
     }
 
     .header-right-section {
-        width: 100%; /* Take full width */
-        justify-content: space-between; /* Space out search and user */
+        width: 100%;
+        justify-content: space-between;
         gap: 15px;
-        flex-direction: row; /* Keep search and user in a row */
+        flex-direction: row;
     }
 
     .search-bar {
-        flex-grow: 1; /* Allow search bar to grow */
-        width: auto; /* Reset fixed width */
+        flex-grow: 1;
+        width: auto;
         max-width: unset;
     }
 
     .search-bar:focus-within {
-        width: auto; /* Reset fixed width expansion on focus */
+        width: auto;
     }
 
     .content-area {
@@ -859,40 +841,39 @@ body.modal-open {
         font-size: 12px;
         padding: 8px 0;
         gap: 5px;
-        grid-template-columns: repeat(7, minmax(60px, 1fr)); /* Further reduced min width for very small screens */
-        min-width: 500px; /* Allow content to overflow for smaller screens */
+        grid-template-columns: repeat(7, minmax(60px, 1fr));
+        min-width: 500px;
     }
 
     .actions {
         flex-direction: column;
-        align-items: center; /* Keep centered in column for small screens */
+        align-items: center;
         gap: 5px;
-        width: 100%; /* Take full width of cell */
+        width: 100%;
     }
 
     .add-remark-button,
     .clear-button {
-        width: 90%; /* Buttons take most of the width */
+        width: 90%;
         text-align: center;
-        padding: 6px 10px; /* Smaller padding */
+        padding: 6px 10px;
         font-size: 0.8em;
     }
     .clear-button-text {
-         width: 90%;
-         text-align: center;
-         font-size: 0.8em;
-         padding: 6px 10px;
+        width: 90%;
+        text-align: center;
+        font-size: 0.8em;
+        padding: 6px 10px;
     }
 
 
     .dropdown-menu {
-        min-width: unset; /* Remove min-width to prevent overflow */
+        min-width: unset;
         width: 100%;
         left: 0;
         right: auto;
     }
 
-    /* Modal responsive */
     .view-status-modal-content {
         max-width: 90%;
         padding: 15px;
@@ -929,11 +910,11 @@ body.modal-open {
     }
 
     .user-section span {
-        display: none; /* Hide username to save space */
+        display: none;
     }
 
     .user-section i {
-        font-size: 28px; /* Smaller icons */
+        font-size: 28px;
     }
 
     .clearance-requests-header h2 {
@@ -946,7 +927,7 @@ body.modal-open {
     }
     .Status-header,
     .Status-row {
-        grid-template-columns: repeat(7, minmax(50px, 1fr)); /* Even smaller min-width for very small devices */
-        min-width: 400px; /* Further reduced min-width */
+        grid-template-columns: repeat(7, minmax(50px, 1fr));
+        min-width: 400px;
     }
 }

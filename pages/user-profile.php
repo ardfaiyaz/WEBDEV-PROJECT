@@ -3,20 +3,18 @@ session_start();
 
 require_once __DIR__ . '/../php/database.php';
 
-// Check if user is logged in and is a student
 if (!isset($_SESSION['user_id']) || $_SESSION['account_type'] !== 'STUD') {
     header("Location: login.php");
     exit();
 }
 
 $loggedInUserId = $_SESSION['user_id'];
-$loggedInUserEmail = $_SESSION['user_email']; // Assuming this is set during login
+$loggedInUserEmail = $_SESSION['user_email'];
 
 $userProfileData = null;
 $studentInfoData = null;
 
 try {
-    // Fetch user data from 'users' table
     $stmtUsers = $pdo->prepare("
         SELECT
             user_id,
@@ -33,15 +31,12 @@ try {
     $stmtUsers->execute();
     $userProfileData = $stmtUsers->fetch(PDO::FETCH_ASSOC);
 
-    // Fetch comprehensive student data from 'student_info' table
     $stmtStudentInfo = $pdo->prepare("
         SELECT
             si.student_no,
             si.course,
             si.birthdate,
-            -- si.civil_status,        -- Removed as per user's request
             si.gender,
-            -- si.religion,            -- Removed as per user's request
             si.mobile_num,
             si.tel_num,
             si.email_address,
@@ -49,7 +44,6 @@ try {
             si.birthplace,
             si.province,
             si.city_mun,
-            -- si.postal_code,         -- Removed as per user's request
             si.brgy,
             si.house_no,
             si.street,
@@ -70,21 +64,16 @@ try {
     die("Could not load user profile. Please try again later.");
 }
 
-// Initialize display variables with fetched data or empty strings
-// User data (from 'users' table)
 $displayFullName = "User";
 $displayFirstName = "";
 $displayLastName = "";
 $displayMiddleName = "";
-$displaySchoolEmail = $loggedInUserEmail; // Default to session email
+$displaySchoolEmail = $loggedInUserEmail;
 
-// Student data (from 'student_info' table)
 $displayStudentId = "";
 $displayCourse = "";
 $displayBirthDate = "";
-// $displayCivilStatus = ""; // Removed
 $displayGender = "";
-// $displayReligion = ""; // Removed
 $displayMobileNo = "";
 $displayTelephoneNo = "";
 $displayPersonalEmail = "";
@@ -92,7 +81,7 @@ $displayNationality = "";
 $displayBirthPlace = "";
 $displayProvince = "";
 $displayCityMunicipality = "";
-$displayPostalCode = ""; // This variable will remain empty string if column is not fetched
+$displayPostalCode = "";
 $displayBarangay = "";
 $displayHouseNo = "";
 $displayStreet = "";
@@ -117,9 +106,7 @@ if ($studentInfoData) {
     $displayStudentId = htmlspecialchars($studentInfoData['student_no'] ?? '');
     $displayCourse = htmlspecialchars($studentInfoData['course'] ?? '');
     $displayBirthDate = htmlspecialchars($studentInfoData['birthdate'] ?? '');
-    // $displayCivilStatus = htmlspecialchars($studentInfoData['civil_status'] ?? ''); // Removed
     $displayGender = htmlspecialchars($studentInfoData['gender'] ?? '');
-    // $displayReligion = htmlspecialchars($studentInfoData['religion'] ?? ''); // Removed
     $displayMobileNo = htmlspecialchars($studentInfoData['mobile_num'] ?? '');
     $displayTelephoneNo = htmlspecialchars($studentInfoData['tel_num'] ?? '');
     $displayPersonalEmail = htmlspecialchars($studentInfoData['email_address'] ?? '');
@@ -127,7 +114,6 @@ if ($studentInfoData) {
     $displayBirthPlace = htmlspecialchars($studentInfoData['birthplace'] ?? '');
     $displayProvince = htmlspecialchars($studentInfoData['province'] ?? '');
     $displayCityMunicipality = htmlspecialchars($studentInfoData['city_mun'] ?? '');
-    // postal_code is intentionally not fetched, so it will remain its initial value (empty string)
     $displayBarangay = htmlspecialchars($studentInfoData['brgy'] ?? '');
     $displayHouseNo = htmlspecialchars($studentInfoData['house_no'] ?? '');
     $displayStreet = htmlspecialchars($studentInfoData['street'] ?? '');

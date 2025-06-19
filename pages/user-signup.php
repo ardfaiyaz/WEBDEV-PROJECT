@@ -3,23 +3,19 @@ session_start();
 
 require_once '../php/database.php';
 
-// Initialize variables to store submitted data and errors
 $firstName = '';
 $middleName = '';
 $lastName = '';
 $email = '';
 $studentId = '';
-$errors = []; // For validation errors that keep the user on the same page
-$generalErrorHeading = ''; // For the heading of the validation errors
+$errors = [];
+$generalErrorHeading = '';
 
-// Variable for success message (will be displayed inline)
 $successMessage = '';
-$redirectNow = false; // Flag to trigger immediate redirect after success
+$redirectNow = false;
 
-// --- HANDLE FORM SUBMISSION (PHP Processing Logic) ---
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
 
-    // 1. Sanitize and retrieve input data from POST
     $firstName = trim($_POST['firstName'] ?? '');
     $middleName = trim($_POST['middleName'] ?? '');
     $lastName = trim($_POST['lastName'] ?? '');
@@ -28,7 +24,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
     $password = $_POST['password'] ?? '';
     $confirmPassword = $_POST['confirmPassword'] ?? '';
 
-    // 2. Server-side Validation
     if (empty($firstName)) {
         $errors[] = "First name is required.";
     }
@@ -43,7 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
         $errors[] = "School Email must end with '@students.nu-dasma.edu.ph'.";
     }
 
-    // Validate student ID as a positive integer
     if (empty($studentId)) {
         $errors[] = "Student ID is required.";
     } elseif (!ctype_digit($studentId) || (int)$studentId <= 0) {
@@ -60,24 +54,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
         $errors[] = "Password must be at least 8 characters long.";
     }
 
-    // 3. Check for existing email or student ID in database (if no immediate errors)
     if (empty($errors)) {
         try {
-            // Check if email already exists in users table
             $stmt_check_email = $pdo->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
             $stmt_check_email->execute([$email]);
             if ($stmt_check_email->fetchColumn() > 0) {
                 $errors[] = "Email address is already registered.";
             }
 
-            // Check if student ID (which will be user_id) already exists in users table
             $stmt_check_user_id = $pdo->prepare("SELECT COUNT(*) FROM users WHERE user_id = ?");
             $stmt_check_user_id->execute([(int)$studentId]);
             if ($stmt_check_user_id->fetchColumn() > 0) {
                 $errors[] = "Student ID is already registered as a user ID.";
             }
 
-            // Check if student ID is associated with another student_info record (if applicable)
             $stmt_check_student_no = $pdo->prepare("SELECT COUNT(*) FROM student_info WHERE student_no = ?");
             $stmt_check_student_no->execute([(int)$studentId]);
             if ($stmt_check_student_no->fetchColumn() > 0) {
@@ -90,21 +80,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
         }
     }
 
-    // 4. If still no errors, proceed with insertion
     if (empty($errors)) {
         try {
             $pdo->beginTransaction();
 
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
             $roleCode = 'STUD';
-            $officeCode = null; // Set to null for students
+            $officeCode = null;
 
             $stmt_insert_user = $pdo->prepare("
                 INSERT INTO users (user_id, role_code, firstname, lastname, middlename, email, user_password, office_code)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ");
             $stmt_insert_user->execute([
-                (int)$studentId, // Cast to int for insertion
+                (int)$studentId,
                 $roleCode,
                 $firstName,
                 $lastName,
@@ -116,9 +105,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
 
             $pdo->commit();
 
-            // Set success message to be displayed on this page
             $successMessage = "Account created successfully! Redirecting to login page...";
-            $redirectNow = true; // Set flag to trigger redirection
+            $redirectNow = true;
 
         } catch (PDOException $e) {
             $pdo->rollBack();
@@ -170,30 +158,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
                             <div class="form-row-grid">
                                 <div class="form-item">
                                     <input type="text" id="firstName" name="firstName" placeholder=" " required
-                                                value="<?php echo htmlspecialchars($firstName); ?>" />
+                                                 value="<?php echo htmlspecialchars($firstName); ?>" />
                                     <label for="firstName">First Name:</label>
                                 </div>
                                 <div class="form-item">
                                     <input type="text" id="middleName" name="middleName" placeholder=" "
-                                                value="<?php echo htmlspecialchars($middleName); ?>" />
+                                                 value="<?php echo htmlspecialchars($middleName); ?>" />
                                     <label for="middleName">Middle Name:</label>
                                 </div>
                             </div>
 
                             <div class="form-item">
                                 <input type="text" id="lastName" name="lastName" placeholder=" " required
-                                            value="<?php echo htmlspecialchars($lastName); ?>" />
+                                                value="<?php echo htmlspecialchars($lastName); ?>" />
                                 <label for="lastName">Last Name:</label>
                             </div>
 
                             <div class="form-item">
                                 <input type="email" id="email" name="email" placeholder=" " required
-                                                value="<?php echo htmlspecialchars($email); ?>" />
+                                                 value="<?php echo htmlspecialchars($email); ?>" />
                                 <label for="email">School Email:</label>
                             </div>
                             <div class="form-item">
                                 <input type="number" id="studentId" name="studentId" placeholder=" " required
-                                                value="<?php echo htmlspecialchars($studentId); ?>" />
+                                                 value="<?php echo htmlspecialchars($studentId); ?>" />
                                 <label for="studentId">Student ID:</label>
                             </div>
 
@@ -228,7 +216,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_submit'])) {
         </div>
 
     <script>
-        // Define an object to hold our PHP data
         window.phpData = {
             hasErrors: <?php echo json_encode(!empty($errors)); ?>,
             errorMessageHtml: <?php echo json_encode(!empty($errors) ? (

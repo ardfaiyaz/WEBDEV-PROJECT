@@ -17,11 +17,9 @@ $claimNotificationData = [
     'documents' => []
 ];
 
-// New variable to track if any request has been submitted by the user
 $noRequestSubmitted = false;
 
 try {
-    // 1. Find the latest clearance request for the user
     $stmtLatestReq = $pdo->prepare("
         SELECT req_id, claim_stub
         FROM clearance_request
@@ -33,16 +31,13 @@ try {
     $stmtLatestReq->execute();
     $latestRequest = $stmtLatestReq->fetch(PDO::FETCH_ASSOC);
 
-    // Check if any request was found for the user
     if (!$latestRequest) {
         $noRequestSubmitted = true;
     } else {
-        // If a request is found, proceed to check claim_stub
         if ($latestRequest['claim_stub'] == 1) {
             $showClaimNotification = true;
             $claimNotificationData['req_id'] = $latestRequest['req_id'];
 
-            // 2. If claim stub is released, fetch the requested documents
             $stmtDocuments = $pdo->prepare("
                 SELECT dr.doc_copies, d.description AS document_name
                 FROM document_request dr
@@ -53,15 +48,12 @@ try {
             $stmtDocuments->execute();
             $claimNotificationData['documents'] = $stmtDocuments->fetchAll(PDO::FETCH_ASSOC);
         }
-        // If $latestRequest exists but claim_stub is not 1,
-        // then $showClaimNotification remains false and $noRequestSubmitted is false.
-        // This means there's an ongoing request, but not ready for claim.
     }
 
 } catch (PDOException $e) {
     error_log("Database Error fetching claim notification data: " . $e->getMessage());
-    $showClaimNotification = false; // Hide notification on error
-    $noRequestSubmitted = false; // Assume some error, not necessarily no request.
+    $showClaimNotification = false;
+    $noRequestSubmitted = false;
 }
 
 ?>
@@ -132,7 +124,6 @@ try {
                             <strong><?= htmlspecialchars($doc['document_name']); ?></strong>
                             (<?= htmlspecialchars($doc['doc_copies']); ?>
                             <?php
-                                // Determine if "copy" or "copies" should be displayed
                                 if ($doc['doc_copies'] > 1) {
                                     echo 'copies';
                                 } else {
@@ -169,32 +160,22 @@ try {
         const claimNotification = document.getElementById('claim-notification');
         const closeNotifBtn = document.getElementById('close-notif-btn');
 
-        // Function to toggle sidebar (already existing)
         sidebar.addEventListener('click', () => {
             sidebar.classList.toggle('active');
             mainContent.classList.toggle('shifted');
         });
 
-        // Event listener for the notification bell
         notificationBell.addEventListener('click', function() {
-            // Toggle visibility of the claim notification popup
             if (claimNotification.style.display === 'none' || claimNotification.style.display === '') {
                 claimNotification.style.display = 'block';
-                // You might want to remove the 'has-notification' class only if it's a new, unread notification
-                // For simplicity, we remove it on click, assuming the user acknowledges it.
                 notificationBell.classList.remove('has-notification');
             } else {
                 claimNotification.style.display = 'none';
             }
         });
 
-        // Event listener for the "I UNDERSTOOD" or "GOT IT" button
         closeNotifBtn.addEventListener('click', function () {
             claimNotification.style.display = 'none';
-            // Optional: You can add AJAX here to mark the notification as read in the database
-            // so it doesn't reappear on subsequent page loads until a new claim stub is released.
-            // Example:
-            // fetch('../php/mark_notification_read.php', { method: 'POST', body: JSON.stringify({ req_id: '<?php echo $claimNotificationData['req_id']; ?>', type: 'claim' }) });
         });
     </script>
 

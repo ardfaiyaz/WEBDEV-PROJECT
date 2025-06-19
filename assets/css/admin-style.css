@@ -2,29 +2,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
 
 @font-face {
-  font-family: 'AkwePro';
-  src: url('../fonts/akwe-pro-ext-sc-bold.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'AkwePro';
+    src: url('../fonts/akwe-pro-ext-sc-bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: 'Montserrat', sans-serif;
-  background-color: #f5f5f5;
-  color: #2c2c2c;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* Ensure body takes at least full viewport height */
-  align-items: center; /* Centers items along the cross-axis (horizontally for column direction) */
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f5f5f5;
+    color: #2c2c2c;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center;
 }
 
-/* Header Topbar */
 .topbar {
     background-color: #2c2273;
     color: white;
@@ -36,7 +35,7 @@ body {
     top: 0;
     z-index: 100;
     flex-wrap: wrap;
-    width: 100%; /* Ensure topbar takes full width */
+    width: 100%;
 }
 
 .topbar .logo-section {
@@ -63,7 +62,6 @@ body {
     line-height: 1.2;
 }
 
-/* Top Navigation Bar */
 .top-navbar {
     flex-grow: 1;
     display: flex;
@@ -124,14 +122,12 @@ body {
     transform-origin: bottom left;
 }
 
-/* Header Right Section (for search and user) */
 .header-right-section {
     display: flex;
     align-items: center;
     gap: 25px;
 }
 
-/* Search Bar */
 .search-bar {
     margin-right: 10px;
     background-color: rgba(255, 255, 255, 0.15);
@@ -208,99 +204,96 @@ body {
     color: white;
 }
 
-/* Content Wrapper */
 .content-wrapper {
-  display: flex; /* Make content-wrapper a flex container */
-  justify-content: center; /* Center its children horizontally */
-  align-items: center; /* Center its children vertically */
-  flex-grow: 1; /* Allow content-wrapper to take up available vertical space */
-  width: 100%; /* Ensure it spans the full width to allow for internal centering */
-  max-width: 1500px; /* Optional: Set a max-width for the content wrapper itself */
-  margin: auto; /* This will center the content-wrapper horizontally within the body */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    width: 100%;
+    max-width: 1500px;
+    margin: auto;
 }
 
-/* Main Content */
 .main-content {
-  flex: 1;
-  padding: 30px;
-  transition: 0.3s ease-in-out;
-  display: flex; /* Makes it a flex container */
-  align-items: center; /* Centers content vertically within main-content */
-  justify-content: center; /* Centers content horizontally within main-content */
-  margin: auto; /* Helps with overall centering if main-content has a defined width */
-  width: 100%; /* Ensure it takes full width within its parent */
+    flex: 1;
+    padding: 30px;
+    transition: 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    width: 100%;
 }
 
 .main-content.shifted {
-  margin-left: 320px;
+    margin-left: 320px;
 }
 
 .main-content section {
-  background-color: #ffffff;
-  padding: 60px;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-  width: 100%;
-  max-width: 1500px;
-  text-align: center;
+    background-color: #ffffff;
+    padding: 60px;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 1500px;
+    text-align: center;
 }
 
 .main-content h2 {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 38px;
-  color: #2b2c7e;
-  margin-bottom: 10px;
-  font-weight: 800;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 38px;
+    color: #2b2c7e;
+    margin-bottom: 10px;
+    font-weight: 800;
 }
 
 .description {
-  color: #555;
-  font-size: 18px;
-  margin-bottom: 40px;
+    color: #555;
+    font-size: 18px;
+    margin-bottom: 40px;
 }
 
-/* Cards Section */
 .cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 50px;
-  justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    justify-content: center;
 }
 
 .card {
-  text-decoration: none;
-  color: inherit;
-  background-color: #ffffff;
-  border-radius: 14px;
-  padding: 50px;
-  flex: 1 1 calc(33.333% - 40px);
-  min-width: 250px;
-  max-width: 100%;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-  transition: transform 0.2s ease;
-  text-align: center;
+    text-decoration: none;
+    color: inherit;
+    background-color: #ffffff;
+    border-radius: 14px;
+    padding: 50px;
+    flex: 1 1 calc(33.333% - 40px);
+    min-width: 250px;
+    max-width: 100%;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease;
+    text-align: center;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  cursor: pointer;
-} 
+    transform: translateY(-5px);
+    cursor: pointer;
+}
 
 .card .icon {
-  font-size: 54px;
-  color: #127e00;
-  margin-bottom: 15px;
+    font-size: 54px;
+    color: #127e00;
+    margin-bottom: 15px;
 }
 
 .card h3 {
-  font-size: 26px;
-  color: #2b2c7e;
-  font-weight: 00;
-  margin-bottom: 10px;
+    font-size: 26px;
+    color: #2b2c7e;
+    font-weight: 00;
+    margin-bottom: 10px;
 }
 
 .card p {
-  color: black;
-  font-size: 17px;
-  line-height: 1.5;
+    color: black;
+    font-size: 17px;
+    line-height: 1.5;
 }
