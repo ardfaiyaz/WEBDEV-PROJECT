@@ -278,10 +278,12 @@ body {
 }
 
 .claim-notification strong {
+    font-family: 'Montserrat', sans-serif;
     color: #000; /* Ensure strong text is very visible */
 }
 
 .claim-notification a {
+    font-family: 'Montserrat', sans-serif;
     color: #007bff; /* Blue for the link */
     font-size: 1em; /* Adjusted to be consistent with body text */
     text-decoration: underline; /* Emphasize it's a link */
@@ -289,7 +291,8 @@ body {
     margin-top: 15px; /* Adjusted margin */
 }
 
-.claim-notification .yellow-button { /* Changed from just .yellow-button to be specific */
+.claim-notification .yellow-button { 
+    font-family: 'Montserrat', sans-serif;/* Changed from just .yellow-button to be specific */
     background-color: #f0b809; /* Consistent yellow */
     padding: 12px 0;
     margin-top: 25px; /* Adjusted margin */
@@ -297,6 +300,7 @@ body {
 }
 
 .claim-notification .yellow-button button {
+  font-family: 'Montserrat', sans-serif;
     background: none;
     border: none;
     color: #fff; /* White text for button */
@@ -306,8 +310,8 @@ body {
     transition: background-color 0.3s ease; /* Smooth hover effect */
 }
 
-.claim-notification .yellow-button button:hover {
-    background-color: #d1a007; /* Slightly darker yellow on hover */
+.notifbtn {
+  font-family: 'Montserrat', sans-serif;
 }
 
 
