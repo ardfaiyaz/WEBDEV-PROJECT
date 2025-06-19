@@ -281,7 +281,8 @@ body {
     margin-top: 15px;
 }
 
-.claim-notification .yellow-button {
+.claim-notification .yellow-button { 
+    font-family: 'Montserrat', sans-serif;
     background-color: #f0b809;
     padding: 12px 0;
     margin-top: 25px;
@@ -289,6 +290,7 @@ body {
 }
 
 .claim-notification .yellow-button button {
+  font-family: 'Montserrat', sans-serif;
     background: none;
     border: none;
     color: #fff;
@@ -300,14 +302,14 @@ body {
 
 .claim-notification .yellow-button button:hover {
     background-color: #d1a007;
-}
 
+}
 
 .notification-bell-icon {
     position: relative;
     font-size: 24px;
     cursor: pointer;
-    color: #333;
+    color: white; /* Example color */
 }
 
 .notification-bell-icon.has-notification::after {

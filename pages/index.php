@@ -64,6 +64,7 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../assets/css/style.css"/>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
     <link rel="icon" type="image/png" href="../assets/images/school-logo.png" />
     <title>Home</title>
 </head>
@@ -76,7 +77,7 @@ try {
             </div>
         </a>
         <div class="user-section">
-            <i class='bx bxs-bell notification-bell-icon <?php echo ($showClaimNotification || $noRequestSubmitted) ? "has-notification" : ""; ?>' id="notification-bell"></i>
+            <i class='bx bxs-bell notification-bell-icon <?php echo ($showClaimNotification || $noRequestSubmitted) ? "has-notification" : ""; ?>' id="notification-bell" style="color: white;"></i>
             <span class="username">Hi, <?= htmlspecialchars($displayFirstName); ?> </span>
             <i class='bx bxs-user-circle'></i>
         </div>
@@ -137,7 +138,7 @@ try {
                 <?php endif; ?>
                 <a href="track-clearance.php">You may now claim your documents at the Registrar's Office.</a>
                 <div class="yellow-button">
-                    <button id="close-notif-btn">I UNDERSTOOD</button>
+                    <button id="close-notif-btn" class="notifbtn" style="font-family: 'Montserrat', sans-serif;">I UNDERSTOOD</button>
                 </div>
             <?php elseif ($noRequestSubmitted): ?>
                 <i class='bx bxs-info-circle icon' style="color: #FFC107;"></i> <h2><b>NO REQUEST SUBMITTED</b> </h2>
@@ -146,7 +147,7 @@ try {
                 <p>Click on "Apply for Clearance" to start your first request.</p>
                 <a href="apply-clearance.php">Apply for Clearance</a>
                 <div class="yellow-button">
-                    <button id="close-notif-btn">GOT IT</button>
+                    <button id="close-notif-btn" class="notifbtn" style="font-family: 'Montserrat', sans-serif;">GOT IT</button>
                 </div>
             <?php endif; ?>
         </div>
