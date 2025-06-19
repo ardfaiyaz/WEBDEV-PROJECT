@@ -10,7 +10,7 @@ $officeMappings = [
     'student-discipline-office'    => ['office_code' => 'SDO',       'role_code' => 'SUB_ADMIN'],
     'student-affairs-office'       => ['office_code' => 'SDAO',      'role_code' => 'SUB_ADMIN'],
     'guidance-office'              => ['office_code' => 'GO',        'role_code' => 'SUB_ADMIN'],
-    'itso'                         => ['office_code' => 'ITSO',      'role_code' => 'SUB_ADMIN'],
+    'IT-Support'                         => ['office_code' => 'ITSO',      'role_code' => 'SUB_ADMIN'],
     'library-office'               => ['office_code' => 'LIB',       'role_code' => 'SUB_ADMIN'],
     'accounting-office'            => ['office_code' => 'ACC',       'role_code' => 'SUB_ADMIN'],
 ];

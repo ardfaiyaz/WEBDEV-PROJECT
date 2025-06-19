@@ -32,7 +32,6 @@
                 <i class='bx bx-search icon-search'></i>
             </div>
             <div class="user-section">
-                <i class='bx bxs-bell'></i>
                 <span class="username">Hi, <span id="current-username">user_name</span></span>
                 <i class='bx bxs-user-circle'></i>
             </div>
@@ -66,8 +65,8 @@
             <div class="Status">
                 <ul class="navtabs">
                     <li class="Nav-item active" data-status-frontend="ALL" data-status-db="">ALL</li>
-                    <li class="Nav-item" data-status-frontend="PENDING" data-status-db="PEND">PENDING</li>
-                    <li class="Nav-item" data-status-frontend="ON-GOING" data-status-db="ON">ON-GOING</li>
+                    <li class="Nav-item" data-status-frontend="PENDING" data-status-db="ON">PENDING</li>
+                    <li class="Nav-item" data-status-frontend="ON-GOING" data-status-db="ISSUE">ON-GOING</li>
                     <li class="Nav-item" data-status-frontend="COMPLETED" data-status-db="COMP">COMPLETED</li>
                 </ul>
 
@@ -138,14 +137,14 @@ let currentUserOfficeCode = '';
 let allRequests = []; // Stores all fetched requests for the current office
 
 const REMARKS_MAPPING = {
-    "ACC": ["Balance Issues", "Unpaid Fees", "Scholarship Concerns"],
-    "DN_PC_PR": ["Grade/Subject Issues", "Missing Grades", "Incomplete Coursework"],
-    "GO": ["Office Record", "Missing Documents", "Incorrect Information"],
-    "ITSO": ["Unreturned Item", "Damaged Equipment", "Software License Issues"],
-    "LIB": ["Unreturned Book/Material", "Overdue Fines", "Damaged Materials"],
-    "REG": ["Incomplete Grade/Documents", "Enrollment Discrepancies", "Missing Prerequisites"],
-    "SDAO": ["Unsettled Issue", "Disciplinary Action", "Conduct Violation"],
-    "SDO": ["Violation/Offense", "Academic Dishonesty", "Attendance Issues"]
+    "ACC": ["Balance Issues", "Unpaid Fees"],
+    "DN_PC_PR": ["Grade/Subject Issues", "Incomplete Coursework"],
+    "GO": ["Office Record", "Incorrect Information"],
+    "ITSO": ["Damaged Equipment", "Software License Issues"],
+    "LIB": ["Unreturned Book/Material", "Damaged Materials"],
+    "REG": ["Incomplete Grade/Documents", "Enrollment Discrepancies"],
+    "SDAO": ["Disciplinary Action", "Conduct Violation"],
+    "SDO": ["Violation/Offense", "Academic Dishonesty"]
 };
 
 // --- DOM Elements ---
@@ -222,8 +221,11 @@ async function fetchClearanceRequests(officeCode) {
 
 function updateStatusCounts() {
     const total = allRequests.length;
-    const pending = allRequests.filter(req => req.status_code === 'PEND').length;
-    const ongoing = allRequests.filter(req => req.status_code === 'ON').length;
+    // 'PENDING' on frontend is DB 'ON'
+    const pending = allRequests.filter(req => req.status_code === 'ON').length;
+    // 'ON-GOING' on frontend is DB 'ISSUE'
+    const ongoing = allRequests.filter(req => req.status_code === 'ISSUE').length;
+    // 'COMPLETED' on frontend is DB 'COMP'
     const completed = allRequests.filter(req => req.status_code === 'COMP').length;
 
     totalRequestsSpan.textContent = total;
@@ -246,44 +248,44 @@ function createRequestRow(request, filterStatusFrontend) {
     let actionsContent = '';
 
     if (filterStatusFrontend === 'ON-GOING') {
+        // Here, `request.office_remarks` should contain the remark for an 'ISSUE' status
         fifthColumnContent = `<div class="remark-column"><span class="remark-text">${request.office_remarks || 'N/A'}</span></div>`;
     } else {
         fifthColumnContent = `<div class="status-cell">${statusDisplay}</div>`;
     }
 
     if (filterStatusFrontend !== 'ALL') {
-        if (request.status_code === 'PEND') {
+        if (request.status_code === 'ON') { // If DB status is 'ON' (frontend PENDING)
             const customRemarks = REMARKS_MAPPING[currentUserOfficeCode] || [];
-            const dropdownItems = customRemarks.map(remark =>
-                `<a href="#" data-remark="${remark}">${remark}</a>`
+            // Changed from custom dropdown to <select> element
+            const selectOptions = customRemarks.map(remark =>
+                `<option value="${remark}">${remark}</option>`
             ).join('');
 
             actionsContent = `
-                <div class="dropdown-wrapper">
-                    <button class="add-remark-button dropdown-toggle">ADD REMARK <i class='bx bx-chevron-down'></i></button>
-                    <div class="dropdown-menu">
-                        ${dropdownItems}
-                    </div>
-                </div>
+                <select class="add-remark-select" data-request-id="${request.req_id}">
+                    <option value="">Select Remark</option>
+                    ${selectOptions}
+                </select>
                 <button class="clear-button">CLEAR</button>
             `;
-        } else if (request.status_code === 'ON') {
+        } else if (request.status_code === 'ISSUE') { // If DB status is 'ISSUE' (frontend ON-GOING)
             actionsContent = `<button class="clear-button">CLEAR</button>`;
-        } else if (request.status_code === 'COMP') {
+        } else if (request.status_code === 'COMP') { // If DB status is 'COMP' (frontend COMPLETED)
             actionsContent = `<div class="actions-placeholder"></div>`;
         }
-    } else {
+    } else { // If filterStatusFrontend is 'ALL', no actions
         actionsContent = `<div class="actions-placeholder"></div>`;
     }
 
 
     row.innerHTML = `
         <div class="reqid">${request.req_id}</div>
-        <div class="studid">${request.student_id}</div>
-        <div class="studname">${request.student_name}</div>
-        <div class="program">${request.program}</div>
+        <div class="studid">${request.student_id || 'N/A'}</div> <!-- Uses PHP alias 'student_id' -->
+        <div class="studname">${request.student_name || 'N/A'}</div> <!-- Uses PHP alias 'student_name' -->
+        <div class="program">${request.program || 'N/A'}</div> <!-- Uses PHP alias 'program' -->
         ${fifthColumnContent}
-        <div class="datesub">${request.date_submitted}</div>
+        <div class="datesub">${request.date_submitted || 'N/A'}</div> <!-- Uses PHP alias 'date_submitted' -->
         <div class="actions">${actionsContent}</div> `;
 
     return row;
@@ -291,9 +293,15 @@ function createRequestRow(request, filterStatusFrontend) {
 
 function getFrontendStatus(dbStatusCode) {
     switch (dbStatusCode) {
-        case 'PEND': return 'PENDING';
-        case 'ON': return 'ON-GOING';
+        case 'ON': return 'PENDING';
+        case 'ISSUE': return 'ON-GOING';
         case 'COMP': return 'COMPLETED';
+        // 'PEND' status exists in your DB, but based on your previous logic,
+        // it signifies a state before 'ON' (submitted request).
+        // If it means "not yet submitted" it typically won't appear in the office's view.
+        // If it means "submitted but not yet 'ON'", adjust filtering.
+        // For now, I'll provide a mapping.
+        case 'PEND': return 'INITIAL PENDING (DB: PEND)';
         default: return dbStatusCode;
     }
 }
@@ -312,6 +320,7 @@ function renderRequests(requestsToDisplay, filterStatusFrontend) {
         requestsContainer.appendChild(row);
     });
 
+    // Re-attach event listeners after new rows are added to the DOM
     attachEventListenersToRows();
 }
 
@@ -320,6 +329,8 @@ function filterAndRenderRequests() {
     // 1. Get the currently active tab's status filter
     const activeTab = document.querySelector('.Nav-item.active');
     const selectedStatusFrontend = activeTab ? activeTab.dataset.statusFrontend.toUpperCase() : 'ALL';
+    // Get DB status directly from data-status-db for filtering
+    const selectedStatusDb = activeTab ? activeTab.dataset.statusDb.toUpperCase() : '';
     updateTableHeaders(selectedStatusFrontend); // Update headers based on active tab
 
     // 2. Get the search term and normalize it
@@ -328,16 +339,17 @@ function filterAndRenderRequests() {
     // 3. Apply tab filtering first
     let filteredByTab = allRequests;
     if (selectedStatusFrontend !== 'ALL') {
-        filteredByTab = allRequests.filter(req => getFrontendStatus(req.status_code) === selectedStatusFrontend);
+        // Filter by the DB status code from the tab
+        filteredByTab = allRequests.filter(req => req.status_code === selectedStatusDb);
     }
 
     // 4. Apply search filtering to the tab-filtered results
     const finalFilteredRequests = filteredByTab.filter(req => {
         // Search by request ID, student ID, or student name
         const requestIdMatch = req.req_id.toString().toLowerCase().includes(searchTerm);
-        const studentIdMatch = req.student_id.toLowerCase().includes(searchTerm);
-        const studentNameMatch = req.student_name.toLowerCase().includes(searchTerm);
-        const programMatch = req.program.toLowerCase().includes(searchTerm); // Also search by program
+        const studentIdMatch = (req.student_id || '').toLowerCase().includes(searchTerm); // Uses PHP alias 'student_id'
+        const studentNameMatch = (req.student_name || '').toLowerCase().includes(searchTerm); // Uses PHP alias 'student_name'
+        const programMatch = (req.program || '').toLowerCase().includes(searchTerm); // Uses PHP alias 'program'
 
         return requestIdMatch || studentIdMatch || studentNameMatch || programMatch;
     });
@@ -360,76 +372,71 @@ function updateTableHeaders(selectedStatusFrontend) {
     }
 }
 
-function attachEventListenersToRows() {
-    document.querySelectorAll('.dropdown-toggle').forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.stopPropagation();
-            const dropdownMenu = this.nextElementSibling;
-            document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
-                if (menu !== dropdownMenu) {
-                    menu.classList.remove('show');
-                }
+// --- MODIFIED: handleRemarkSelectChange to handle <select> change ---
+async function handleRemarkSelectChange(event) {
+    const selectElement = event.target;
+    const remark = selectElement.value;
+    const requestId = selectElement.dataset.requestId;
+
+    // Only proceed if a valid remark is selected (not the "Select Remark" default empty value)
+    if (remark) {
+        try {
+            const response = await fetch(`${API_BASE_URL}update_office_remark.php`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ request_id: requestId, office_code: currentUserOfficeCode, remark: remark, status_code: 'ISSUE' })
             });
-            dropdownMenu.classList.toggle('show');
-        });
-    });
-
-    document.querySelectorAll('.dropdown-menu a').forEach(link => {
-        link.addEventListener('click', async function(event) {
-            event.preventDefault();
-            const remark = this.dataset.remark;
-            const requestId = this.closest('.Status-row').dataset.requestId;
-
-            try {
-                const response = await fetch(`${API_BASE_URL}update_office_remark.php`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ request_id: requestId, remark: remark })
-                });
-                const data = await response.json();
-                if (data.success) {
-                    showMessageBox("Remark added and status updated to ON-GOING!");
-                    // Re-fetch and re-render everything to update UI correctly
-                    await fetchClearanceRequests(currentUserOfficeCode);
-                } else {
-                    console.error("Failed to add remark:", data.message);
-                    showMessageBox("Error: Could not add remark. " + data.message);
-                }
-            } catch (error) {
-                console.error("Error adding remark:", error);
-                showMessageBox("Error connecting to server for remark update.");
+            const data = await response.json();
+            if (data.success) {
+                showMessageBox("Remark added and status updated to ON-GOING!");
+                await fetchClearanceRequests(currentUserOfficeCode); // Re-fetch and re-render
+            } else {
+                console.error("Failed to add remark:", data.message);
+                showMessageBox("Error: Could not add remark. " + data.message);
             }
-            this.closest('.dropdown-menu').classList.remove('show');
-        });
+        } catch (error) {
+            console.error("Error adding remark:", error);
+            showMessageBox("Error connecting to server for remark update.");
+        }
+    }
+    // Reset the select to its default "Select Remark" after action
+    selectElement.value = "";
+}
+
+function showClearConfirmation(event) {
+    currentRowToClear = this.closest('.Status-row').dataset.requestId;
+    confirmationModal.classList.add('show-modal');
+    document.body.classList.add('modal-open');
+}
+
+// --- MODIFIED: attachEventListenersToRows to target <select> ---
+function attachEventListenersToRows() {
+    // Attach change listener to the new <select> elements for remarks
+    document.querySelectorAll('.add-remark-select').forEach(select => {
+        // Remove existing listener first to prevent duplicates on re-render
+        select.removeEventListener('change', handleRemarkSelectChange);
+        select.addEventListener('change', handleRemarkSelectChange);
     });
 
+    // Attach click listener to clear buttons
     document.querySelectorAll('.clear-button').forEach(button => {
-        button.addEventListener('click', function(event) {
-            currentRowToClear = this.closest('.Status-row').dataset.requestId;
-            confirmationModal.classList.add('show-modal');
-            document.body.classList.add('modal-open');
-        });
+        button.removeEventListener('click', showClearConfirmation); // Remove old first
+        button.addEventListener('click', showClearConfirmation);
     });
 }
 
-// --- Event Listeners ---
+
+// --- Main Event Listeners ---
 
 navItems.forEach(tab => {
     tab.addEventListener('click', () => {
         navItems.forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
-        // Call filterAndRenderRequests instead of direct renderRequests
         filterAndRenderRequests();
     });
 });
 
-window.addEventListener('click', function(event) {
-    document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
-        if (!menu.contains(event.target) && !event.target.classList.contains('dropdown-toggle')) {
-            menu.classList.remove('show');
-        }
-    });
-});
+
 
 confirmClearBtn.addEventListener('click', async function() {
     if (currentRowToClear) {
@@ -437,12 +444,11 @@ confirmClearBtn.addEventListener('click', async function() {
             const response = await fetch(`${API_BASE_URL}update_request_status.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ request_id: currentRowToClear })
+                body: JSON.stringify({ request_id: currentRowToClear, office_code: currentUserOfficeCode, status_code: 'COMP' })
             });
             const data = await response.json();
             if (data.success) {
                 showMessageBox("Request cleared successfully!");
-                // Re-fetch and re-render everything to update UI correctly
                 await fetchClearanceRequests(currentUserOfficeCode);
             } else {
                 console.error("Failed to clear request:", data.message);

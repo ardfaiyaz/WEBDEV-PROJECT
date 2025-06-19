@@ -123,7 +123,6 @@ function getStatusClass($statusCode) {
             </div>
         </a>
         <div class="user-section">
-            <i class='bx bxs-bell'></i>
             <span class="username">Hi, <?php echo $displayFirstName; ?></span>
             <i class='bx bxs-user-circle'></i>
         </div>

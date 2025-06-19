@@ -15,29 +15,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Decode the JSON payload from the request body
     $data = json_decode(file_get_contents("php://input"));
 
-    // Validate if both request_id and remark are provided
-    if (!isset($data->request_id) || !isset($data->remark)) {
-        echo json_encode(["success" => false, "message" => "Request ID or remark not provided."]);
+    // Check for request_id, office_code, remark, and status_code in the payload
+    if (!isset($data->request_id) || !isset($data->office_code) || !isset($data->remark) || !isset($data->status_code)) {
+        echo json_encode(["success" => false, "message" => "Required data (request_id, office_code, remark, or status_code) not provided."]);
         exit();
     }
 
-    // --- CRITICAL ADDITION: Get current user's office_code from session ---
-    if (!isset($_SESSION['office_code'])) {
-        // If office_code is not in session, the user is not properly logged in or session is incomplete.
-        echo json_encode(["success" => false, "message" => "User office code not found in session. Please re-login."]);
+    // Validate user's office_code from session for security
+    if (!isset($_SESSION['office_code']) || $_SESSION['office_code'] !== $data->office_code) {
+        echo json_encode(["success" => false, "message" => "Unauthorized access or session mismatch."]);
         exit();
     }
     $userOfficeCode = $_SESSION['office_code'];
-    // --- END CRITICAL ADDITION ---
 
-    // Get the values.
+    // Get the values from the payload
     $requestId = $data->request_id;
     $remark = $data->remark;
+    $newStatusCode = $data->status_code; // This will be 'ISSUE' from the frontend
 
-    // Update office_remarks and status_code to 'ON'
-    // CRITICAL CHANGE: Add office_code to the WHERE clause to restrict updates to the current office's requests.
+    // Update office_remarks and status_code to the provided value
     $sql = "UPDATE clearance_status
-            SET office_remarks = :remark, status_code = 'ON'
+            SET office_remarks = :remark, status_code = :new_status_code
             WHERE req_id = :request_id AND office_code = :office_code";
 
     try {
@@ -47,19 +45,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Execute the statement, binding ALL placeholders
         $stmt->execute([
             ':remark' => $remark,
+            ':new_status_code' => $newStatusCode,
             ':request_id' => $requestId,
-            ':office_code' => $userOfficeCode // Bind the logged-in user's office code
+            ':office_code' => $userOfficeCode
         ]);
 
         // Check if any rows were affected
         if ($stmt->rowCount() > 0) {
-            echo json_encode(["success" => true, "message" => "Remark added and status updated to ON-GOING."]);
+            echo json_encode(["success" => true, "message" => "Remark added and status updated to " . $newStatusCode . "."]);
         } else {
-            // This might mean:
-            // 1. The request_id didn't exist for this office.
-            // 2. The request_id existed, but not for this office_code.
-            // 3. The status was already 'ON' and remark was the same.
-            echo json_encode(["success" => false, "message" => "No record found for this office or status already ON-GOING for Request ID: " . $requestId]);
+            echo json_encode(["success" => false, "message" => "No record found or remark/status already " . $newStatusCode . " for Request ID: " . $requestId]);
         }
     } catch (PDOException $e) {
         error_log("Database error in update_office_remark.php: " . $e->getMessage());

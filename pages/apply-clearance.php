@@ -293,7 +293,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['applyclr_submitbtn']))
                 INSERT INTO clearance_status (req_id, user_id, office_code, status_code, office_remarks)
                 VALUES (?, ?, ?, ?, ?)
             ");
-            $initial_status_code = 'PEND'; // Set initial status to 'ON' (Ongoing)
+            $initial_status_code = 'ON'; // Set initial status to 'ON' (Ongoing)
             $initial_remarks = 'Request submitted. Currently under initial review by office.';
 
             foreach ($offices as $office_code) {
@@ -405,7 +405,6 @@ if (!$formSubmitted || !empty($errors)) {
       </div>
     </a>
     <div class="user-section">
-      <i class='bx bxs-bell'></i>
       <span class="username">Hi, <?php echo $displayFirstName; ?> </span>
       <i class='bx bxs-user-circle'></i>
     </div>

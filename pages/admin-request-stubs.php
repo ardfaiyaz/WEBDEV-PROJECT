@@ -228,7 +228,6 @@ $js_version = time(); // Using timestamp to ensure a unique version on every loa
                 <i class='bx bx-search icon-search'></i>
             </div>
             <div class="user-section">
-                <i class='bx bxs-bell'></i>
                 <span class="username">Hi, <span id="current-username"><?php echo htmlspecialchars($loggedInAdminName); ?></span></span>
                 <i class='bx bxs-user-circle'></i>
             </div>

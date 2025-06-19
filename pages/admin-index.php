@@ -43,7 +43,6 @@ $displayFirstName = $_SESSION['firstname'] ?? 'User'; // Default to 'User' if no
 
         <div class="header-right-section">
             <div class="user-section">
-                <i class='bx bxs-bell'></i>
                 <span class="username">Hi, <?php echo htmlspecialchars($loggedInAdminName); ?></span>
                 <i class='bx bxs-user-circle'></i>
             </div>
