@@ -391,3 +391,64 @@ button {
     from { opacity: 0; transform: translateY(-20px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+
+
+
+/* CLAIM STUB NOTIF */
+
+.claim-notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  padding: 30px 20px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  z-index: 9999;
+  /* --- ADD THIS LINE --- */
+  display: none; /* This ensures it's hidden when the page loads */
+}
+
+.claim-notification .check-icon {
+  width: 25px; /* Further reduced width */
+  height: auto; /* Maintain aspect ratio */
+  margin-bottom: 15px;
+}
+
+.claim-notification h2 {
+  font-size: 22px;
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+.claim-notification p {
+  margin: 5px 0;
+}
+
+.claim-notification a {
+  color: #007bff;
+  font-size: 14px;
+  text-decoration: none;
+  display: block;
+  margin-top: 10px;
+}
+
+.yellow-button {
+  background-color: #f2cd00;
+  padding: 12px 0;
+  margin-top: 20px;
+  border-radius: 0 0 10px 10px;
+}
+
+.yellow-button button {
+  background: none;
+  border: none;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+}

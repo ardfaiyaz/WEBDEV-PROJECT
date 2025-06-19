@@ -226,3 +226,108 @@ body {
   line-height: 1.5;
 }
 
+/* CLAIM STUB NOTIF */
+
+.claim-notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    padding: 30px 20px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    z-index: 9999;
+    border: 2px solid #f0b809; /* Added from previous suggestion for yellow border */
+    /* This ensures it's hidden when the page loads, unless PHP overrides it */
+    display: none; 
+}
+
+.claim-notification .check-icon {
+    width: 80px; /* Adjusted based on previous suggestion for larger icon */
+    height: 80px; /* Adjusted based on previous suggestion for larger icon */
+    margin-bottom: 20px; /* Adjusted margin */
+    background-color: #f0b809; /* Yellow background for the circle */
+    border-radius: 50%; /* Make it a circle */
+    padding: 10px;
+    box-sizing: border-box; /* Include padding in width/height */
+}
+
+.icon {
+    font-size: 40px;
+    color: green; /* Or any color you want */
+    display: block;
+    margin-bottom: 10px;
+}
+
+
+.claim-notification h2 {
+    font-size: 1.8em; /* Adjusted based on previous suggestion for larger heading */
+    color: #333; /* Darker color for better contrast */
+    margin: 10px 0 15px; /* Adjusted margin */
+    font-weight: bold;
+}
+
+.claim-notification p {
+    color: #555; /* Slightly lighter color for body text */
+    margin: 5px 0 10px; /* Adjusted margin */
+    line-height: 1.6; /* Improved readability */
+}
+
+.claim-notification strong {
+    color: #000; /* Ensure strong text is very visible */
+}
+
+.claim-notification a {
+    color: #007bff; /* Blue for the link */
+    font-size: 1em; /* Adjusted to be consistent with body text */
+    text-decoration: underline; /* Emphasize it's a link */
+    display: block;
+    margin-top: 15px; /* Adjusted margin */
+}
+
+.claim-notification .yellow-button { /* Changed from just .yellow-button to be specific */
+    background-color: #f0b809; /* Consistent yellow */
+    padding: 12px 0;
+    margin-top: 25px; /* Adjusted margin */
+    border-radius: 5px; /* So the button itself is rounded, not just the container */
+}
+
+.claim-notification .yellow-button button {
+    background: none;
+    border: none;
+    color: #fff; /* White text for button */
+    font-weight: bold;
+    font-size: 1em; /* Adjusted size */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+.claim-notification .yellow-button button:hover {
+    background-color: #d1a007; /* Slightly darker yellow on hover */
+}
+
+
+/* Notification Bell Icon Red Dot */
+.notification-bell-icon {
+    position: relative;
+    /* Other styles for your bell icon */
+    font-size: 24px; /* Example size */
+    cursor: pointer;
+    color: #333; /* Example color */
+}
+
+.notification-bell-icon.has-notification::after {
+    content: '';
+    position: absolute;
+    top: -2px; /* Adjust as needed */
+    right: -2px; /* Adjust as needed */
+    width: 8px; /* Size of the red dot */
+    height: 8px; /* Size of the red dot */
+    background-color: red;
+    border-radius: 50%;
+    border: 1px solid white; /* Small white border to make it stand out */
+}
