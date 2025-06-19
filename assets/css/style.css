@@ -317,7 +317,7 @@ body {
     /* Other styles for your bell icon */
     font-size: 24px; /* Example size */
     cursor: pointer;
-    color: #333; /* Example color */
+    color: white; /* Example color */
 }
 
 .notification-bell-icon.has-notification::after {
