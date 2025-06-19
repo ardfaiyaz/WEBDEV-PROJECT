@@ -21,6 +21,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh; /* Ensure body takes at least full viewport height */
+  align-items: center; /* Centers items along the cross-axis (horizontally for column direction) */
 }
 
 /* Header Topbar */
@@ -35,6 +36,7 @@ body {
     top: 0;
     z-index: 100;
     flex-wrap: wrap;
+    width: 100%; /* Ensure topbar takes full width */
 }
 
 .topbar .logo-section {
@@ -206,16 +208,27 @@ body {
     color: white;
 }
 
+/* Content Wrapper */
+.content-wrapper {
+  display: flex; /* Make content-wrapper a flex container */
+  justify-content: center; /* Center its children horizontally */
+  align-items: center; /* Center its children vertically */
+  flex-grow: 1; /* Allow content-wrapper to take up available vertical space */
+  width: 100%; /* Ensure it spans the full width to allow for internal centering */
+  max-width: 1500px; /* Optional: Set a max-width for the content wrapper itself */
+  margin: auto; /* This will center the content-wrapper horizontally within the body */
+}
+
 /* Main Content */
 .main-content {
   flex: 1;
   padding: 30px;
   transition: 0.3s ease-in-out;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: auto; /* This will center the main-content */
-  width: 100%; /* Ensure it takes full width to allow for horizontal centering */
+  display: flex; /* Makes it a flex container */
+  align-items: center; /* Centers content vertically within main-content */
+  justify-content: center; /* Centers content horizontally within main-content */
+  margin: auto; /* Helps with overall centering if main-content has a defined width */
+  width: 100%; /* Ensure it takes full width within its parent */
 }
 
 .main-content.shifted {
@@ -291,4 +304,3 @@ body {
   font-size: 17px;
   line-height: 1.5;
 }
-
