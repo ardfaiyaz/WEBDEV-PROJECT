@@ -32,7 +32,7 @@
                 <i class='bx bx-search icon-search'></i>
             </div>
             <div class="user-section">
-                <span class="username">Hi, <span id="current-username">user_name</span></span>
+                <span class="username">Hi, <span id="current-username"></span></span>
                 <i class='bx bxs-user-circle'></i>
             </div>
         </div>
@@ -249,10 +249,12 @@
                     ).join('');
 
                     actionsContent = `
-                        <select class="add-remark-select" data-request-id="${request.req_id}">
-                            <option value="">Select Remark</option>
-                            ${selectOptions}
-                        </select>
+                        <div class="custom-select-wrapper">
+                            <span class="selected-remark-display">ADD REMARK</span> <select class="add-remark-select" data-request-id="${request.req_id}">
+                                <option value="">Select Remark</option>
+                                ${selectOptions}
+                            </select>
+                        </div>
                         <button class="clear-button">CLEAR</button>
                     `;
                 } else if (request.status_code === 'ISSUE') {
@@ -431,6 +433,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             fetchUserInfo();
         });
+
     </script>
 </body>
 </html>

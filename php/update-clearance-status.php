@@ -2,12 +2,10 @@
 session_start();
 header('Content-Type: application/json');
 
-// Include the database connection file
-require_once __DIR__ . '/database.php'; // Adjust path as needed
+require_once __DIR__ . '/database.php';
 
 $response = ['success' => false, 'message' => ''];
 
-// Check if the user is logged in and is an office staff member (role_code 'SUB_ADMIN' or 'ADMIN')
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['role_code']) || ($_SESSION['role_code'] !== 'SUB_ADMIN' && $_SESSION['role_code'] !== 'ADMIN')) {
     $response['message'] = 'Unauthorized access.';
     echo json_encode($response);
@@ -17,7 +15,6 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role_code']) || ($_SESSION
 $loggedInUserId = $_SESSION['user_id'];
 $loggedInUserOfficeCode = null;
 
-// Fetch the logged-in user's office code
 try {
     $stmtOffice = $pdo->prepare("SELECT office_code FROM users WHERE user_id = :user_id");
     $stmtOffice->bindParam(':user_id', $loggedInUserId, PDO::PARAM_INT);
@@ -44,14 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $statusCode = $_POST['status_code'] ?? null;
     $officeRemarks = $_POST['office_remarks'] ?? null;
 
-    // Validate inputs
     if (!$reqId || !$studentUserId || !$targetOfficeCode || !$statusCode) {
         $response['message'] = 'Missing required parameters.';
         echo json_encode($response);
         exit();
     }
 
-    // IMPORTANT SECURITY CHECK: Ensure the logged-in office staff can only update THEIR own office's status
     if ($targetOfficeCode !== $loggedInUserOfficeCode) {
         $response['message'] = 'Attempted to update status for an unauthorized office.';
         error_log("Security Alert: User " . $loggedInUserId . " tried to update " . $targetOfficeCode . " but is assigned to " . $loggedInUserOfficeCode);
@@ -60,7 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     try {
-        // Update the clearance_status for the specific request, student, and office
         $stmtUpdate = $pdo->prepare("
             UPDATE clearance_status
             SET
@@ -81,7 +75,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $response['success'] = true;
                 $response['message'] = 'Clearance status updated successfully.';
 
-                // Logic to check if all offices for a request are COMPLETED to update clearance_request.claim_stub
                 $stmtCheckAllCompleted = $pdo->prepare("
                     SELECT COUNT(*)
                     FROM clearance_status
@@ -93,10 +86,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $pendingOfficesCount = $stmtCheckAllCompleted->fetchColumn();
 
                 if ($pendingOfficesCount == 0) {
-                    // All offices have completed their part for this request
                     $stmtUpdateClaimStub = $pdo->prepare("
                         UPDATE clearance_request
-                        SET claim_stub = 1, student_remarks = 'Ready for claiming' -- Example remark for student upon full completion
+                        SET claim_stub = 1, student_remarks = 'Ready for claiming'
                         WHERE req_id = :req_id AND user_id = :student_user_id
                     ");
                     $stmtUpdateClaimStub->bindParam(':req_id', $reqId, PDO::PARAM_INT);

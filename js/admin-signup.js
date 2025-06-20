@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // --- Select all necessary elements once ---
     const passwordToggles = document.querySelectorAll('.password-toggle-icon');
     const signupForm = document.querySelector('.signup-form');
     const header = document.querySelector('.header');
@@ -7,10 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitButton = document.getElementById('adminSubmitButton');
     const notificationContainer = document.getElementById('notification-container');
 
-    // --- Function to display notification ---
     function showNotification(message, type, heading = '') {
         if (notificationContainer) {
-            notificationContainer.innerHTML = ''; // Clear existing notifications
+            notificationContainer.innerHTML = '';
         }
 
         const notification = document.createElement('div');
@@ -26,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (notificationContainer) {
             notificationContainer.appendChild(notification);
-            void notification.offsetWidth; // Force reflow
+            void notification.offsetWidth;
             notification.classList.add('show');
 
             notification.querySelector('.close-btn').addEventListener('click', function() {
@@ -44,7 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // --- Function to hide notification ---
     function hideNotification(notificationElement) {
         notificationElement.classList.remove('show');
         notificationElement.classList.add('hide');
@@ -53,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }, { once: true });
     }
 
-    // --- Password Toggle Animation ---
     passwordToggles.forEach(toggle => {
         toggle.addEventListener('click', function() {
             const passwordInput = this.closest('.password-input-container').querySelector('input');
@@ -73,7 +69,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // --- Client-Side Form Submission Validation (Password Match) ---
     if (signupForm) {
         signupForm.addEventListener('submit', function(event) {
             const password = document.getElementById('password').value;
@@ -86,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- Header & Logo Fade-In ---
     if (header) {
         setTimeout(() => {
             header.style.transition = 'opacity 1s ease-out';
@@ -94,7 +88,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 100);
     }
 
-    // --- Form Fields Slide & Fade-In (Staggered) ---
     formItems.forEach((item, index) => {
         setTimeout(() => {
             item.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
@@ -103,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 300 + (index * 100));
     });
 
-    // --- Submit Button Click Effect ---
     if (submitButton) {
         submitButton.addEventListener('mousedown', () => {
             submitButton.classList.add('button-pressed');
@@ -116,7 +108,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Initial check for PHP-generated notifications on page load
     if (notificationContainer) {
         const initialNotification = notificationContainer.querySelector('.notification.show');
         if (initialNotification) {
@@ -132,13 +123,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }, isSuccess ? 3000 : 5000);
         }
     }
-    
-    // Handle initial state of floating labels for pre-filled values (from PHP)
+
     formItems.forEach(item => {
         const input = item.querySelector('input, select');
         const label = item.querySelector('label');
         if (input && label) {
-            // For text inputs and email inputs
             if (input.tagName === 'INPUT' && input.value.length > 0) {
                 label.style.top = '0px';
                 label.style.fontSize = '12px';
@@ -147,7 +136,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 label.style.backgroundColor = 'white';
                 label.style.padding = '0 5px';
             }
-            // For select elements
             else if (input.tagName === 'SELECT' && input.value !== "") {
                 label.style.top = '0px';
                 label.style.fontSize = '12px';

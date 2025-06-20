@@ -1,27 +1,23 @@
 <?php
-session_start(); // Start the session at the very beginning
+session_start();
 
-// Include the database connection file
 require_once __DIR__ . '/../php/database.php';
 
-// --- Basic Authentication Check ---
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['account_type'])) {
-    header("Location: login.php"); // Adjust to your actual login page if different
+    header("Location: login.php");
     exit();
 }
 
-$loggedInAdminName = $_SESSION['username'] ?? 'Admin'; // Assuming username is stored in session
+// Correctly catch and display the first name of the logged-in user
+$displayFirstName = $_SESSION['firstname'] ?? 'Admin';
 
-// --- Fetch all clearance requests with related student and office data ---
 $requests = [];
 try {
-    // Fetch main request details along with student and user information
-    // ORDER BY clause now uses 'req_id' in ascending order
     $stmt = $pdo->prepare("
         SELECT
             cr.req_id,
             cr.req_date,
-            cr.claim_stub,            -- Fetching claim_stub to check its current state
+            cr.claim_stub,
             cr.enrollment_purpose,
             cr.student_remarks AS other_remarks,
             cr.consent_letter,
@@ -46,7 +42,6 @@ try {
     foreach ($rawRequests as $request) {
         $reqId = $request['req_id'];
 
-        // --- Fetch Office Statuses for each request ---
         $officeStatuses = [];
         $stmtStatus = $pdo->prepare("
             SELECT
@@ -67,21 +62,19 @@ try {
         $stmtStatus->execute();
         $officeStatusesData = $stmtStatus->fetchAll(PDO::FETCH_ASSOC);
 
-        $allOfficesCompleted = true; // Assume true until proven false
-        foreach($officeStatusesData as $officeStatus) {
+        $allOfficesCompleted = true;
+        foreach ($officeStatusesData as $officeStatus) {
             $officeStatuses[] = [
                 'office' => htmlspecialchars($officeStatus['office_name']),
                 'status' => htmlspecialchars($officeStatus['status']),
                 'remarks' => htmlspecialchars($officeStatus['office_remarks'] ?? 'No remarks.')
             ];
-            // Check if ANY office status is NOT 'Completed'
             if (strtoupper($officeStatus['status']) !== 'COMPLETED') {
                 $allOfficesCompleted = false;
             }
         }
 
 
-        // --- Fetch Requested Documents for each request ---
         $requestedDocuments = [];
         $stmtDocs = $pdo->prepare("
             SELECT
@@ -98,23 +91,20 @@ try {
         $requestedDocumentsData = $stmtDocs->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($requestedDocumentsData as $doc) {
-             $requestedDocuments[] = [
+            $requestedDocuments[] = [
                 'name' => htmlspecialchars($doc['name']),
-                'copies' => '1 copy' // Hardcoded default as doc_copies column doesn't exist
-             ];
+                'copies' => '1 copy'
+            ];
         }
 
 
-        // Prepare the data for the HTML data attributes
         $request['office_statuses_json'] = json_encode($officeStatuses);
         $request['requested_documents_json'] = json_encode($requestedDocuments);
 
         $request['formatted_date'] = (new DateTime($request['req_date']))->format('m-d-Y');
         $request['full_name'] = htmlspecialchars($request['firstname'] . ' ' . $request['lastname']);
 
-        // --- Derive Overall Status ---
-        // This logic remains the same, but 'allOfficesCompleted' influences it.
-        $derivedOverallStatus = 'COMPLETED'; // Default to completed
+        $derivedOverallStatus = 'COMPLETED';
         $hasPending = false;
         $hasOngoing = false;
         foreach ($officeStatuses as $os) {
@@ -138,43 +128,42 @@ try {
         $request['overall_status_display'] = htmlspecialchars(str_replace('_', ' ', $derivedOverallStatus));
 
 
-        // Hardcoded avatar URL as 'avatar_url' is not in your 'users' table
         $request['avatar_url_display'] = 'https://placehold.co/80x80/cccccc/333333?text=User';
 
 
-        // IMPORTANT: Changed 'req_id' to 'request_id' to match get_consent_file.php
         $request['consent_file_url'] = !empty($request['consent_letter']) ?
-                                      '../php/get_consent_file.php?request_id=' . $request['req_id'] :
-                                      '#';
+            '../php/get_consent_file.php?request_id=' . $request['req_id'] :
+            '#';
 
         $request['clearance_type_display'] = htmlspecialchars(strtoupper($request['enrollment_purpose']));
 
-        // NEW: Add a boolean indicating if claim stub can be released
-        // It can be released only if all offices are completed AND claim_stub is not already 1
         $request['can_release_claim_stub'] = $allOfficesCompleted && ($request['claim_stub'] == 0);
 
 
         $requests[] = $request;
     }
-
 } catch (PDOException $e) {
     error_log("Error fetching clearance requests for admin: " . $e->getMessage());
     die("A database error occurred. Please try again later or contact support. Error: " . $e->getMessage());
 }
 
-// Helper function to get CSS class for overall status span in the main table
-function getOverallStatusClass($overallStatus) {
+function getOverallStatusClass($overallStatus)
+{
     switch (strtoupper($overallStatus)) {
-        case 'PENDING': return 'status-pending';
-        case 'ONGOING': return 'status-ongoing';
-        case 'ISSUE FOUND': return 'status-issue-found';
-        case 'COMPLETED': return 'status-completed';
-        default: return '';
+        case 'PENDING':
+            return 'status-pending';
+        case 'ONGOING':
+            return 'status-ongoing';
+        case 'ISSUE FOUND':
+            return 'status-issue-found';
+        case 'COMPLETED':
+            return 'status-completed';
+        default:
+            return '';
     }
 }
 
-// Generate a unique version string for cache busting
-$js_version = time(); // Using timestamp to ensure a unique version on every load
+$js_version = time();
 ?>
 
 <!DOCTYPE html>
@@ -187,20 +176,16 @@ $js_version = time(); // Using timestamp to ensure a unique version on every loa
     <link rel="stylesheet" href="../assets/css/admin-request-stubs.css">
     <link rel="icon" type="image/png" href="../assets/images/school-logo.png" />
     <style>
-        /* Styling for the Release Claim Stub button */
         .release-claim-stub-button {
-            background-color: #2c2273; /* Default active color */
+            background-color: #2c2273;
             color: white;
             cursor: pointer;
-            /* Add any other default button styles here if needed,
-               e.g., padding, border, border-radius, font-size */
         }
 
-        /* Styles for when the button is disabled */
         .release-claim-stub-button[disabled] {
-            background-color: #ccc; /* Grey when disabled */
-            color: #666; /* Lighter text for disabled state */
-            cursor: not-allowed; /* Indicate it's not clickable */
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -209,7 +194,7 @@ $js_version = time(); // Using timestamp to ensure a unique version on every loa
         <div class="logo-section">
             <a href="index.html" class="logo-link">
                 <img src="../assets/icons/NU_shield.svg.png" alt="School Logo">
-                <span class="school-name">NATIONAL<br/>UNIVERSITY</span>
+                <span class="school-name">NATIONAL<br />UNIVERSITY</span>
             </a>
         </div>
 
@@ -228,7 +213,7 @@ $js_version = time(); // Using timestamp to ensure a unique version on every loa
                 <i class='bx bx-search icon-search'></i>
             </div>
             <div class="user-section">
-                <span class="username">Hi, <span id="current-username"><?php echo htmlspecialchars($loggedInAdminName); ?></span></span>
+                <span class="username">Hi, <span id="current-username"><?php echo htmlspecialchars($displayFirstName); ?></span></span>
                 <i class='bx bxs-user-circle'></i>
             </div>
         </div>
@@ -264,23 +249,11 @@ $js_version = time(); // Using timestamp to ensure a unique version on every loa
                         <div>ACTION</div>
                     </div>
 
-                    <?php if (empty($requests)): ?>
+                    <?php if (empty($requests)) : ?>
                         <div class="no-requests-message">No clearance requests found.</div>
-                    <?php else: ?>
-                        <?php foreach ($requests as $request): ?>
-                            <div class="data-row view-request-data-row"
-                                data-req-id="<?php echo htmlspecialchars($request['req_id']); ?>"
-                                data-type="<?php echo htmlspecialchars($request['clearance_type_display']); ?>"
-                                data-office-statuses='<?php echo htmlspecialchars($request['office_statuses_json'], ENT_QUOTES, 'UTF-8'); ?>'
-                                data-student-name="<?php echo htmlspecialchars($request['full_name']); ?>"
-                                data-student-email="<?php echo htmlspecialchars($request['email'] ?? 'N/A'); ?>"
-                                data-student-id="<?php echo htmlspecialchars($request['student_no'] ?? 'N/A'); ?>"
-                                data-requested-documents='<?php echo htmlspecialchars($request['requested_documents_json'], ENT_QUOTES, 'UTF-8'); ?>'
-                                data-student-avatar="<?php echo htmlspecialchars($request['avatar_url_display']); ?>"
-                                data-other-remarks="<?php echo htmlspecialchars($request['other_remarks'] ?? 'No other remarks.'); ?>"
-                                data-consent-file-url="<?php echo htmlspecialchars($request['consent_file_url']); ?>"
-                                data-has-consent-file="<?php echo !empty($request['consent_letter']) ? 'true' : 'false'; ?>"
-                                >
+                    <?php else : ?>
+                        <?php foreach ($requests as $request) : ?>
+                            <div class="data-row view-request-data-row" data-req-id="<?php echo htmlspecialchars($request['req_id']); ?>" data-type="<?php echo htmlspecialchars($request['clearance_type_display']); ?>" data-office-statuses='<?php echo htmlspecialchars($request['office_statuses_json'], ENT_QUOTES, 'UTF-8'); ?>' data-student-name="<?php echo htmlspecialchars($request['full_name']); ?>" data-student-email="<?php echo htmlspecialchars($request['email'] ?? 'N/A'); ?>" data-student-id="<?php echo htmlspecialchars($request['student_no'] ?? 'N/A'); ?>" data-requested-documents='<?php echo htmlspecialchars($request['requested_documents_json'], ENT_QUOTES, 'UTF-8'); ?>' data-student-avatar="<?php echo htmlspecialchars($request['avatar_url_display']); ?>" data-other-remarks="<?php echo htmlspecialchars($request['other_remarks'] ?? 'No other remarks.'); ?>" data-consent-file-url="<?php echo htmlspecialchars($request['consent_file_url']); ?>" data-has-consent-file="<?php echo !empty($request['consent_letter']) ? 'true' : 'false'; ?>">
                                 <div><?php echo htmlspecialchars($request['req_id']); ?></div>
                                 <div><?php echo htmlspecialchars($request['formatted_date']); ?></div>
                                 <div><?php echo htmlspecialchars($request['student_no'] ?? 'N/A'); ?></div>
@@ -289,11 +262,7 @@ $js_version = time(); // Using timestamp to ensure a unique version on every loa
                                 <div> <span class="<?php echo getOverallStatusClass($request['overall_status']); ?>"><?php echo htmlspecialchars($request['overall_status_display']); ?></span> </div>
                                 <div class="action-cell">
                                     <button class="action-button secondary-button view-status-detail-button">View Status Detail</button>
-                                    <button class="action-button primary-button release-claim-stub-button"
-                                        <?php echo ($request['can_release_claim_stub'] ? '' : 'disabled'); ?>
-                                        data-can-release-claim-stub="<?php echo $request['can_release_claim_stub'] ? 'true' : 'false'; ?>"
-                                        data-released="<?php echo ($request['claim_stub'] == 1 ? 'true' : 'false'); ?>"
-                                    >
+                                    <button class="action-button primary-button release-claim-stub-button" <?php echo ($request['can_release_claim_stub'] ? '' : 'disabled'); ?> data-can-release-claim-stub="<?php echo $request['can_release_claim_stub'] ? 'true' : 'false'; ?>" data-released="<?php echo ($request['claim_stub'] == 1 ? 'true' : 'false'); ?>">
                                         <?php echo ($request['claim_stub'] == 1 ? 'Claim Stub Released' : 'Release Claim Stub'); ?>
                                     </button>
                                 </div>
@@ -306,7 +275,6 @@ $js_version = time(); // Using timestamp to ensure a unique version on every loa
         </main>
     </div>
 
-    <!-- View Status Modal HTML (remains the same structure, populated by JS) -->
     <div id="viewStatusModal" class="modal-overlay">
         <div class="modal-content view-status-modal-content">
             <span class="close-button">&times;</span>
@@ -323,14 +291,12 @@ $js_version = time(); // Using timestamp to ensure a unique version on every loa
                 <div class="status-offices-section">
                     <h4>OFFICE STATUSES</h4>
                     <div class="office-statuses-list">
-                        <!-- Office statuses dynamically generated by JS -->
                     </div>
                 </div>
 
                 <div class="requested-documents-section">
                     <h4>REQUESTED DOCUMENTS</h4>
                     <ul class="requested-documents-list">
-                        <!-- Requested documents dynamically generated by JS -->
                     </ul>
                 </div>
 
@@ -345,7 +311,6 @@ $js_version = time(); // Using timestamp to ensure a unique version on every loa
         </div>
     </div>
 
-    <!-- Confirmation Modal HTML (for releasing claim stub) -->
     <div id="confirmationModal" class="modal-overlay">
         <div class="modal-content confirmation-modal-content">
             <h4 class="confirmation-modal-title">Confirm Action</h4>

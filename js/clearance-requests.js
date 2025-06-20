@@ -1,12 +1,9 @@
-// --- Configuration ---
 const API_BASE_URL = 'http://localhost/WEBDEV/WEBDEV-PROJECT/php/';
 document.addEventListener('DOMContentLoaded', () => {
-    // Check if the current page is index.html (or the main dashboard page)
     if (document.getElementById('requestsTableBody')) {
         fetchClearanceRequests();
     }
 
-    // Event listeners for modal interactions (assuming the modal HTML exists on the page)
     const requestDetailsModal = document.getElementById('requestDetailsModal');
     if (requestDetailsModal) {
         requestDetailsModal.addEventListener('show.bs.modal', function (event) {
@@ -15,13 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
             fetchRequestDetailsForModal(requestId);
         });
 
-        // Event listener for the "Save Remarks" button in the modal
         const saveRemarksButton = requestDetailsModal.querySelector('#saveOfficeRemarksButton');
         if (saveRemarksButton) {
             saveRemarksButton.addEventListener('click', saveOfficeRemarks);
         }
 
-        // Event listeners for status update buttons
         const approveButton = requestDetailsModal.querySelector('#approveRequestButton');
         const rejectButton = requestDetailsModal.querySelector('#rejectRequestButton');
         const pendingButton = requestDetailsModal.querySelector('#setPendingButton');
@@ -31,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (pendingButton) pendingButton.addEventListener('click', () => updateRequestStatus('PENDING'));
     }
 
-    // Fetch user info for display (e.g., in a header/sidebar)
     fetchUserInfo();
 });
 
@@ -42,7 +36,6 @@ async function fetchUserInfo() {
 
         if (userInfo.error) {
             console.error('Error fetching user info:', userInfo.error);
-            // Optionally redirect to login or show an error message
             return;
         }
 
@@ -59,7 +52,7 @@ async function fetchClearanceRequests() {
         const response = await fetch(`${API_BASE_URL}get_clearance_requests.php`);
         const requests = await response.json();
         const tableBody = document.getElementById('requestsTableBody');
-        tableBody.innerHTML = ''; // Clear existing rows
+        tableBody.innerHTML = '';
 
         if (requests.error) {
             console.error('Error fetching requests:', requests.error);
@@ -88,13 +81,12 @@ async function fetchClearanceRequests() {
                     <button type="button" class="btn btn-info btn-sm view-details-btn" data-bs-toggle="modal" data-bs-target="#requestDetailsModal" data-bs-request-id="${request.req_id}">View Details</button>
                 </td>
             `;
-            // Add a class to the row based on status for styling
             if (request.status_code === 'APPROVED') {
                 row.classList.add('table-success');
             } else if (request.status_code === 'REJECTED') {
                 row.classList.add('table-danger');
             } else {
-                row.classList.add('table-warning'); // For PENDING or other statuses
+                row.classList.add('table-warning');
             }
         });
     } catch (error) {
@@ -105,10 +97,10 @@ async function fetchClearanceRequests() {
     }
 }
 
-let currentRequestId = null; // To store the ID of the request currently in the modal
+let currentRequestId = null;
 
 async function fetchRequestDetailsForModal(requestId) {
-    currentRequestId = requestId; // Set the current request ID
+    currentRequestId = requestId;
     try {
         const response = await fetch(`${API_BASE_URL}get_request_details.php?request_id=${requestId}`);
         const details = await response.json();
@@ -119,7 +111,6 @@ async function fetchRequestDetailsForModal(requestId) {
             return;
         }
 
-        // Populate modal fields
         document.getElementById('modalRequestId').textContent = details.req_id;
         document.getElementById('modalStudentName').textContent = `${details.firstname} ${details.lastname}`;
         document.getElementById('modalStudentNo').textContent = details.student_no || 'N/A';
@@ -133,7 +124,6 @@ async function fetchRequestDetailsForModal(requestId) {
         const officeRemarksInput = document.getElementById('modalOfficeRemarks');
         officeRemarksInput.value = details.office_remarks || '';
 
-        // Handle consent letter button visibility
         const viewConsentFileButton = document.getElementById('viewConsentFileButton');
         if (details.consent_letter_exists) {
             viewConsentFileButton.style.display = 'inline-block';
@@ -142,11 +132,9 @@ async function fetchRequestDetailsForModal(requestId) {
             viewConsentFileButton.style.display = 'none';
         }
 
-        // Set the current status in the modal
         const currentStatusDisplay = document.getElementById('modalCurrentStatus');
         currentStatusDisplay.textContent = details.status_code || 'PENDING';
-        // Apply status-based styling to the status text
-        currentStatusDisplay.className = ''; // Clear existing classes
+        currentStatusDisplay.className = '';
         if (details.status_code === 'APPROVED') {
             currentStatusDisplay.classList.add('text-success', 'fw-bold');
         } else if (details.status_code === 'REJECTED') {
@@ -185,9 +173,7 @@ async function saveOfficeRemarks() {
 
         if (result.success) {
             alert('Office remarks saved successfully!');
-            // Re-fetch the main table data to show updated remarks
             fetchClearanceRequests();
-            // Re-fetch modal details to update the displayed remarks (if modal is still open)
             fetchRequestDetailsForModal(currentRequestId);
         } else {
             alert('Failed to save office remarks: ' + result.error);
@@ -220,9 +206,7 @@ async function updateRequestStatus(statusCode) {
 
         if (result.success) {
             alert(`Request status updated to ${statusCode}!`);
-            // Re-fetch main table data
             fetchClearanceRequests();
-            // Re-fetch modal details to update the displayed status
             fetchRequestDetailsForModal(currentRequestId);
         } else {
             alert('Failed to update request status: ' + result.error);
@@ -233,15 +217,12 @@ async function updateRequestStatus(statusCode) {
     }
 }
 
-// Function to handle logout
 function logout() {
-    // You would typically send an AJAX request to a PHP logout script
-    // that destroys the session.
-    fetch(`${API_BASE_URL}logout.php`) // Assuming you have a logout.php
+    fetch(`${API_BASE_URL}logout.php`)
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                window.location.href = 'login.html'; // Redirect to login page
+                window.location.href = 'login.html';
             } else {
                 alert('Logout failed: ' + data.error);
             }
@@ -252,8 +233,7 @@ function logout() {
         });
 }
 
-// Attach logout function to a logout button/link if it exists
-const logoutButton = document.getElementById('logoutButton'); // Assuming you have a button with this ID
+const logoutButton = document.getElementById('logoutButton');
 if (logoutButton) {
     logoutButton.addEventListener('click', logout);
 }

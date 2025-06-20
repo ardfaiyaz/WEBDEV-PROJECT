@@ -1,24 +1,17 @@
 <?php
-session_start(); // Start the session at the very beginning
+session_start();
 
-// Include the database connection file
-// Adjust this path based on where your 'database.php' is located relative to this file
 require_once __DIR__ . '/../php/database.php';
 
-// Check if the user is logged in
-// If not logged in, redirect them to the login page
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php"); // Adjust path if login.php is not in the same folder
+    header("Location: login.php");
     exit();
 }
 
-$user_id = $_SESSION['user_id']; // Get the user_id from the session
+$user_id = $_SESSION['user_id'];
 
-// Initialize variables for displaying user info
-$displayFirstName = "User"; // Default fallback name
+$displayFirstName = "User";
 
-// Initialize variables to store submitted data or pre-fill from student_info
-// These will hold the values for the form fields
 $firstName = '';
 $middleName = '';
 $lastName = '';
@@ -42,14 +35,12 @@ $graduationDate = '';
 $enrollmentPurpose = '';
 $studentRemarks = '';
 
-// Initialize arrays for errors and messages
-$errors = []; // For validation errors
-$successMessage = ''; // For success message that persists after redirect
-$generalErrorHeading = ''; // To display a heading for errors
+$errors = [];
+$successMessage = '';
+$generalErrorHeading = '';
 
-$formSubmitted = false; // Flag to indicate if the form was submitted
+$formSubmitted = false;
 
-// Mapping HTML form field names for documents to their display labels and default states
 $documentsMap = [
     "AUTH_LOC" => "Authentication - Local",
     "AUTH_ABR" => "Authentication - Abroad",
@@ -62,31 +53,25 @@ $documentsMap = [
     "TOR" => "Transcript of Records"
 ];
 
-// Initialize document checkbox and copies values
 foreach ($documentsMap as $doc_code => $doc_label) {
-    ${$doc_code . '_checked'} = false; // Boolean for checkbox
-    ${$doc_code . '_copies_value'} = ''; // Value for select
+    ${$doc_code . '_checked'} = false;
+    ${$doc_code . '_copies_value'} = '';
 }
 
-// --- Check for and display any session-based messages (from a previous redirect) ---
 if (isset($_SESSION['success_message'])) {
     $successMessage = $_SESSION['success_message'];
-    unset($_SESSION['success_message']); // Clear the message after displaying
+    unset($_SESSION['success_message']);
 }
 if (isset($_SESSION['error_message'])) {
-    // If there's a general error message from a redirect, add it to errors array
-    // This allows the error display logic below to handle it.
     $errors[] = $_SESSION['error_message'];
     $generalErrorHeading = "Submission Failed:";
-    unset($_SESSION['error_message']); // Clear the message
+    unset($_SESSION['error_message']);
 }
 
 
-// --- HANDLE FORM SUBMISSION (PHP Processing Logic) ---
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['applyclr_submitbtn'])) {
-    $formSubmitted = true; // Set flag as form was submitted
+    $formSubmitted = true;
 
-    // --- 1. Sanitize and retrieve input data from POST ---
     $firstName = trim($_POST['first_name'] ?? '');
     $middleName = trim($_POST['middle_name'] ?? '');
     $lastName = trim($_POST['last_name'] ?? '');
@@ -106,21 +91,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['applyclr_submitbtn']))
     $birthplace = trim($_POST['birthplace'] ?? '');
     $nationality = trim($_POST['nationality'] ?? '');
 
-    // Academic Information
     $studentNo = trim($_POST['student_no'] ?? '');
     $course = trim($_POST['course'] ?? '');
     $semStart = trim($_POST['sem_start'] ?? '');
     $semEnd = trim($_POST['sem_end'] ?? '');
     $graduationDate = trim($_POST['graduation_date'] ?? '');
 
-    // Other Request Details
     $enrollmentPurpose = trim($_POST['Enrollment_Purpose'] ?? '');
     $studentRemarks = trim($_POST['REMARKS'] ?? '');
     if (empty($studentRemarks)) { 
     $studentRemarks = 'No remark';
 }
 
-    // --- 2. Server-side Validation ---
     if (empty($firstName)) $errors[] = "First name is required.";
     if (empty($lastName)) $errors[] = "Last name is required.";
     if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "A valid email address is required.";
@@ -140,16 +122,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['applyclr_submitbtn']))
     if (empty($graduationDate)) $errors[] = "Date of Graduation is required.";
     if (empty($enrollmentPurpose)) $errors[] = "Enrollment Purpose is required.";
 
-    // Check for at least one document requested and its copies
     $documentRequestedCount = 0;
     $documentCopyErrors = [];
 
     foreach ($documentsMap as $doc_code => $doc_label) {
-        // If the checkbox for a document is checked
         if (isset($_POST[$doc_code]) && $_POST[$doc_code] === 'on') {
-            ${$doc_code . '_checked'} = true; // Mark checkbox as checked for form re-display
+            ${$doc_code . '_checked'} = true;
             $copies = (int)($_POST[$doc_code . "_copies"] ?? 0);
-            ${$doc_code . '_copies_value'} = $copies; // Keep selected copies value for form re-display
+            ${$doc_code . '_copies_value'} = $copies;
 
             if ($copies <= 0) {
                 $documentCopyErrors[] = "Please select number of copies for " . htmlspecialchars($doc_label) . ".";
@@ -157,24 +137,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['applyclr_submitbtn']))
                 $documentRequestedCount++;
             }
         } else {
-            // Ensure variables are defined even if not checked, to avoid PHP notices later
             ${$doc_code . '_checked'} = false;
             ${$doc_code . '_copies_value'} = '';
         }
     }
 
-    // Ensure at least one document type is selected
     if ($documentRequestedCount === 0) {
         $errors[] = "Please select at least one document type to request.";
     }
 
-    // Merge document-specific errors with general errors
     if (!empty($documentCopyErrors)) {
         $errors = array_merge($errors, $documentCopyErrors);
     }
 
-    // Consent file validation
-    // Only proceed with file validation if no general file upload error occurred or if a file was selected
     if (isset($_FILES['CONSENT_FILE']) && $_FILES['CONSENT_FILE']['error'] !== UPLOAD_ERR_NO_FILE) {
         if ($_FILES['CONSENT_FILE']['error'] !== UPLOAD_ERR_OK) {
             $upload_errors = [
@@ -189,7 +164,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['applyclr_submitbtn']))
             $error_msg = $upload_errors[$_FILES['CONSENT_FILE']['error']] ?? 'Unknown upload error.';
             $errors[] = "Consent file upload error: " . $error_msg;
         } else {
-            // Check file type (MIME type)
             $allowed_mime_types = ['application/pdf', 'image/jpeg', 'image/png'];
             $finfo = new finfo(FILEINFO_MIME_TYPE);
             $mime_type = $finfo->file($_FILES['CONSENT_FILE']['tmp_name']);
@@ -203,20 +177,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['applyclr_submitbtn']))
     }
 
 
-    // --- 3. If no errors, proceed with database insertion ---
     if (empty($errors)) {
         try {
-            // Start a transaction for atomicity
             $pdo->beginTransaction();
 
-            // --- Check and Insert/Update student_info table ---
-            // Fetch current student info
             $stmt_check_student_info = $pdo->prepare("SELECT user_id FROM student_info WHERE user_id = ?");
             $stmt_check_student_info->execute([$user_id]);
             $studentInfoExists = $stmt_check_student_info->fetchColumn();
 
             if (!$studentInfoExists) {
-                // Insert if student info doesn't exist
                 $stmt_insert_student_info = $pdo->prepare("
                     INSERT INTO student_info (
                         user_id, firstname, middlename, lastname, gender, nationality,
@@ -234,7 +203,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['applyclr_submitbtn']))
                     $studentNo, $course, $semStart, $semEnd, $graduationDate
                 ]);
             } else {
-                // Update if student info exists
                 $stmt_update_student_info = $pdo->prepare("
                     UPDATE student_info SET
                         firstname = ?, middlename = ?, lastname = ?, gender = ?, nationality = ?,
@@ -252,9 +220,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['applyclr_submitbtn']))
                 ]);
             }
 
-            // --- Insert into clearance_request table ---
             $consent_letter_blob = file_get_contents($_FILES['CONSENT_FILE']['tmp_name']);
-            $claimStubStatus = 0; // Set to 0 (false) initially, meaning not yet issued.
+            $claimStubStatus = 0;
 
             $stmt_clearance_request = $pdo->prepare("
                 INSERT INTO clearance_request (user_id, req_date, claim_stub, enrollment_purpose, student_remarks, consent_letter)
@@ -267,9 +234,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['applyclr_submitbtn']))
             $stmt_clearance_request->bindParam(5, $consent_letter_blob, PDO::PARAM_LOB);
             $stmt_clearance_request->execute();
 
-            $req_id = $pdo->lastInsertId(); // Get the ID of the newly inserted clearance request
+            $req_id = $pdo->lastInsertId();
 
-            // --- Insert into document_request table ---
             $stmt_document_request = $pdo->prepare("
                 INSERT INTO document_request (req_id, doc_code, doc_copies)
                 VALUES (?, ?, ?)
@@ -278,58 +244,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['applyclr_submitbtn']))
             foreach ($documentsMap as $doc_code => $doc_label) {
                 if (isset($_POST[$doc_code]) && $_POST[$doc_code] === 'on') {
                     $copies = (int)($_POST[$doc_code . "_copies"] ?? 0);
-                    if ($copies > 0) { // Only insert if checkbox is checked AND copies > 0
+                    if ($copies > 0) {
                         $stmt_document_request->execute([$req_id, $doc_code, $copies]);
                     }
                 }
             }
 
-            // --- Insert into clearance_status for all relevant offices (ADMIN and SUB_ADMIN) ---
             $stmt_get_offices = $pdo->prepare("SELECT office_code FROM office WHERE office_role IN ('ADMIN', 'SUB_ADMIN')");
             $stmt_get_offices->execute();
-            $offices = $stmt_get_offices->fetchAll(PDO::FETCH_COLUMN); // Fetch just the office_codes
+            $offices = $stmt_get_offices->fetchAll(PDO::FETCH_COLUMN);
 
             $stmt_initial_status = $pdo->prepare("
                 INSERT INTO clearance_status (req_id, user_id, office_code, status_code, office_remarks)
                 VALUES (?, ?, ?, ?, ?)
             ");
-            $initial_status_code = 'ON'; // Set initial status to 'ON' (Ongoing)
+            $initial_status_code = 'ON';
             $initial_remarks = 'Request submitted. Currently under initial review by office.';
 
             foreach ($offices as $office_code) {
                 $stmt_initial_status->execute([$req_id, $user_id, $office_code, $initial_status_code, $initial_remarks]);
             }
 
-            // If all operations are successful, commit the transaction
             $pdo->commit();
 
-            // Set success message for display on the track-clearance page and redirect
             $_SESSION['success_message'] = "Your clearance request has been submitted successfully and is now ON-GOING!";
-            header("Location: track-clearance.php"); // Redirect to tracking page
+            header("Location: track-clearance.php");
             exit;
 
         } catch (PDOException $e) {
-            // Rollback the transaction on database error
             $pdo->rollBack();
-            error_log("Database Error in apply-clearance.php: " . $e->getMessage()); // Log the error for debugging
+            error_log("Database Error in apply-clearance.php: " . $e->getMessage());
             $errors[] = "A database error occurred while submitting your request. Please try again. If the problem persists, contact support.";
             $generalErrorHeading = "Submission Failed:";
         } catch (Exception $e) {
-            // Catch other application-level exceptions (e.g., validation, file upload)
             $pdo->rollBack();
-            error_log("Application Error in apply-clearance.php: " . $e->getMessage()); // Log the error
+            error_log("Application Error in apply-clearance.php: " . $e->getMessage());
             $errors[] = "An unexpected error occurred: " . $e->getMessage();
             $generalErrorHeading = "Submission Failed:";
         }
     }
 }
 
-// --- INITIAL DATA LOADING FOR FORM (if not submitted or on error) ---
-// If the form was NOT submitted (first load) OR if it was submitted but had errors,
-// attempt to pre-fill from student_info or user data.
 if (!$formSubmitted || !empty($errors)) {
     try {
-        // Fetch user data for general display (like "Hi, User")
         $stmt_user = $pdo->prepare("SELECT firstname, lastname, middlename, email FROM users WHERE user_id = :user_id");
         $stmt_user->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $stmt_user->execute();
@@ -337,22 +294,17 @@ if (!$formSubmitted || !empty($errors)) {
 
         if ($userData) {
             $displayFirstName = htmlspecialchars($userData['firstname'] ?? 'User');
-            // If the form wasn't submitted (first load) or if the email field was empty, pre-fill it.
-            // This prevents overwriting user input if they typed something invalid.
             if (!$formSubmitted || empty($email)) {
                 $email = htmlspecialchars($userData['email'] ?? '');
             }
         }
 
-        // Fetch existing student_info to pre-fill the form fields on initial load
-        // Or if the form was submitted with errors, but certain fields weren't touched.
         $stmt_student_info = $pdo->prepare("SELECT * FROM student_info WHERE user_id = :user_id");
         $stmt_student_info->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $stmt_student_info->execute();
         $studentInfoData = $stmt_student_info->fetch(PDO::FETCH_ASSOC);
 
         if ($studentInfoData) {
-            // Only pre-fill if the form hasn't been submitted OR if the field was empty in the *current* submission
             $firstName = $formSubmitted && !empty($firstName) ? $firstName : htmlspecialchars($studentInfoData['firstname'] ?? '');
             $middleName = $formSubmitted && !empty($middleName) ? $middleName : htmlspecialchars($studentInfoData['middlename'] ?? '');
             $lastName = $formSubmitted && !empty($lastName) ? $lastName : htmlspecialchars($studentInfoData['lastname'] ?? '');
@@ -365,7 +317,6 @@ if (!$formSubmitted || !empty($errors)) {
 
             $telNo = $formSubmitted && !empty($telNo) ? $telNo : htmlspecialchars($studentInfoData['tel_num'] ?? '');
             $mobileNo = $formSubmitted && !empty($mobileNo) ? $mobileNo : htmlspecialchars($studentInfoData['mobile_num'] ?? '');
-            // Email is handled above
             $sex = $formSubmitted && !empty($sex) ? $sex : htmlspecialchars($studentInfoData['gender'] ?? '');
             $birthdate = $formSubmitted && !empty($birthdate) ? $birthdate : htmlspecialchars($studentInfoData['birthdate'] ?? '');
             $birthplace = $formSubmitted && !empty($birthplace) ? $birthplace : htmlspecialchars($studentInfoData['birthplace'] ?? '');
@@ -448,15 +399,13 @@ if (!$formSubmitted || !empty($errors)) {
         <div class="form-section">
           <form action="apply-clearance.php" method="POST" enctype="multipart/form-data">
             <?php
-            // Display success message
             if (!empty($successMessage)) {
                 echo '<div class="alert success-alert">';
                 echo '<strong>Success!</strong> ' . htmlspecialchars($successMessage);
                 echo '</div>';
             }
-            // Display validation errors
             if (!empty($errors)) {
-                echo '<div class="alert error-alert">'; // Use a more descriptive class
+                echo '<div class="alert error-alert">';
                 if (!empty($generalErrorHeading)) {
                     echo '<strong>' . htmlspecialchars($generalErrorHeading) . '</strong>';
                 }
@@ -521,11 +470,11 @@ if (!$formSubmitted || !empty($errors)) {
 
             <div class="row">
               <div class="form-group"><label>Tel No.</label><input type="text" name="tel_no" placeholder="Enter Tel No."
-                      value="<?php echo htmlspecialchars($telNo); ?>"></div>
+                     value="<?php echo htmlspecialchars($telNo); ?>"></div>
               <div class="form-group"><label>Mobile No.</label><input type="text" name="mobile_no" placeholder="Enter Mobile No." required
-                      value="<?php echo htmlspecialchars($mobileNo); ?>"></div>
+                     value="<?php echo htmlspecialchars($mobileNo); ?>"></div>
               <div class="form-group"><label>Email Address</label><input type="email" name="email" placeholder="Enter Here" required
-                      value="<?php echo htmlspecialchars($email); ?>"></div>
+                     value="<?php echo htmlspecialchars($email); ?>"></div>
               <div class="form-group">
                 <label>Sex</label>
                 <select class="select1" name="sex" required>
@@ -537,19 +486,19 @@ if (!$formSubmitted || !empty($errors)) {
               <div class="form-group">
                 <label>Birthdate</label>
                 <input type="date" name="birthdate" required
-                        value="<?php echo htmlspecialchars($birthdate); ?>">
+                         value="<?php echo htmlspecialchars($birthdate); ?>">
               </div>
               <div class="form-group"><label>Birthplace</label><input type="text" name="birthplace" placeholder="Enter Here" required
-                      value="<?php echo htmlspecialchars($birthplace); ?>"></div>
+                     value="<?php echo htmlspecialchars($birthplace); ?>"></div>
               <div class="form-group"><label>Nationality</label><input type="text" name="nationality" placeholder="Enter Here" required
-                      value="<?php echo htmlspecialchars($nationality); ?>"></div>
+                     value="<?php echo htmlspecialchars($nationality); ?>"></div>
             </div>
 
 
             <h3>Academic Information</h3>
             <div class="row">
               <div class="form-group"><label>Student No.</label><input type="text" name="student_no" placeholder="Enter Here"
-                      value="<?php echo htmlspecialchars($studentNo); ?>"></div>
+                     value="<?php echo htmlspecialchars($studentNo); ?>"></div>
 
               <div class="form-group">
                 <label>Course/Major</label>
@@ -564,19 +513,19 @@ if (!$formSubmitted || !empty($errors)) {
               </div>
 
               <div class="form-group"><label>Year/Semester Start</label><input type="text" name="sem_start" placeholder="Enter Here"
-                      value="<?php echo htmlspecialchars($semStart); ?>"></div>
+                     value="<?php echo htmlspecialchars($semStart); ?>"></div>
               <div class="form-group"><label>Year/Semester End</label><input type="text" name="sem_end" placeholder="Enter Here"
-                      value="<?php echo htmlspecialchars($semEnd); ?>"></div>
+                     value="<?php echo htmlspecialchars($semEnd); ?>"></div>
               <div class="form-group"><label>Date of Graduation</label><input type="text" name="graduation_date" placeholder="Enter Here"
-                      value="<?php echo htmlspecialchars($graduationDate); ?>"></div>
+                     value="<?php echo htmlspecialchars($graduationDate); ?>"></div>
             </div>
 
             <h3>Type of Document</h3>
             <h2>PLEASE CHECK AND SELECT THE NO. OF COPIES</h2>
             <div class="row">
               <?php foreach ($documentsMap as $doc_code => $doc_label):
-                $isChecked = ${$doc_code . '_checked'} ?? false; // Use initial value or what was posted
-                $copiesValue = ${$doc_code . '_copies_value'} ?? ''; // Use initial value or what was posted
+                $isChecked = ${$doc_code . '_checked'} ?? false;
+                $copiesValue = ${$doc_code . '_copies_value'} ?? '';
               ?>
               <div class="form-group">
                   <label><?php echo htmlspecialchars($doc_label); ?></label>
@@ -605,7 +554,7 @@ if (!$formSubmitted || !empty($errors)) {
                     <option value="Local" <?php echo ($enrollmentPurpose == 'Local') ? 'selected' : ''; ?>>Local</option>
                   </select>
               </div>
-            </div>
+            </div> 
                 
             <div class="form-group">
               <label>Other Remarks</label>

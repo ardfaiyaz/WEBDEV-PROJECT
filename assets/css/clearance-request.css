@@ -400,7 +400,6 @@ body.modal-open {
     text-overflow: ellipsis;
 }
 
-
 .Status-row:hover {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transform: translateY(-2px);
@@ -453,7 +452,6 @@ body.modal-open {
     display: inline-block;
     white-space: nowrap;
 }
-
 
 .clear-button:hover {
     background-color: #218838;
@@ -662,7 +660,6 @@ body.modal-open {
     resize: vertical;
 }
 
-
 .custom-message-box {
     position: fixed;
     top: 50%;
@@ -866,7 +863,6 @@ body.modal-open {
         padding: 6px 10px;
     }
 
-
     .dropdown-menu {
         min-width: unset;
         width: 100%;
@@ -930,4 +926,71 @@ body.modal-open {
         grid-template-columns: repeat(7, minmax(50px, 1fr));
         min-width: 400px;
     }
+}
+
+.custom-select-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 80%;
+    height: 35px;
+    overflow: hidden;
+    border-radius: 5px;
+    background-color: #E75B4B;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 40px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.custom-select-wrapper:hover {
+    background-color: #d44d3d;
+}
+
+.custom-select-wrapper .add-remark-select {
+    font-family: 'Montserrat', sans-serif;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.selected-remark-display {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.custom-select-wrapper .add-remark-select option {
+    background-color: #f8f8f8;
+    color: #333;
+    padding: 8px 15px;
+    font-size: 14px;
+}
+
+.custom-select-wrapper .add-remark-select option:hover {
+    background-color: #e0e0e0;
 }

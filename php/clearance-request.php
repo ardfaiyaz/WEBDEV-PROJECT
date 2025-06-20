@@ -65,41 +65,33 @@ if (!$loggedInUserId && $action !== 'user') { // Allow 'user' endpoint for initi
 // --- END AUTHENTICATION AND USER CONTEXT ---
 
 
-// --- API Logic ---
 $method = $_SERVER['REQUEST_METHOD'];
 
 $requestId = null;
 $action = null;
 
-// Parse URL to get request ID or specific action
 if (isset($_SERVER['PATH_INFO']) && !empty($_SERVER['PATH_INFO'])) {
     $path_segment = trim($_SERVER['PATH_INFO'], '/');
     if (ctype_digit($path_segment)) {
         $requestId = (int)$path_segment;
     } elseif ($path_segment === 'user') {
-        $action = 'user'; // This indicates a request for user info
+        $action = 'user'; 
     }
 }
 
 
 switch ($method) {
     case 'GET':
-        // --- Handle GET request for user info ---
         if ($action === 'user') {
-            // This endpoint is specifically for the frontend to get basic user info without needing a specific request ID
-            // It should be accessible if a session exists, even if other endpoints require more roles.
             echo json_encode([
                 'firstname' => $displayFirstName,
-                'officeCode' => $loggedInOfficeCode, // Provide officeCode if relevant to frontend
+                'officeCode' => $loggedInOfficeCode,
                 'roleCode' => $loggedInUserRole
             ]);
             exit();
         }
 
-        // --- GET request logic for clearance requests with overall status ---
-        try { 
-            // This complex query attempts to determine the overall status by checking all
-            // related office statuses for a given request.
+        try {
             $sql = "
                 SELECT
                     cr.req_id,
@@ -141,12 +133,12 @@ switch ($method) {
                     'studId' => $row['studId'],
                     'studName' => $row['studName'],
                     'program' => $row['program'],
-                    'status' => $row['overallStatus'], // This is the derived overall status
+                    'status' => $row['overallStatus'], 
                     'dateSubmitted' => $row['dateSubmitted'],
                     'studentEmail' => $row['studentEmail'],
                     'studentAvatar' => 'https://placehold.co/80x80/cccccc/333333?text=' . substr($row['studName'], 0, 1),
                     'remark' => $row['remark'],
-                    'claimStub' => $row['claim_stub'], // Keep claim stub for other pages
+                    'claimStub' => $row['claim_stub'], 
                     'dateCompleted' => ($row['overallStatus'] === 'COMPLETED' && $row['claim_stub'] == 1) ? $row['dateSubmitted'] : null
                 ];
             }
@@ -161,11 +153,8 @@ switch ($method) {
 
     case 'PUT':
     case 'PATCH':
-        // Role-based access control for PUT/PATCH: Only specific roles (e.g., ADMIN, SUB_ADMIN) can update.
-        // You'll need to define what roles are allowed to perform updates.
-        // For example, if only office staff (SUB_ADMIN, ADMIN) can update remarks/status:
         if ($loggedInUserRole !== 'ADMIN' && $loggedInUserRole !== 'SUB_ADMIN') {
-            http_response_code(403); // Forbidden
+            http_response_code(403);
             echo json_encode(["message" => "Forbidden: You do not have permission to update requests."]);
             exit();
         }
@@ -185,12 +174,10 @@ switch ($method) {
         $newOfficeRemark = $data['officeRemark'] ?? null;
         $newStatusCode = $data['statusCode'] ?? null;
 
-        // Use the office_code fetched from the logged-in user's session
         $officeCode = $loggedInOfficeCode;
 
         if (!$officeCode) {
-            // This should ideally not happen if role check passed and user exists with an office_code
-            http_response_code(403); // Forbidden
+            http_response_code(403);
             echo json_encode(["message" => "Office information not associated with your account. Cannot perform update."]);
             error_log("PUT/PATCH: Logged in user " . $loggedInUserId . " has no associated office_code.");
             exit();
@@ -201,7 +188,6 @@ switch ($method) {
 
             $updatesCount = 0;
 
-            // 1. Update student_remarks in clearance_request table
             if ($newStudentRemark !== null) {
                 $sql_student_remark = "UPDATE clearance_request SET student_remarks = ? WHERE req_id = ?";
                 $stmt_student_remark = $pdo->prepare($sql_student_remark);
@@ -209,7 +195,6 @@ switch ($method) {
                 $updatesCount += $stmt_student_remark->rowCount();
             }
 
-            // 2. Update status_code and office_remarks in clearance_status table
             if ($newStatusCode !== null || $newOfficeRemark !== null) {
                 if ($newStatusCode !== null && !in_array($newStatusCode, $validStatusCodes)) {
                     $pdo->rollBack();
@@ -247,7 +232,6 @@ switch ($method) {
                         $updatesCount += $stmt_clearance_status->rowCount();
                     }
                 } else {
-                    // Insert new entry if it doesn't exist for this office (first time this office processes it)
                     $get_student_id_sql = "SELECT user_id FROM clearance_request WHERE req_id = ?";
                     $get_student_id_stmt = $pdo->prepare($get_student_id_sql);
                     $get_student_id_stmt->execute([$requestId]);
@@ -267,7 +251,7 @@ switch ($method) {
                         $requestId,
                         $student_userId,
                         $officeCode,
-                        $newStatusCode ?? 'PEND', // Default to PEND if status not explicitly provided on insert
+                        $newStatusCode ?? 'PEND', 
                         $newOfficeRemark
                     ]);
                     $updatesCount += $stmt_insert_status->rowCount();

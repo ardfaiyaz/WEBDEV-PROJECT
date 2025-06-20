@@ -1,21 +1,18 @@
 <?php
-// get_useroffice_info.php
 session_start();
 require_once 'api_config.php';
 require_once 'database.php';
 
-// Check if the user is logged in by verifying the 'user_id' in the session.
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(["success" => false, "message" => "User not logged in."]);
-    exit(); // Terminate script execution immediately.
+    exit();
 }
 
 $userId = $_SESSION['user_id'];
 
-
 $sql = "SELECT u.firstname, u.middlename, u.lastname, u.office_code
         FROM users u
-        WHERE u.user_id = :user_id"; // Using a named placeholder for security.
+        WHERE u.user_id = :user_id";
 
 try {
     $stmt = $pdo->prepare($sql);
@@ -23,10 +20,8 @@ try {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user) {
-        // Construct the user's full name.
         $user_name = trim($user['firstname']);
 
-        // Send a successful JSON response.
         echo json_encode(["success" => true, "user" => ["user_name" => $user_name, "office_code" => $user['office_code']]]);
     } else {
         error_log("Session user_id " . $userId . " not found in database.");

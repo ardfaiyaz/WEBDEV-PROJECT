@@ -1,17 +1,13 @@
 <?php
-session_start(); // IMPORTANT: Start the session at the very beginning of the file
+session_start();
 
 $loggedInAdminName = $_SESSION['username'] ?? 'Admin';
-// Check if the user is logged in. If not, redirect to the login page.
-// We use 'user_id' from the session variables set in login.php
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['account_type'])) {
-    // Redirect to login page if not logged in
     header('Location: login.php');
     exit();
 }
 
-
-$displayFirstName = $_SESSION['firstname'] ?? 'User'; // Default to 'User' if not set
+$displayFirstName = $_SESSION['firstname'] ?? 'User';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,7 +39,7 @@ $displayFirstName = $_SESSION['firstname'] ?? 'User'; // Default to 'User' if no
 
         <div class="header-right-section">
             <div class="user-section">
-                <span class="username">Hi, <?php echo htmlspecialchars($loggedInAdminName); ?></span>
+                <span class="username">Hi, <?php echo htmlspecialchars($displayFirstName); ?></span>
                 <i class='bx bxs-user-circle'></i>
             </div>
         </div>
@@ -57,14 +53,13 @@ $displayFirstName = $_SESSION['firstname'] ?? 'User'; // Default to 'User' if no
         <div class="cards">
 
           <a href="clearance-request.php" class="card">
-            <i class='bx bx-list-ul icon'></i> <!-- Changed icon class here -->
+            <i class='bx bx-list-ul icon'></i>
             <h3>View Requests</h3>
             <p>Browse all incoming student requests for documents, letters, and clearance applications.</p>
           </a>
 
-
           <a href="admin-request-stubs.php" class="card">
-            <i class='bx bx-task icon'></i> <!-- Changed icon class here -->
+            <i class='bx bx-task icon'></i>
             <h3>Process Requests</h3>
             <p>Approve, decline, or forward student requests with notes and file attachments.</p>
           </a>
