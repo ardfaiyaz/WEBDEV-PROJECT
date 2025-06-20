@@ -1,20 +1,17 @@
 <?php
-session_start(); // Start the session at the very beginning
+session_start();
 
-// Include the database connection file
 require_once __DIR__ . '/../php/database.php';
 
-// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
 
 $loggedInUserId = $_SESSION['user_id'];
-$displayFirstName = "User"; // Default fallback name
-$successMessage = ''; // Initialize success message variable
+$displayFirstName = "User";
+$successMessage = '';
 
-// Fetch user details from the 'users' table using the session user_id
 try {
     $stmt = $pdo->prepare("SELECT firstname, lastname FROM users WHERE user_id = :user_id");
     $stmt->bindParam(':user_id', $loggedInUserId, PDO::PARAM_INT);
@@ -29,18 +26,15 @@ try {
     error_log("Error fetching user data for track-clearance page: " . $e->getMessage());
 }
 
-// Check for a success message from the previous page
 if (isset($_SESSION['success_message'])) {
     $successMessage = $_SESSION['success_message'];
-    unset($_SESSION['success_message']); // Clear the message after displaying it
+    unset($_SESSION['success_message']);
 }
 
-// --- Fetch Clearance Status for the Logged-in User ---
-$clearanceStatuses = []; // Array to store fetched statuses for each office
+$clearanceStatuses = [];
 $latestReqId = null;
 
 try {
-    // 1. Find the latest clearance request for the user
     $stmtLatestReq = $pdo->prepare("
         SELECT req_id
         FROM clearance_request
@@ -53,7 +47,6 @@ try {
     $latestReqId = $stmtLatestReq->fetchColumn();
 
     if ($latestReqId) {
-        // 2. Fetch all clearance statuses for this latest request and user, along with office descriptions
         $stmtStatuses = $pdo->prepare("
             SELECT cs.office_code, o.description AS office_description, cs.status_code, rs.description AS status_description, cs.office_remarks
             FROM clearance_status cs
@@ -66,7 +59,6 @@ try {
         $stmtStatuses->execute();
         $results = $stmtStatuses->fetchAll(PDO::FETCH_ASSOC);
 
-        // Map the results for easy access by office_code
         foreach ($results as $row) {
             $clearanceStatuses[$row['office_code']] = [
                 'status_code' => $row['status_code'],
@@ -81,7 +73,6 @@ try {
     error_log("Error fetching clearance statuses: " . $e->getMessage());
 }
 
-// Define the order and mapping of offices to display on the page
 $officeDisplayMap = [
     'DN_PC_PR' => ['DEAN/ PROGRAM CHAIR/ PRINCIPAL', '5th Floor / Faculty Room'],
     'LIB' => ['LIBRARY', '5th Floor'],
@@ -93,14 +84,13 @@ $officeDisplayMap = [
     'REG' => ['REGISTRAR OFFICE', '4th Floor']
 ];
 
-// Function to get the status class based on status_code
 function getStatusClass($statusCode) {
     switch ($statusCode) {
         case 'PEND': return 'pending';
         case 'ON': return 'ongoing';
         case 'ISSUE': return 'issuefound';
         case 'COMP': return 'completed';
-        default: return 'pending'; // Default to pending if status is unknown
+        default: return 'pending';
     }
 }
 ?>
@@ -145,7 +135,6 @@ function getStatusClass($statusCode) {
         <main class="main-content" id="mainContent">
             <section>
                 <?php
-                // Display success message if available
                 if (!empty($successMessage)) {
                     echo '<div class="alert success-alert">';
                     echo '<strong>Success!</strong> ' . htmlspecialchars($successMessage);
@@ -162,13 +151,11 @@ function getStatusClass($statusCode) {
                     <?php foreach ($officeDisplayMap as $officeCode => $officeInfo):
                         $officeName = $officeInfo[0];
                         $officeLocation = $officeInfo[1];
-                        $currentStatusCode = $clearanceStatuses[$officeCode]['status_code'] ?? 'PEND'; // Default to PEND if not found
+                        $currentStatusCode = $clearanceStatuses[$officeCode]['status_code'] ?? 'PEND';
                         $statusClass = getStatusClass($currentStatusCode);
 
-                        // Get office_remarks from the fetched statuses array
-                        $officeRemarks = $clearanceStatuses[$officeCode]['office_remarks'] ?? ''; // Default to empty string
+                        $officeRemarks = $clearanceStatuses[$officeCode]['office_remarks'] ?? '';
 
-                        // --- Conditional logic for Remarks and Action ---
                         $displayRemarks = '';
                         $displayAction = '';
 
